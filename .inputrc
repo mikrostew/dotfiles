@@ -1,0 +1,4 @@
+# add a trailing slash to directories and symlinked directories
+set mark-directories on
+set mark-symlinked-directories on
+

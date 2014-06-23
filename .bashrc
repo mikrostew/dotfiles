@@ -31,7 +31,11 @@ shopt -s checkwinsize
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
 #PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
-PS1='(\t) \u@\h[\#] \w/\n\$ '
+# prompt string:
+# replace home dir in PWD with ~,
+# add a trailing slash to the PWD if there is not one
+MY_PS='$(echo "$PWD" | sed -e "s|^$HOME|~|" -e "s|/*$|/|")'
+PS1='(\t) \u@\h[\#] $(eval "echo ${MY_PS}")\n\$ '
 
 # If this is an xterm set the title to user@host:dir
 case "$TERM" in

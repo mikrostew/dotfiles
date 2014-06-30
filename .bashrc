@@ -2,14 +2,13 @@
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 
-# If not running interactively, don't do anything
+# if not interactive, return (if flags do not contain "i")
 case $- in
     *i*) ;;
       *) return;;
 esac
 
-# don't put duplicate lines or lines starting with space in the history.
-# See bash(1) for more options
+# don't put duplicate lines or lines starting with space in the history
 HISTCONTROL=ignoreboth
 
 # append to the history file, don't overwrite it
@@ -23,14 +22,9 @@ HISTFILESIZE=2000
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
 
-# If set, the pattern "**" used in a pathname expansion context will
-# match all files and zero or more directories and subdirectories.
-#shopt -s globstar
-
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
-#PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 # prompt string:
 # replace home dir in PWD with ~,
 # add a trailing slash to the PWD if there is not one

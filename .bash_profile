@@ -14,3 +14,8 @@ if [ -n "$BASH_VERSION" ]; then
     fi
 fi
 
+# PATH variable for use with MacPorts
+if [ -d "/opt/local/bin" ] && [ -d "/opt/local/sbin" ]; then
+    export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
+fi
+

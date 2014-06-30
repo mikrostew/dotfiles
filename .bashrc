@@ -70,3 +70,13 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
+
+# output fortune at every login
+if [ -f "/opt/local/bin/fortune" ]; then
+    # Mac
+    /opt/local/bin/fortune
+else if [-f "/usr/games/fortune" ]; then
+    # Ubuntu
+    /usr/games/fortune
+fi
+

@@ -25,3 +25,14 @@ I use these config files on all of my development machines, at work and home. I 
 then, add this to the global config
 `git config --global core.excludesfile ~/.gitignore`
 
+## fortune
+
+### Mac
+
+First install MacPorts (https://www.macports.org/install.php)
+Then `sudo port install fortune`
+
+### Ubuntu
+
+`sudo apt-get install fortune`
+

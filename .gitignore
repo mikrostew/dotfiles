@@ -7,3 +7,5 @@ Session.vim
 .netrwhist
 *~
 
+# ignore compiled binaries
+bin/

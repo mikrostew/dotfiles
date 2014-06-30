@@ -75,7 +75,7 @@ fi
 if [ -f "/opt/local/bin/fortune" ]; then
     # Mac
     /opt/local/bin/fortune
-else if [-f "/usr/games/fortune" ]; then
+elif [ -f "/usr/games/fortune" ]; then
     # Ubuntu
     /usr/games/fortune
 fi

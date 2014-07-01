@@ -78,5 +78,7 @@ if [ -f "/opt/local/bin/fortune" ]; then
 elif [ -f "/usr/games/fortune" ]; then
     # Ubuntu
     /usr/games/fortune
+else
+    echo "(fortune not installed)"
 fi
 

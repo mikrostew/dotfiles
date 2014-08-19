@@ -1,4 +1,4 @@
-# ignore vim's temporary files
+# vim's temporary files
 # (from https://github.com/github/gitignore/blob/master/Global/vim.gitignore)
 [._]*.s[a-w][a-z]
 [._]s[a-w][a-z]
@@ -7,5 +7,9 @@ Session.vim
 .netrwhist
 *~
 
-# ignore compiled binaries
+# compiled binaries
 bin/
+
+# nfs lock files
+.nfs0000*
+

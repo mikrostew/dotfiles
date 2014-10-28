@@ -18,6 +18,10 @@ I use these config files on all of my development machines, at work and home. I 
 
 `ln -s Dropbox/dev/conf/.inputrc ~/.inputrc`
 
+## rvmrc
+
+`ln -s Dropbox/dev/conf/.rvmrc ~/.rvmrc`
+
 ## gitignore
 
 `ln -s Dropbox/dev/conf/.gitignore ~/.gitignore`

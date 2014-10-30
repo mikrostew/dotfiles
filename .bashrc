@@ -85,3 +85,6 @@ fi
 # formatting for `ri` documentation
 export RI="-T --format=ansi"
 
+# rbenv
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init -)"

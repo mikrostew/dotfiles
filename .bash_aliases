@@ -18,5 +18,5 @@ cdl() {
 }
 
 set_title() {
-    echo -en "\033]0;$1\a"
+    echo -en "\033]0;$*\a"
 }

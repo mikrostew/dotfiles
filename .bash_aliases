@@ -12,8 +12,11 @@ alias l='ls -CF'
 
 # functions
 
-cdl()
-{
+cdl() {
     cd "$1"
     ll
+}
+
+set_title() {
+    echo -en "\033]0;$1\a"
 }

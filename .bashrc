@@ -29,7 +29,14 @@ shopt -s checkwinsize
 # replace home dir in PWD with ~,
 # add a trailing slash to the PWD if there is not one
 MY_PS='$(echo "$PWD" | sed -e "s|^$HOME|~|" -e "s|/*$|/|")'
-PS1='\n(\t) \u@\h[\#] $(eval "echo ${MY_PS}")\n\$ '
+# show what kind of repo we're in
+# - some code from http://zanshin.net/2012/03/09/wordy-nerdy-zsh-prompt/
+repo_type() {
+    git branch >/dev/null 2>&1 && echo ' [git]' && return
+    svn info >/dev/null 2>&1 && echo ' [svn]' && return
+    echo ''
+}
+PS1='\n(\t) \u@\h[\#] $(eval "echo ${MY_PS}")$(repo_type)\n\$ '
 
 # If this is an xterm set the title to user@host:dir
 # (this will overwrite the terminal title after every command - don't want that)

@@ -13,3 +13,5 @@ bin/
 # nfs lock files
 .nfs0000*
 
+# OSX things
+.DS_Store

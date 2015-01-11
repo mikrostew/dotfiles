@@ -37,10 +37,10 @@ repo_status() {
     git_status=$(git status 2>/dev/null)
     if [ $? -eq 0 ]; then
         branch=$( ( [[ "$git_status" =~ On\ branch\ ([^$'\n']*) ]] && echo ${BASH_REMATCH[1]} ) || echo '?' )
-        staged=$( ( [[ "$git_status" =~ "Changes to be committed" ]] && echo 'stag' ) || echo '' )
-        unstaged=$( ( [[ "$git_status" =~ "Changes not staged for commit" ]] && echo 'unst' ) || echo '' )
-        untracked=$( ( [[ "$git_status" =~ "Untracked files" ]] && echo 'untr' ) || echo '' )
-        ok=$( ( [[ "$git_status" =~ "working directory clean" ]] && echo 'ok' ) || echo '' )
+        staged=$( [[ "$git_status" =~ "Changes to be committed" ]] && echo 'stag' )
+        unstaged=$( [[ "$git_status" =~ "Changes not staged for commit" ]] && echo 'unst' )
+        untracked=$( [[ "$git_status" =~ "Untracked files" ]] && echo 'untr' )
+        ok=$( [[ "$git_status" =~ "working directory clean" ]] && echo 'ok' )
         stat_str=($staged $unstaged $untracked $ok)
         stat_str=$(IFS=, ; echo "${stat_str[*]}")
         echo " [git/${branch} ${stat_str}]"

@@ -31,12 +31,25 @@ shopt -s checkwinsize
 MY_PS='$(echo "$PWD" | sed -e "s|^$HOME|~|" -e "s|/*$|/|")'
 # show what kind of repo we're in
 # - some code from http://zanshin.net/2012/03/09/wordy-nerdy-zsh-prompt/
-repo_type() {
-    git branch >/dev/null 2>&1 && echo ' [git]' && return
+# - and https://github.com/sjl/oh-my-zsh/commit/3d22ee248c6bce357c018a93d31f8d292d2cb4cd
+# - and http://stackoverflow.com/questions/1527049/bash-join-elements-of-an-array
+repo_status() {
+    git_status=$(git status 2>/dev/null)
+    if [ $? -eq 0 ]; then
+        branch=$( ( [[ "$git_status" =~ On\ branch\ ([^$'\n']*) ]] && echo ${BASH_REMATCH[1]} ) || echo '?' )
+        staged=$( ( [[ "$git_status" =~ "Changes to be committed" ]] && echo 'stag' ) || echo '' )
+        unstaged=$( ( [[ "$git_status" =~ "Changes not staged for commit" ]] && echo 'unst' ) || echo '' )
+        untracked=$( ( [[ "$git_status" =~ "Untracked files" ]] && echo 'untr' ) || echo '' )
+        ok=$( ( [[ "$git_status" =~ "working directory clean" ]] && echo 'ok' ) || echo '' )
+        stat_str=($staged $unstaged $untracked $ok)
+        stat_str=$(IFS=, ; echo "${stat_str[*]}")
+        echo " [git/${branch} ${stat_str}]"
+        return
+    fi
     svn info >/dev/null 2>&1 && echo ' [svn]' && return
     echo ''
 }
-PS1='\n(\t) \u@\h[\#] $(eval "echo ${MY_PS}")$(repo_type)\n\$ '
+PS1='\n(\t) \u@\h[\#] $(eval "echo ${MY_PS}")$(repo_status)\n\$ '
 
 # If this is an xterm set the title to user@host:dir
 # (this will overwrite the terminal title after every command - don't want that)

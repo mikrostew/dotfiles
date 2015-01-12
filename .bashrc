@@ -50,7 +50,7 @@ repo_status() {
     svn info >/dev/null 2>&1 && echo ' [svn]' && return
     echo ''
 }
-PS1='\n(\t) \u@\h[\#] $(eval "echo ${MY_PS}")$(repo_status)\n\$ '
+PS1='\n(\t) \u@\h:$(eval "echo ${MY_PS}")$(repo_status)\n\$ '
 
 # If this is an xterm set the title to user@host:dir
 # (this will overwrite the terminal title after every command - don't want that)

@@ -29,26 +29,33 @@ shopt -s checkwinsize
 # replace home dir in PWD with ~,
 # add a trailing slash to the PWD if there is not one
 MY_PS='$(echo "$PWD" | sed -e "s|^$HOME|~|" -e "s|/*$|/|")'
-# show what kind of repo we're in
-# - some code from http://zanshin.net/2012/03/09/wordy-nerdy-zsh-prompt/
-# - and https://github.com/sjl/oh-my-zsh/commit/3d22ee248c6bce357c018a93d31f8d292d2cb4cd
-# - and http://stackoverflow.com/questions/1527049/bash-join-elements-of-an-array
+# show info about what kind of repo we're in
+# some code and ideas from:
+# - http://zanshin.net/2012/03/09/wordy-nerdy-zsh-prompt/
+# - https://github.com/sjl/oh-my-zsh/commit/3d22ee248c6bce357c018a93d31f8d292d2cb4cd
 repo_status() {
     git_status=$(git status 2>/dev/null)
     if [ $? -eq 0 ]; then
-        branch=$( ( [[ "$git_status" =~ On\ branch\ ([^$'\n']*) ]] && echo ${BASH_REMATCH[1]} ) || echo '?' )
-        ahead=$( ( [[ "$git_status" =~ Your\ branch\ is\ ahead\ of\ .*\ by\ ([0-9]+)\ commit ]] && echo "+${BASH_REMATCH[1]}" ) || echo '' )
-        staged=$( [[ "$git_status" =~ "Changes to be committed" ]] && echo 'stag' )
-        unstaged=$( [[ "$git_status" =~ "Changes not staged for commit" ]] && echo 'unst' )
-        untracked=$( [[ "$git_status" =~ "Untracked files" ]] && echo 'untr' )
-        ok=$( [[ "$git_status" =~ "working directory clean" ]] && echo 'ok' )
-        stat_str=($staged $unstaged $untracked $ok)
-        stat_str=$(IFS=, ; echo "${stat_str[*]}")
-        echo " [git/$branch$ahead $stat_str]"
-        return
+        git_branch=$( ( [[ "$git_status" =~ On\ branch\ ([^$'\n']+) ]] && echo ${BASH_REMATCH[1]} ) || echo '?' )
+        git_ahead=$( ( [[ "$git_status" =~ Your\ branch\ is\ ahead\ of\ .*\ by\ ([0-9]+)\ commit ]] && echo "+${BASH_REMATCH[1]}" ) || echo '' )
+        git_staged=$( [[ "$git_status" =~ "Changes to be committed" ]] && echo 'stag' )
+        git_unstaged=$( [[ "$git_status" =~ "Changes not staged for commit" ]] && echo 'unst' )
+        git_untracked=$( [[ "$git_status" =~ "Untracked files" ]] && echo 'untr' )
+        git_ok=$( [[ "$git_status" =~ "working directory clean" ]] && echo 'ok' )
+        # join stat strings with commas
+        git_stat_str=($git_staged $git_unstaged $git_untracked $git_ok)
+        git_stat_str=$(IFS=, ; echo "${git_stat_str[*]}")
+        echo " git($git_branch$git_ahead $git_stat_str)"
+    elif [ -d .svn ]; then
+        svn_info=$(svn info 2>/dev/null)
+        svn_path=$( ( [[ "$svn_info" =~ URL:\ ([^$'\n']+) ]] && echo ${BASH_REMATCH[1]} ) || echo '?' )
+        svn_revision=$( [[ "$svn_info" =~ Revision:\ ([0-9]+) ]] && echo ${BASH_REMATCH[1]} )
+        svn_stat=$(svn status 2>/dev/null)
+        svn_dirty=$( ( [[ "$svn_stat" =~ [?!AM]([[:space:]]+[^$'\n']+) ]] && echo 'dirty' ) || echo 'ok' )
+        echo " svn($svn_path@$svn_revision $svn_dirty)"
+    else
+        echo ''
     fi
-    svn info >/dev/null 2>&1 && echo ' [svn]' && return
-    echo ''
 }
 PS1='\n(\t) \u@\h:$(eval "echo ${MY_PS}")$(repo_status)\n\$ '
 

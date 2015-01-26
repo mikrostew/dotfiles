@@ -15,3 +15,6 @@ bin/
 
 # OSX things
 .DS_Store
+
+# bundler config
+.bundle/

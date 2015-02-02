@@ -38,10 +38,10 @@ repo_status() {
     if [ $? -eq 0 ]; then
         git_branch=$( ( [[ "$git_status" =~ On\ branch\ ([^$'\n']+) ]] && echo ${BASH_REMATCH[1]} ) || echo '?' )
         git_ahead=$( ( [[ "$git_status" =~ Your\ branch\ is\ ahead\ of\ .*\ by\ ([0-9]+)\ commit ]] && echo "+${BASH_REMATCH[1]}" ) || echo '' )
-        git_staged=$( [[ "$git_status" =~ "Changes to be committed" ]] && echo 'stag' )
-        git_unstaged=$( [[ "$git_status" =~ "Changes not staged for commit" ]] && echo 'unst' )
-        git_untracked=$( [[ "$git_status" =~ "Untracked files" ]] && echo 'untr' )
-        git_ok=$( [[ "$git_status" =~ "working directory clean" ]] && echo 'ok' )
+        git_staged=$( [[ "$git_status" =~ Changes\ to\ be\ committed ]] && echo 'stag' )
+        git_unstaged=$( [[ "$git_status" =~ Changes\ not\ staged\ for\ commit ]] && echo 'unst' )
+        git_untracked=$( [[ "$git_status" =~ Untracked\ files ]] && echo 'untr' )
+        git_ok=$( [[ "$git_status" =~ nothing\ to\ commit|working\ directory\ clean ]] && echo 'ok' )
         # join stat strings with commas
         git_stat_str=($git_staged $git_unstaged $git_untracked $git_ok)
         git_stat_str=$(IFS=, ; echo "${git_stat_str[*]}")

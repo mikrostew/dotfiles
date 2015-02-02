@@ -16,5 +16,6 @@ bin/
 # OSX things
 .DS_Store
 
-# bundler config
+# bundler config and gems
 .bundle/
+vendor/

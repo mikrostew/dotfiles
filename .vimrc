@@ -7,13 +7,17 @@ set title                     " Show title in console title bar
 set hid                       " Change buffer without saving
 set showmatch                 " Show matching bracets
 
+" spaces, no tabs
 set ts=4                      " Numbers of spaces of tab character
 set sw=4                      " Numbers of spaces to (auto)indent
 set et                        " Tabs are converted to spaces, use only when required
 set sts=4                     " Soft tab stop
+
+" indenting
 set smartindent               " Smart indent
 set autoindent
 set nocindent
+
 set wrap
 
 set hlsearch                  " Highlight searches
@@ -56,4 +60,6 @@ autocmd BufWritePre     * :call TrimWhiteSpace()
 " show hidden files in NERDTree
 let NERDTreeShowHidden=1
 
+" only indent 2 spaces for ruby files
+autocmd FileType ruby setlocal sw=2 ts=2 sts=2
 

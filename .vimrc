@@ -20,6 +20,7 @@ set nocindent
 
 set wrap
 
+" searching
 set hlsearch                  " Highlight searches
 set incsearch                 " Do incremental searching
 
@@ -62,4 +63,7 @@ let NERDTreeShowHidden=1
 
 " only indent 2 spaces for ruby files
 autocmd FileType ruby setlocal sw=2 ts=2 sts=2
+
+" to search and replace the word under the cursor
+nnoremap <Leader>s :%s/\<<C-r><C-w>\>/
 

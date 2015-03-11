@@ -25,6 +25,10 @@ I use these config files on all of my development machines, at work and home. I 
 then, add this to the global config
 `git config --global core.excludesfile ~/.gitignore`
 
+## tmux
+
+`ln -s ~/Dropbox/dev/conf/.tmux.conf ~/.tmux.conf`
+
 ## fortune
 
 ### Mac

@@ -117,3 +117,6 @@ export RI="-T --format=ansi"
 # rbenv
 #export PATH="$HOME/.rbenv/bin:$PATH"
 #eval "$(rbenv init -)"
+
+# chruby
+source /usr/local/share/chruby/chruby.sh

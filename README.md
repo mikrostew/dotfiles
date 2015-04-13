@@ -29,6 +29,10 @@ then, add this to the global config
 
 `ln -s ~/Dropbox/dev/conf/.tmux.conf ~/.tmux.conf`
 
+## bundler
+
+`ln -s ~/Dropbox/dev/conf/.bundle ~/.bundle`
+
 ## fortune
 
 ### Mac

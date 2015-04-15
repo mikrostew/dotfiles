@@ -67,3 +67,6 @@ autocmd FileType ruby setlocal sw=2 ts=2 sts=2
 " to search and replace the word under the cursor
 nnoremap <Leader>s :%s/\<<C-r><C-w>\>/
 
+" use the same symbols as TextMate for tabstops and EOLs
+" (http://vimcasts.org/episodes/show-invisibles/)
+set listchars=tab:▸\ ,eol:¬

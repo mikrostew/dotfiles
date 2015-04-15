@@ -36,18 +36,36 @@ if has("autocmd")
   autocmd BufWritePre     * :call StripTrailingWhitespace()
 endif
 
+" syntax highlighting
 syntax enable
-"set background=dark
-"hi Normal ctermfg=grey ctermbg=darkgrey
-hi PreProc ctermfg=magenta
-hi Statement ctermfg=darkYellow
-hi Type ctermfg=blue
-hi Function ctermfg=blue
-hi Identifier ctermfg=darkBlue
-hi Special ctermfg=darkCyan
-hi Constant ctermfg=darkCyan
-hi Comment ctermfg=darkGreen
-au BufRead,BufNewFile *.rb hi rubySymbol ctermfg=green
+" this looks good for ruby, may have to change this for other languages
+hi Normal       ctermfg=grey ctermbg=black
+hi Operator     ctermfg=grey
+hi Delimiter    ctermfg=grey
+hi Comment      ctermfg=darkGrey
+hi Special      ctermfg=darkGrey
+hi PreProc      ctermfg=darkGrey
+hi Define       ctermfg=darkYellow
+hi Conditional  ctermfg=darkYellow
+hi Repeat       ctermfg=darkYellow
+hi Statement    ctermfg=darkYellow
+hi Exception    ctermfg=darkYellow
+hi Keyword      ctermfg=darkYellow
+hi Function     ctermfg=blue
+hi Include      ctermfg=darkBlue
+hi Constant     ctermfg=darkCyan
+hi String       ctermfg=darkCyan
+hi Identifier   ctermfg=green
+hi Number       ctermfg=darkGreen
+hi Character    ctermfg=darkGreen
+hi Float        ctermfg=darkGreen
+hi Boolean      ctermfg=darkGreen
+hi Type         ctermfg=darkGreen
+hi Todo         ctermfg=darkRed ctermbg=black
+hi Error        ctermfg=darkRed ctermbg=black
+" colors for listchars
+hi NonText      ctermfg=darkGrey
+hi SpecialKey   ctermfg=darkGrey
 
 " remove trailing whitespace
 function! StripTrailingWhitespace()

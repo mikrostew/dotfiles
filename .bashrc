@@ -114,9 +114,6 @@ fi
 # formatting for `ri` documentation
 export RI="-T --format=ansi"
 
-# rbenv
-#export PATH="$HOME/.rbenv/bin:$PATH"
-#eval "$(rbenv init -)"
-
-# chruby
+# chruby - source and set a default ruby
 source /usr/local/share/chruby/chruby.sh
+chruby ruby-1.9.3

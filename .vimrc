@@ -10,12 +10,13 @@ set showmatch                 " Show matching bracets
 " default indentation: 4 spaces
 set ts=4 sts=4 sw=4 expandtab
 
-" indenting
-set smartindent               " Smart indent
-set autoindent
-set nocindent
+" show whitespace, using the same symbols as TextMate for tabstops and EOLs
+set list
+set listchars=tab:▸\ ,eol:¬
 
+" wrap text at 96 chars (so I can fit 2 windows side-by-side in tmux)
 set wrap
+set textwidth=96
 
 " searching
 set hlsearch                  " Highlight searches
@@ -24,13 +25,12 @@ set incsearch                 " Do incremental searching
 " only if compiled with support for autocommands
 if has("autocmd")
   " enable file type detection
-  " also loads indent files, to automatically to language-dependent
-  " indenting
+  " also loads indent files, to automatically to language-dependent indenting
   filetype plugin indent on
 
   " customizations based on accepted styles (mostly)
-  autocmd FileType ruby setlocal sw=2 ts=2 sts=2 expandtab
-  autocmd FileType vim setlocal sw=2 ts=2 sts=2 expandtab
+  autocmd FileType ruby setlocal ts=2 sts=2 sw=2 expandtab
+  autocmd FileType vim setlocal ts=2 sts=2 sw=2 expandtab
 endif
 
 syntax enable
@@ -62,6 +62,3 @@ let NERDTreeShowHidden=1
 " to search and replace the word under the cursor
 nnoremap <Leader>s :%s/\<<C-r><C-w>\>/
 
-" use the same symbols as TextMate for tabstops and EOLs
-" (http://vimcasts.org/episodes/show-invisibles/)
-set listchars=tab:▸\ ,eol:¬

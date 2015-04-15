@@ -7,11 +7,8 @@ set title                     " Show title in console title bar
 set hid                       " Change buffer without saving
 set showmatch                 " Show matching bracets
 
-" spaces, no tabs
-set ts=4                      " Numbers of spaces of tab character
-set sw=4                      " Numbers of spaces to (auto)indent
-set et                        " Tabs are converted to spaces, use only when required
-set sts=4                     " Soft tab stop
+" default indentation: 4 spaces
+set ts=4 sts=4 sw=4 expandtab
 
 " indenting
 set smartindent               " Smart indent
@@ -24,17 +21,18 @@ set wrap
 set hlsearch                  " Highlight searches
 set incsearch                 " Do incremental searching
 
-"if has("autocmd")
-"au FileType cpp,c,java,sh,pl,php,python,ruby set autoindent
-"au FileType cpp,c,java,sh,pl,php,py,rb set smartindent
-"au FileType cpp,c,java,sh,pl,php set cindent
-"au BufRead *.py set cinwords=if,elif,else,for,while,try,except,finally,def,class
-"au BufRead *.rb set cinwords=if,elsif,else,unless,for,while,begin,rescue,def,class,module
-"au BufRead *.py set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
-"au BufRead *.rb set smartindent cinwords=if,elsif,else,unless,for,while,begin,rescue,def,class,module
-"endif
+" only if compiled with support for autocommands
+if has("autocmd")
+  " enable file type detection
+  " also loads indent files, to automatically to language-dependent
+  " indenting
+  filetype plugin indent on
 
-filetype plugin indent on
+  " customizations based on accepted styles (mostly)
+  autocmd FileType ruby setlocal sw=2 ts=2 sts=2 expandtab
+  autocmd FileType vim setlocal sw=2 ts=2 sts=2 expandtab
+endif
+
 syntax enable
 "set background=dark
 "hi Normal ctermfg=grey ctermbg=darkgrey
@@ -50,7 +48,7 @@ au BufRead,BufNewFile *.rb hi rubySymbol ctermfg=green
 
 " remove trailing whitespace
 function! TrimWhiteSpace()
-    %s/\s\+$//e
+  %s/\s\+$//e
 endfunction
 
 autocmd FileWritePre    * :call TrimWhiteSpace()
@@ -60,9 +58,6 @@ autocmd BufWritePre     * :call TrimWhiteSpace()
 
 " show hidden files in NERDTree
 let NERDTreeShowHidden=1
-
-" only indent 2 spaces for ruby files
-autocmd FileType ruby setlocal sw=2 ts=2 sts=2
 
 " to search and replace the word under the cursor
 nnoremap <Leader>s :%s/\<<C-r><C-w>\>/

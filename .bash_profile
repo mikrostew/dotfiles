@@ -18,6 +18,3 @@ fi
 if [ -d "/opt/local/bin" ] && [ -d "/opt/local/sbin" ]; then
     export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
 fi
-
-# set a default ruby
-chruby ruby-1.9.3

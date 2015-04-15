@@ -31,6 +31,9 @@ if has("autocmd")
   " customizations based on accepted styles (mostly)
   autocmd FileType ruby setlocal ts=2 sts=2 sw=2 expandtab
   autocmd FileType vim setlocal ts=2 sts=2 sw=2 expandtab
+
+  " strip trailing whitespace before file write
+  autocmd BufWritePre     * :call StripTrailingWhitespace()
 endif
 
 syntax enable
@@ -47,14 +50,17 @@ hi Comment ctermfg=darkGreen
 au BufRead,BufNewFile *.rb hi rubySymbol ctermfg=green
 
 " remove trailing whitespace
-function! TrimWhiteSpace()
+function! StripTrailingWhitespace()
+  " save search and cursor position
+  let _s=@/
+  let l = line(".")
+  let c = col(".")
+  " regex to strip whitespace at the end of lines
   %s/\s\+$//e
+  " restore search history and cursor position
+  let @/=_s
+  call cursor(l,c)
 endfunction
-
-autocmd FileWritePre    * :call TrimWhiteSpace()
-autocmd FileAppendPre   * :call TrimWhiteSpace()
-autocmd FilterWritePre  * :call TrimWhiteSpace()
-autocmd BufWritePre     * :call TrimWhiteSpace()
 
 " show hidden files in NERDTree
 let NERDTreeShowHidden=1

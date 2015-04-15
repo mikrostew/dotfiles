@@ -11,7 +11,7 @@ set showmatch                 " Show matching bracets
 set ts=4 sts=4 sw=4 expandtab
 
 " show whitespace, using the same symbols as TextMate for tabstops and EOLs
-set list
+"set list
 set listchars=tab:▸\ ,eol:¬
 
 " wrap text at 96 chars (so I can fit 2 windows side-by-side in tmux)

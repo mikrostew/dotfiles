@@ -41,7 +41,6 @@ syntax enable
 " this looks good for ruby, may have to change this for other languages
 hi Normal       ctermfg=grey ctermbg=black
 hi Operator     ctermfg=grey
-hi Delimiter    ctermfg=grey
 hi Comment      ctermfg=darkGrey
 hi Special      ctermfg=darkGrey
 hi PreProc      ctermfg=darkGrey
@@ -52,6 +51,7 @@ hi Statement    ctermfg=darkYellow
 hi Exception    ctermfg=darkYellow
 hi Keyword      ctermfg=darkYellow
 hi Function     ctermfg=blue
+hi Delimiter    ctermfg=blue
 hi Include      ctermfg=darkBlue
 hi String       ctermfg=darkCyan
 hi Identifier   ctermfg=green

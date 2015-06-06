@@ -44,3 +44,7 @@ Then `sudo port install fortune`
 
 `sudo apt-get install fortune`
 
+## ssh
+
+`ln -s ~/Dropbox/dev/conf/.ssh-config ~/.ssh/config`
+

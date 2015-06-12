@@ -1,3 +1,21 @@
-Host            github.com
-    IdentityFile    ~/.ssh/github-mikrostew
+Host desktop
+    Hostname 10.0.201.97
+    User mstewart
+    IdentityFile ~/.ssh/desktop_rsa
+    IdentitiesOnly yes
+    Port 22
+Host sldc1
+    Hostname 173.192.196.34
+    User root
+    IdentityFile ~/.ssh/id_rsa_softlayer_console
+    IdentitiesOnly yes
+    Port 22
+# for local VMs/machines, try the key that is on trac
+Host 10.0.*
+    IdentityFile ~/.ssh/id_rsa
+    IdentitiesOnly yes
+# github
+Host github.com
+    Hostname github.com
+    IdentityFile    ~/.ssh/github_mikrostew
     IdentitiesOnly yes

@@ -1,7 +1,7 @@
 Host desktop
     Hostname 10.0.201.97
     User mstewart
-    IdentityFile ~/.ssh/desktop_rsa
+    IdentityFile ~/.ssh/aspera_rsa
     IdentitiesOnly yes
     Port 22
 Host sldc1
@@ -18,4 +18,8 @@ Host 10.0.*
 Host github.com
     Hostname github.com
     IdentityFile    ~/.ssh/github_mikrostew
+    IdentitiesOnly yes
+Host gitlab.aspera.us
+    Hostname gitlab.aspera.us
+    IdentityFile ~/.ssh/aspera_rsa
     IdentitiesOnly yes

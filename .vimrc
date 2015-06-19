@@ -22,6 +22,16 @@ set textwidth=96
 set hlsearch                  " Highlight searches
 set incsearch                 " Do incremental searching
 
+" set the leader key to space (easier to type than backslash)
+let mapleader = " "
+
+" leader commands
+
+" select the text that was just pasted, so I can do things to it
+nnoremap <leader>v V`]
+" get rid of annoying highlighting once I'm done with it
+nnoremap <leader><space> :noh<cr>
+
 " only if compiled with support for autocommands
 if has("autocmd")
   " enable file type detection

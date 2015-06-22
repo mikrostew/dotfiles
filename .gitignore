@@ -19,8 +19,5 @@ bin/
 # bundler config and gems
 .bundle/
 
-# PGP key files
-*.asc
-
 # SVN directories (for tracking svn repos in a branch)
 .svn/

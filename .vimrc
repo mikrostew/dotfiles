@@ -1,3 +1,6 @@
+" use pathogen.vim for managing plugins (https://github.com/tpope/vim-pathogen)
+execute pathogen#infect()
+
 set nocompatible              " Use vim defaults
 "set ls=2                      " Always show status line
 set showcmd                   " Show incomplete commands

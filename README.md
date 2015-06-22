@@ -5,6 +5,7 @@ I use these config files on all of my development machines, at work and home. I 
 ## vim
 
 `ln -s Dropbox/dev/conf/.vimrc ~/.vimrc`
+`ln -s ~/Dropbox/dev/plugin/.vim ~/.vim`
 
 ## bash
 

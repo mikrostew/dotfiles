@@ -63,6 +63,20 @@ set formatoptions=qrn1j         " text formatting options
 "set list                        " leave this off, since it's distracting
 set listchars=tab:▸\ ,eol:¬     " use the same symbols as TextMate for tabstops and EOLs
 
+""" do the right thing
+
+nnoremap <up> <nop>
+nnoremap <down> <nop>
+nnoremap <left> <nop>
+nnoremap <right> <nop>
+inoremap <up> <nop>
+inoremap <down> <nop>
+inoremap <left> <nop>
+inoremap <right> <nop>
+" move by screen line instead of file line
+nnoremap j gj
+nnoremap k gk
+
 " leader commands
 
 " select the text that was just pasted, so I can do things to it

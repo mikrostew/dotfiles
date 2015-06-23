@@ -86,12 +86,14 @@ vnoremap <F1> <ESC>
 " save when focus is lost
 autocmd FocusLost * :wa
 
-" leader commands
+""" custom commands
 
 " select the text that was just pasted, so I can do things to it
 nnoremap <leader>v V`]
 " search and replace the word under the cursor
 nnoremap <leader>s :%s/\<<C-r><C-w>\>/
+" open a new vertical split and switch to it
+nnoremap <leader>w <C-w>v<C-w>l
 
 " only if compiled with support for autocommands
 if has("autocmd")

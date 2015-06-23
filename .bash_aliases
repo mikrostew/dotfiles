@@ -6,6 +6,11 @@ alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
 
+# tmux
+alias tl='tmux ls'
+alias ta='tmux at'
+alias tn='tmux new'
+
 # so that tmux will display 256 colors correctly
 alias tmux='TERM=xterm-256color tmux'
 

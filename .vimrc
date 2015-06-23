@@ -63,7 +63,7 @@ set formatoptions=qrn1j         " text formatting options
 "set list                        " leave this off, since it's distracting
 set listchars=tab:▸\ ,eol:¬     " use the same symbols as TextMate for tabstops and EOLs
 
-""" do the right thing
+""" do the right thing (also disables mouse scrolling)
 
 nnoremap <up> <nop>
 nnoremap <down> <nop>
@@ -76,6 +76,15 @@ inoremap <right> <nop>
 " move by screen line instead of file line
 nnoremap j gj
 nnoremap k gk
+
+""" annoyances
+
+" get rid of that stupid F1 key that I hit accidentally when aiming for escape
+inoremap <F1> <ESC>
+nnoremap <F1> <ESC>
+vnoremap <F1> <ESC>
+" save when focus is lost
+autocmd FocusLost * :wa
 
 " leader commands
 

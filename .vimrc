@@ -154,6 +154,13 @@ function! StripTrailingWhitespace()
   call cursor(l,c)
 endfunction
 
+""" plugins
+
 " show hidden files in NERDTree
 let NERDTreeShowHidden=1
+
+" vim-slime with tmux
+let g:slime_target="tmux"
+" this will use the second pane of the window I am currently in
+let g:slime_default_config = {"socket_name": "default", "target_pane": ":1.2"}
 

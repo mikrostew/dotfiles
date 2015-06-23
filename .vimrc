@@ -94,6 +94,8 @@ nnoremap <leader>v V`]
 nnoremap <leader>s :%s/\<<C-r><C-w>\>/
 " open a new vertical split and switch to it
 nnoremap <leader>w <C-w>v<C-w>l
+" use ack in vim
+nnoremap <leader>a :Ack
 
 " only if compiled with support for autocommands
 if has("autocmd")

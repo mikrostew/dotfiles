@@ -1,5 +1,6 @@
 " use pathogen.vim for managing plugins (https://github.com/tpope/vim-pathogen)
 execute pathogen#infect()
+filetype plugin indent on
 
 " don't need to be compatible with vi
 set nocompatible
@@ -62,8 +63,10 @@ set formatoptions=qrn1j         " text formatting options
 
 "set list                        " leave this off, since it's distracting
 set listchars=tab:▸\ ,eol:¬     " use the same symbols as TextMate for tabstops and EOLs
+" strip trailing whitespace before file write
+autocmd BufWritePre * :call StripTrailingWhitespace()
 
-""" do the right thing (also disables mouse scrolling)
+""" do the right thing - no arrow keys (also disables mouse scrolling)
 
 nnoremap <up> <nop>
 nnoremap <down> <nop>
@@ -97,21 +100,13 @@ nnoremap <leader>w <C-w>v<C-w>l
 " use ack in vim
 nnoremap <leader>a :Ack
 
-" only if compiled with support for autocommands
-if has("autocmd")
-  " enable file type detection
-  " also loads indent files, to automatically to language-dependent indenting
-  filetype plugin indent on
+""" filetype styles
 
-  " customizations based on accepted styles (mostly)
-  autocmd FileType ruby setlocal ts=2 sts=2 sw=2 expandtab
-  autocmd FileType vim setlocal ts=2 sts=2 sw=2 expandtab
+autocmd FileType ruby setlocal ts=2 sts=2 sw=2 expandtab
+autocmd FileType vim setlocal ts=2 sts=2 sw=2 expandtab
 
-  " strip trailing whitespace before file write
-  autocmd BufWritePre     * :call StripTrailingWhitespace()
-endif
+""" syntax highlighting
 
-" syntax highlighting
 syntax enable
 " line numbers should be grey
 hi LineNr       ctermfg=darkGrey
@@ -144,6 +139,8 @@ hi Error        ctermfg=darkRed ctermbg=black
 hi NonText      ctermfg=darkGrey
 hi SpecialKey   ctermfg=darkGrey
 
+""" functions
+
 " remove trailing whitespace
 function! StripTrailingWhitespace()
   " save search and cursor position
@@ -159,5 +156,4 @@ endfunction
 
 " show hidden files in NERDTree
 let NERDTreeShowHidden=1
-
 

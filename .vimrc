@@ -9,6 +9,8 @@ set modelines=0
 " default indentation: 4 spaces
 set ts=4 sts=4 sw=4 expandtab
 
+""" basic options
+
 set encoding=utf-8              " sane default file encoding
 set scrolloff=3                 " minimum nuber of lines to keep above and below the cursor
 set autoindent                  " use the indent of the current line for a new line
@@ -25,8 +27,25 @@ set backspace=indent,eol,start  " allow backspacing over these options in Insert
 set laststatus=2                " always show the status line
 set relativenumber              " show line number relative to cursor line
 set undofile                    " save undo history to a file
-set showmatch                   " show matching bracets
 set title                       " show title in console title bar
+let mapleader = " "             " set the leader key to space (easier to type than backslash)
+
+""" searching/moving
+
+" use normal regex for search
+nnoremap / /\v
+vnoremap / /\v
+set ignorecase                  " case insensitive search
+set smartcase                   " any uppercase characters cause search to be case sensitive
+set gdefault                    " use /g by default
+set incsearch                   " show matches as you type
+set showmatch                   " show matching brackets
+set hlsearch                    " highlight search pattern matches
+" get rid of search highlighting once I'm done with it
+nnoremap <leader><space> :noh<cr>
+" use Tab to jump between bracket pairs ([{}])
+nnoremap <tab> %
+vnoremap <tab> %
 
 " show whitespace, using the same symbols as TextMate for tabstops and EOLs
 "set list
@@ -36,19 +55,10 @@ set listchars=tab:▸\ ,eol:¬
 set wrap
 set textwidth=96
 
-" searching
-set hlsearch                  " Highlight searches
-set incsearch                 " Do incremental searching
-
-" set the leader key to space (easier to type than backslash)
-let mapleader = " "
-
 " leader commands
 
 " select the text that was just pasted, so I can do things to it
 nnoremap <leader>v V`]
-" get rid of annoying highlighting once I'm done with it
-nnoremap <leader><space> :noh<cr>
 " search and replace the word under the cursor
 nnoremap <leader>s :%s/\<<C-r><C-w>\>/
 

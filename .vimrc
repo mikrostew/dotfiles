@@ -1,17 +1,32 @@
 " use pathogen.vim for managing plugins (https://github.com/tpope/vim-pathogen)
 execute pathogen#infect()
 
-set nocompatible              " Use vim defaults
-"set ls=2                      " Always show status line
-set showcmd                   " Show incomplete commands
-set scrolloff=3               " Keep 3 lines when scrolling
-set ruler                     " Show the cursor position all the time
-set title                     " Show title in console title bar
-set hid                       " Change buffer without saving
-set showmatch                 " Show matching bracets
+" don't need to be compatible with vi
+set nocompatible
+" supposedly this prevents security exploits, and I don't use it anyway
+set modelines=0
 
 " default indentation: 4 spaces
 set ts=4 sts=4 sw=4 expandtab
+
+set encoding=utf-8              " sane default file encoding
+set scrolloff=3                 " minimum nuber of lines to keep above and below the cursor
+set autoindent                  " use the indent of the current line for a new line
+set showmode                    " show a message when in Insert, Replace, or Visual mode
+set showcmd                     " show partial command in the last line on the screen
+set hidden                      " buffer is hidden when abandoned (instead of unloaded)
+set wildmenu                    " enhanced command line completion
+set wildmode=list:longest       " list matches, and complete to the longest common string
+set visualbell                  " use visual bell instead of beeping
+set cursorline                  " highlight the screen line of the cursor
+set ttyfast                     " indicates a fast terminal connection, should be smoother
+set ruler                       " show the line and column of the cursor position
+set backspace=indent,eol,start  " allow backspacing over these options in Insert mode
+set laststatus=2                " always show the status line
+set relativenumber              " show line number relative to cursor line
+set undofile                    " save undo history to a file
+set showmatch                   " show matching bracets
+set title                       " show title in console title bar
 
 " show whitespace, using the same symbols as TextMate for tabstops and EOLs
 "set list
@@ -34,6 +49,8 @@ let mapleader = " "
 nnoremap <leader>v V`]
 " get rid of annoying highlighting once I'm done with it
 nnoremap <leader><space> :noh<cr>
+" search and replace the word under the cursor
+nnoremap <leader>s :%s/\<<C-r><C-w>\>/
 
 " only if compiled with support for autocommands
 if has("autocmd")
@@ -51,6 +68,8 @@ endif
 
 " syntax highlighting
 syntax enable
+" line numbers should be grey
+hi LineNr       ctermfg=darkGrey
 " this looks good for ruby, may have to change this for other languages
 hi Normal       ctermfg=grey ctermbg=black
 hi Operator     ctermfg=grey
@@ -96,6 +115,4 @@ endfunction
 " show hidden files in NERDTree
 let NERDTreeShowHidden=1
 
-" to search and replace the word under the cursor
-nnoremap <Leader>s :%s/\<<C-r><C-w>\>/
 

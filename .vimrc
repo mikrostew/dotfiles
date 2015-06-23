@@ -47,13 +47,21 @@ nnoremap <leader><space> :noh<cr>
 nnoremap <tab> %
 vnoremap <tab> %
 
-" show whitespace, using the same symbols as TextMate for tabstops and EOLs
-"set list
-set listchars=tab:▸\ ,eol:¬
+""" long line handling
 
-" wrap text at 96 chars (so I can fit 2 windows side-by-side in tmux)
-set wrap
-set textwidth=96
+set wrap                        " wrap long lines
+set textwidth=96                " at 96 chars I can fit 2 windows side-by-side in tmux
+set formatoptions=qrn1j         " text formatting options
+" q - allows hard-wrapping comments with "gq"
+" r - automatically insert the current comment leader after <Enter> in Insert mode
+" n - recognize numbered lists
+" 1 - don't break a line after a 1-letter word
+" j - remove comment leader when joining lines
+
+""" whitespace
+
+"set list                        " leave this off, since it's distracting
+set listchars=tab:▸\ ,eol:¬     " use the same symbols as TextMate for tabstops and EOLs
 
 " leader commands
 

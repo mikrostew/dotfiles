@@ -100,6 +100,11 @@ nnoremap <leader>w <C-w>v<C-w>l
 " use ack in vim
 nnoremap <leader>a :Ack
 
+""" edit my vimrc
+
+nmap <leader>ev :e $MYVIMRC<CR>
+nmap <leader>sv :so $MYVIMRC<CR>
+
 """ filetype styles
 
 autocmd FileType ruby setlocal ts=2 sts=2 sw=2 expandtab

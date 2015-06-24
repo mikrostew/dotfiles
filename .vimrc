@@ -43,7 +43,7 @@ set incsearch                   " show matches as you type
 set showmatch                   " show matching brackets
 set hlsearch                    " highlight search pattern matches
 " get rid of search highlighting once I'm done with it
-nnoremap <leader><space> :noh<cr>
+nnoremap <leader><space> :nohls<cr>
 " use Tab to jump between bracket pairs ([{}])
 nnoremap <tab> %
 vnoremap <tab> %
@@ -52,12 +52,11 @@ vnoremap <tab> %
 
 set wrap                        " wrap long lines
 set textwidth=96                " at 96 chars I can fit 2 windows side-by-side in tmux
-set formatoptions=qrn1j         " text formatting options
+set formatoptions=qrn1          " text formatting options
 " q - allows hard-wrapping comments with "gq"
 " r - automatically insert the current comment leader after <Enter> in Insert mode
 " n - recognize numbered lists
 " 1 - don't break a line after a 1-letter word
-" j - remove comment leader when joining lines
 
 """ whitespace
 

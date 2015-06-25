@@ -94,8 +94,9 @@ autocmd FocusLost * :wa
 nnoremap <leader>v V`]
 " search and replace the word under the cursor
 nnoremap <leader>s :%s/\<<C-r><C-w>\>/
-" open a new vertical split and switch to it
-nnoremap <leader>w <C-w>v<C-w>l
+" open vertical split with | and horizontal with -
+nnoremap <leader>\| <C-w>v<C-w>l
+nnoremap <leader>- <C-w>s<C-w>j
 " use ack in vim
 nnoremap <leader>a :Ack
 

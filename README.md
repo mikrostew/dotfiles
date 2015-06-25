@@ -34,17 +34,6 @@ then, add this to the global config
 
 `ln -s ~/Dropbox/dev/conf/.bundle ~/.bundle`
 
-## fortune
-
-### Mac
-
-First install MacPorts (https://www.macports.org/install.php)
-Then `sudo port install fortune`
-
-### Ubuntu
-
-`sudo apt-get install fortune`
-
 ## ssh
 
 `ln -s ~/Dropbox/dev/conf/.ssh-config ~/.ssh/config`

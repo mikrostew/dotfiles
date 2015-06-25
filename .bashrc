@@ -100,17 +100,6 @@ if ! shopt -oq posix; then
   fi
 fi
 
-# output fortune at every login
-if [ -f "/opt/local/bin/fortune" ]; then
-    # Mac
-    /opt/local/bin/fortune
-elif [ -f "/usr/games/fortune" ]; then
-    # Ubuntu
-    /usr/games/fortune
-else
-    echo "(fortune not installed)"
-fi
-
 # formatting for `ri` documentation
 export RI="-T --format=ansi"
 

@@ -87,8 +87,10 @@ nnoremap <F1> <ESC>
 vnoremap <F1> <ESC>
 " save when focus is lost
 autocmd FocusLost * :wa
+" easy toggle for pasting text without the crazy indentation
+set pastetoggle=<F2>
 
-""" custom commands
+""" misc commands
 
 " select the text that was just pasted, so I can do things to it
 nnoremap <leader>v V`]

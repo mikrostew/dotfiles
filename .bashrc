@@ -106,3 +106,7 @@ export RI="-T --format=ansi"
 # chruby - source and set a default ruby
 source /usr/local/share/chruby/chruby.sh
 chruby ruby-1.9.3
+
+# 256 color support
+export TERM=xterm-256color
+

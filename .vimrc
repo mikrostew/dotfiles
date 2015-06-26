@@ -33,9 +33,6 @@ let mapleader = " "             " set the leader key to space (easier to type th
 
 """ searching/moving
 
-" use normal regex for search
-nnoremap / /\v
-vnoremap / /\v
 set ignorecase                  " case insensitive search
 set smartcase                   " any uppercase characters cause search to be case sensitive
 set gdefault                    " use /g by default

@@ -114,10 +114,15 @@ autocmd FileType vim setlocal ts=2 sts=2 sw=2 expandtab
 
 """ syntax highlighting
 
+" syntax highlighting, with a nice colorscheme
 syntax enable
 colorscheme wombat
 " line numbers should be grey
 hi LineNr       ctermfg=darkGrey
+" make the Ubuntu terminal look better
+if $COLORTERM == 'gnome-terminal'
+  set t_Co=256
+endif
 
 """ functions
 

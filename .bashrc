@@ -37,6 +37,7 @@ repo_status() {
     git_status=$(git status 2>/dev/null)
     if [ $? -eq 0 ]; then
         git_branch=$( ( [[ "$git_status" =~ On\ branch\ ([^$'\n']+) ]] && echo ${BASH_REMATCH[1]} ) || echo '?' )
+        git_rebase=$( ( [[ "$git_status" =~ rebase\ in\ progress ]] && echo '<rebase>' ) || echo '' )
         git_ahead=$( ( [[ "$git_status" =~ Your\ branch\ is\ ahead\ of\ .*\ by\ ([0-9]+)\ commit ]] && echo "+${BASH_REMATCH[1]}" ) || echo '' )
         git_staged=$( [[ "$git_status" =~ Changes\ to\ be\ committed ]] && echo 'stag' )
         git_unstaged=$( [[ "$git_status" =~ Changes\ not\ staged\ for\ commit ]] && echo 'unst' )
@@ -45,7 +46,7 @@ repo_status() {
         # join stat strings with commas
         git_stat_str=($git_staged $git_unstaged $git_untracked $git_ok)
         git_stat_str=$(IFS=, ; echo "${git_stat_str[*]}")
-        echo " git($git_branch$git_ahead $git_stat_str)"
+        echo " git($git_rebase$git_branch$git_ahead $git_stat_str)"
     elif [ -d .svn ]; then
         svn_info=$(svn info 2>/dev/null)
         svn_path=$( ( [[ "$svn_info" =~ URL:\ ([^$'\n']+) ]] && echo ${BASH_REMATCH[1]} ) || echo '?' )
@@ -105,7 +106,7 @@ export RI="-T --format=ansi"
 
 # chruby - source and set a default ruby
 source /usr/local/share/chruby/chruby.sh
-chruby ruby-1.9.3
+chruby ruby-2
 
 # 256 color support
 export TERM=xterm-256color

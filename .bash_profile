@@ -18,3 +18,9 @@ fi
 if [ -d "/opt/local/bin" ] && [ -d "/opt/local/sbin" ]; then
     export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
 fi
+
+# environment for cxxtext
+if [ -d "$HOME/Dropbox/dev/includes/cxxtest-4.4/bin" ]; then
+    export PATH="$PATH:$HOME/Dropbox/dev/includes/cxxtest-4.4/bin"
+    export CXXTEST="$HOME/Dropbox/dev/includes/cxxtest-4.4"
+fi

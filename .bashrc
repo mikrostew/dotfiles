@@ -38,15 +38,17 @@ repo_status() {
     if [ $? -eq 0 ]; then
         git_branch=$( ( [[ "$git_status" =~ On\ branch\ ([^$'\n']+) ]] && echo ${BASH_REMATCH[1]} ) || echo '?' )
         git_rebase=$( ( [[ "$git_status" =~ rebase\ in\ progress ]] && echo '<rebase>' ) || echo '' )
+        git_detached=$( ( [[ "$git_status" =~ HEAD\ detached\ from ]] && echo '<detached>' ) || echo '' )
         git_ahead=$( ( [[ "$git_status" =~ Your\ branch\ is\ ahead\ of\ .*\ by\ ([0-9]+)\ commit ]] && echo "+${BASH_REMATCH[1]}" ) || echo '' )
         git_staged=$( [[ "$git_status" =~ Changes\ to\ be\ committed ]] && echo 'stag' )
         git_unstaged=$( [[ "$git_status" =~ Changes\ not\ staged\ for\ commit ]] && echo 'unst' )
         git_untracked=$( [[ "$git_status" =~ Untracked\ files ]] && echo 'untr' )
+        git_unmerged=$( [[ "$git_status" =~ Unmerged ]] && echo 'unmg' )
         git_ok=$( [[ "$git_status" =~ nothing\ to\ commit|working\ directory\ clean ]] && echo 'ok' )
         # join stat strings with commas
-        git_stat_str=($git_staged $git_unstaged $git_untracked $git_ok)
+        git_stat_str=($git_staged $git_unstaged $git_untracked $git_unmerged $git_ok)
         git_stat_str=$(IFS=, ; echo "${git_stat_str[*]}")
-        echo " git($git_rebase$git_branch$git_ahead $git_stat_str)"
+        echo " git($git_rebase$git_detached$git_branch$git_ahead $git_stat_str)"
     elif [ -d .svn ]; then
         svn_info=$(svn info 2>/dev/null)
         svn_path=$( ( [[ "$svn_info" =~ URL:\ ([^$'\n']+) ]] && echo ${BASH_REMATCH[1]} ) || echo '?' )

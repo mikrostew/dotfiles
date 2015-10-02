@@ -27,7 +27,6 @@ set ruler                       " show the line and column of the cursor positio
 set backspace=indent,eol,start  " allow backspacing over these options in Insert mode
 set laststatus=2                " always show the status line
 set relativenumber              " show line number relative to cursor line
-set undofile                    " save undo history to a file
 set title                       " show title in console title bar
 let mapleader = " "             " set the leader key to space (easier to type than backslash)
 

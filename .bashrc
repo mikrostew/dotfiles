@@ -38,7 +38,7 @@ repo_status() {
     if [ $? -eq 0 ]; then
         git_branch=$( ( [[ "$git_status" =~ On\ branch\ ([^$'\n']+) ]] && echo ${BASH_REMATCH[1]} ) || echo '?' )
         git_rebase=$( ( [[ "$git_status" =~ rebase\ in\ progress ]] && echo '<rebase>' ) || echo '' )
-        git_detached=$( ( [[ "$git_status" =~ HEAD\ detached\ from ]] && echo '<detached>' ) || echo '' )
+        git_detached=$( ( [[ "$git_status" =~ HEAD\ detached ]] && echo '<detached>' ) || echo '' )
         git_ahead=$( ( [[ "$git_status" =~ Your\ branch\ is\ ahead\ of\ .*\ by\ ([0-9]+)\ commit ]] && echo "+${BASH_REMATCH[1]}" ) || echo '' )
         git_staged=$( [[ "$git_status" =~ Changes\ to\ be\ committed ]] && echo 'stag' )
         git_unstaged=$( [[ "$git_status" =~ Changes\ not\ staged\ for\ commit ]] && echo 'unst' )

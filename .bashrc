@@ -29,6 +29,10 @@ shopt -s checkwinsize
 # replace home dir in PWD with ~,
 # add a trailing slash to the PWD if there is not one
 MY_PS='$(echo "$PWD" | sed -e "s|^$HOME|~|" -e "s|/*$|/|")'
+COLOR_RED='\033[0;31m'
+COLOR_GREEN='\033[0;32m'
+COLOR_YELLOW='\033[1;33m'
+COLOR_RESET='\033[0m'
 # show info about what kind of repo we're in
 # some code and ideas from:
 # - http://zanshin.net/2012/03/09/wordy-nerdy-zsh-prompt/
@@ -40,22 +44,22 @@ repo_status() {
         git_rebase=$( ( [[ "$git_status" =~ rebase\ in\ progress ]] && echo '<rebase>' ) || echo '' )
         git_detached=$( ( [[ "$git_status" =~ HEAD\ detached ]] && echo '<detached>' ) || echo '' )
         git_ahead=$( ( [[ "$git_status" =~ Your\ branch\ is\ ahead\ of\ .*\ by\ ([0-9]+)\ commit ]] && echo "+${BASH_REMATCH[1]}" ) || echo '' )
-        git_staged=$( [[ "$git_status" =~ Changes\ to\ be\ committed ]] && echo 'stag' )
-        git_unstaged=$( [[ "$git_status" =~ Changes\ not\ staged\ for\ commit ]] && echo 'unst' )
-        git_untracked=$( [[ "$git_status" =~ Untracked\ files ]] && echo 'untr' )
-        git_unmerged=$( [[ "$git_status" =~ Unmerged ]] && echo 'unmg' )
-        git_ok=$( [[ "$git_status" =~ nothing\ to\ commit|working\ directory\ clean ]] && echo 'ok' )
+        git_staged=$( [[ "$git_status" =~ Changes\ to\ be\ committed ]] && echo "${COLOR_GREEN}stag${COLOR_RESET}" )
+        git_unstaged=$( [[ "$git_status" =~ Changes\ not\ staged\ for\ commit ]] && echo "${COLOR_RED}unst${COLOR_RESET}" )
+        git_untracked=$( [[ "$git_status" =~ Untracked\ files ]] && echo "${COLOR_YELLOW}untr${COLOR_RESET}" )
+        git_unmerged=$( [[ "$git_status" =~ Unmerged ]] && echo "${COLOR_RED}unmg${COLOR_RESET}" )
+        git_ok=$( [[ "$git_status" =~ nothing\ to\ commit|working\ directory\ clean ]] && echo "${COLOR_GREEN}ok${COLOR_RESET}" )
         # join stat strings with commas
         git_stat_str=($git_staged $git_unstaged $git_untracked $git_unmerged $git_ok)
         git_stat_str=$(IFS=, ; echo "${git_stat_str[*]}")
-        echo " git($git_rebase$git_detached$git_branch$git_ahead $git_stat_str)"
+        echo -e " git($git_rebase$git_detached$git_branch$git_ahead $git_stat_str)"
     elif [ -d .svn ]; then
         svn_info=$(svn info 2>/dev/null)
         svn_path=$( ( [[ "$svn_info" =~ URL:\ ([^$'\n']+) ]] && echo ${BASH_REMATCH[1]} ) || echo '?' )
         svn_revision=$( [[ "$svn_info" =~ Revision:\ ([0-9]+) ]] && echo ${BASH_REMATCH[1]} )
         svn_stat=$(svn status 2>/dev/null)
-        svn_dirty=$( ( [[ "$svn_stat" =~ [?!AM]([[:space:]]+[^$'\n']+) ]] && echo 'dirty' ) || echo 'ok' )
-        echo " svn($svn_path@$svn_revision $svn_dirty)"
+        svn_dirty=$( ( [[ "$svn_stat" =~ [?!AM]([[:space:]]+[^$'\n']+) ]] && echo 'dirty' ) || echo "${COLOR_GREEN}ok${COLOR_RESET}" )
+        echo -e " svn($svn_path@$svn_revision $svn_dirty)"
     else
         echo ''
     fi

@@ -39,30 +39,56 @@ COLOR_RESET='\033[0m'
 # some code and ideas from:
 # - http://zanshin.net/2012/03/09/wordy-nerdy-zsh-prompt/
 # - https://github.com/sjl/oh-my-zsh/commit/3d22ee248c6bce357c018a93d31f8d292d2cb4cd
+# - https://github.com/magicmonty/bash-git-prompt
 repo_status() {
     git_status=$(git status 2>/dev/null)
     if [ $? -eq 0 ]; then
+        # count occurrences of each case
+        git_status_porcelain=$(git status --porcelain --untracked-files=all --branch)
+        git_num_conflict=0
+        git_num_modified=0
+        git_num_untracked=0
+        git_num_staged=0
+        while IFS='' read -r line; do
+            XY=${line:0:2}
+            case "$XY" in
+                \#\#) git_branch_line="$line" ;;
+                U?)    ((git_num_conflict++)) ;;  # unmerged
+                ?U)    ((git_num_conflict++)) ;;  # unmerged
+                DD)    ((git_num_conflict++)) ;;  # unmerged (both deleted)
+                AA)    ((git_num_conflict++)) ;;  # unmerged (both added)
+                ?[MD]) ((git_num_modified++)) ;;  # modified/deleted in working tree
+                \?\?)  ((git_num_untracked++)) ;; # untracked in index and working tree
+            esac
+            case "$XY" in
+                [MARCD]?) ((git_num_staged++)) ;; # modified/added/renamed/copied/deleted in index
+            esac
+        done <<< "$git_status_porcelain"
+
         git_branch=$( ( [[ "$git_status" =~ On\ branch\ ([^$'\n']+) ]] && echo ${BASH_REMATCH[1]} ) || echo '?' )
         git_rebase=$( ( [[ "$git_status" =~ rebase\ in\ progress ]] && echo '<rebase>' ) || echo '' )
         git_detached=$( ( [[ "$git_status" =~ HEAD\ detached ]] && echo '<detached>' ) || echo '' )
         git_ahead=$( ( [[ "$git_status" =~ Your\ branch\ is\ ahead\ of\ .*\ by\ ([0-9]+)\ commit ]] && echo "+${BASH_REMATCH[1]}" ) || echo '' )
-        git_staged=$( [[ "$git_status" =~ Changes\ to\ be\ committed ]] && echo "${COLOR_GREEN}stag${COLOR_RESET}" )
-        git_unstaged=$( [[ "$git_status" =~ Changes\ not\ staged\ for\ commit ]] && echo "${COLOR_RED}unst${COLOR_RESET}" )
-        git_untracked=$( [[ "$git_status" =~ Untracked\ files ]] && echo "${COLOR_YELLOW}untr${COLOR_RESET}" )
-        git_unmerged=$( [[ "$git_status" =~ Unmerged ]] && echo "${COLOR_RED}unmg${COLOR_RESET}" )
-        git_ok=$( [[ "$git_status" =~ nothing\ to\ commit|working\ directory\ clean ]] && echo "${COLOR_GREEN}ok${COLOR_RESET}" )
+        git_behind=$( ( [[ "$git_status" =~ Your\ branch\ is\ behind\ .*\ by\ ([0-9]+)\ commit ]] && echo "-${BASH_REMATCH[1]}" ) || echo '' )
+
+        git_staged=$( [ "$git_num_staged" -gt 0 ] && echo "${COLOR_GREEN}*$git_num_staged${COLOR_RESET}" )
+        git_modified=$( [ "$git_num_modified" -gt 0 ] && echo "${COLOR_RED}+$git_num_modified${COLOR_RESET}" )
+        git_untracked=$( [ "$git_num_untracked" -gt 0 ] && echo "${COLOR_YELLOW}?$git_num_untracked${COLOR_RESET}" )
+        git_conflict=$( [ "$git_num_conflict" -gt 0 ] && echo "${COLOR_RED}!$git_num_conflict${COLOR_RESET}" )
+
+        git_ok=$( [[ "$git_status" =~ nothing\ to\ commit|working\ directory\ clean ]] && echo "${COLOR_GREEN}--${COLOR_RESET}" )
         # join stat strings with commas
-        git_stat_str=($git_staged $git_unstaged $git_untracked $git_unmerged $git_ok)
+        git_stat_str=($git_staged $git_modified $git_untracked $git_conflict $git_ok)
         git_stat_str=$(IFS=, ; echo "${git_stat_str[*]}")
-        echo -e " ${COLOR_BLUE}git${COLOR_RESET}|${COLOR_BLUE}$git_rebase$git_detached$git_branch${COLOR_RESET}$git_ahead $git_stat_str"
+        echo -e " ${COLOR_BLUE}git${COLOR_RESET}|${COLOR_BLUE}$git_rebase$git_detached$git_branch${COLOR_RESET}$git_behind$git_ahead|$git_stat_str"
     elif [ -d .svn ]; then
         svn_info=$(svn info 2>/dev/null)
         svn_path=$( ( [[ "$svn_info" =~ URL:\ ([^$'\n']+) ]] && echo ${BASH_REMATCH[1]} ) || echo '?' )
-        protocol=$(expr "$svn_path" : '\([a-z]\+://\)') # remove the svn:// or https:// from the start of the repo
+        svn_protocol=$(expr "$svn_path" : '\([a-z]\+://\)') # remove the svn:// or https:// from the start of the repo
         svn_revision=$( [[ "$svn_info" =~ Revision:\ ([0-9]+) ]] && echo ${BASH_REMATCH[1]} )
         svn_stat=$(svn status 2>/dev/null)
         svn_dirty=$( ( [[ "$svn_stat" =~ [?!AM]([[:space:]]+[^$'\n']+) ]] && echo 'dirty' ) || echo "${COLOR_GREEN}ok${COLOR_RESET}" )
-        echo -e " ${COLOR_BLUE}svn${COLOR_RESET}|${COLOR_BLUE}${svn_path#$protocol}${COLOR_RESET}@${COLOR_BLUE}$svn_revision${COLOR_RESET} $svn_dirty"
+        echo -e " ${COLOR_BLUE}svn${COLOR_RESET}|${COLOR_BLUE}${svn_path#$svn_protocol}${COLOR_RESET}@${COLOR_BLUE}$svn_revision${COLOR_RESET} $svn_dirty"
     else
         echo ''
     fi

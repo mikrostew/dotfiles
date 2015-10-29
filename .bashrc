@@ -29,9 +29,11 @@ shopt -s checkwinsize
 # replace home dir in PWD with ~,
 # add a trailing slash to the PWD if there is not one
 MY_PS='$(echo "$PWD" | sed -e "s|^$HOME|~|" -e "s|/*$|/|")'
+# colors used in the prompt
 COLOR_RED='\033[0;31m'
 COLOR_GREEN='\033[0;32m'
-COLOR_YELLOW='\033[1;33m'
+COLOR_YELLOW='\033[0;33m'
+COLOR_BLUE='\033[0;34m'
 COLOR_RESET='\033[0m'
 # show info about what kind of repo we're in
 # some code and ideas from:
@@ -52,14 +54,15 @@ repo_status() {
         # join stat strings with commas
         git_stat_str=($git_staged $git_unstaged $git_untracked $git_unmerged $git_ok)
         git_stat_str=$(IFS=, ; echo "${git_stat_str[*]}")
-        echo -e " git($git_rebase$git_detached$git_branch$git_ahead $git_stat_str)"
+        echo -e " ${COLOR_BLUE}git${COLOR_RESET}|${COLOR_BLUE}$git_rebase$git_detached$git_branch${COLOR_RESET}$git_ahead $git_stat_str"
     elif [ -d .svn ]; then
         svn_info=$(svn info 2>/dev/null)
         svn_path=$( ( [[ "$svn_info" =~ URL:\ ([^$'\n']+) ]] && echo ${BASH_REMATCH[1]} ) || echo '?' )
+        protocol=$(expr "$svn_path" : '\([a-z]\+://\)') # remove the svn:// or https:// from the start of the repo
         svn_revision=$( [[ "$svn_info" =~ Revision:\ ([0-9]+) ]] && echo ${BASH_REMATCH[1]} )
         svn_stat=$(svn status 2>/dev/null)
         svn_dirty=$( ( [[ "$svn_stat" =~ [?!AM]([[:space:]]+[^$'\n']+) ]] && echo 'dirty' ) || echo "${COLOR_GREEN}ok${COLOR_RESET}" )
-        echo -e " svn($svn_path@$svn_revision $svn_dirty)"
+        echo -e " ${COLOR_BLUE}svn${COLOR_RESET}|${COLOR_BLUE}${svn_path#$protocol}${COLOR_RESET}@${COLOR_BLUE}$svn_revision${COLOR_RESET} $svn_dirty"
     else
         echo ''
     fi

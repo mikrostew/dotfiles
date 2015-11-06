@@ -33,7 +33,7 @@ MY_PS='$(echo "$PWD" | sed -e "s|^$HOME|~|" -e "s|/*$|/|")'
 COLOR_RED='\033[0;31m'
 COLOR_GREEN='\033[0;32m'
 COLOR_YELLOW='\033[0;33m'
-COLOR_BLUE='\033[0;34m'
+COLOR_BLUE='\033[1;34m'
 COLOR_RESET='\033[0m'
 # show info about what kind of repo we're in
 # some code and ideas from:
@@ -68,8 +68,8 @@ repo_status() {
         git_branch=$( ( [[ "$git_status" =~ On\ branch\ ([^$'\n']+) ]] && echo ${BASH_REMATCH[1]} ) || echo '?' )
         git_rebase=$( ( [[ "$git_status" =~ rebase\ in\ progress ]] && echo '<rebase>' ) || echo '' )
         git_detached=$( ( [[ "$git_status" =~ HEAD\ detached ]] && echo '<detached>' ) || echo '' )
-        git_ahead=$( ( [[ "$git_status" =~ Your\ branch\ is\ ahead\ of\ .*\ by\ ([0-9]+)\ commit ]] && echo "+${BASH_REMATCH[1]}" ) || echo '' )
-        git_behind=$( ( [[ "$git_status" =~ Your\ branch\ is\ behind\ .*\ by\ ([0-9]+)\ commit ]] && echo "-${BASH_REMATCH[1]}" ) || echo '' )
+        git_ahead=$( ( [[ "$git_status" =~ Your\ branch\ is\ ahead\ of\ .*\ by\ ([0-9]+)\ commit ]] && echo "+${COLOR_BLUE}${BASH_REMATCH[1]}${COLOR_RESET}" ) || echo '' )
+        git_behind=$( ( [[ "$git_status" =~ Your\ branch\ is\ behind\ .*\ by\ ([0-9]+)\ commit ]] && echo "-${COLOR_BLUE}${BASH_REMATCH[1]}${COLOR_RESET}" ) || echo '' )
 
         git_staged=$( [ "$git_num_staged" -gt 0 ] && echo "${COLOR_GREEN}*$git_num_staged${COLOR_RESET}" )
         git_modified=$( [ "$git_num_modified" -gt 0 ] && echo "${COLOR_RED}+$git_num_modified${COLOR_RESET}" )

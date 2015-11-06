@@ -52,7 +52,7 @@ repo_status() {
         while IFS='' read -r line; do
             XY=${line:0:2}
             case "$XY" in
-                \#\#) git_branch_line="$line" ;;
+                \#\#) git_branch_line="${line:3}" ;;
                 U?)    ((git_num_conflict++)) ;;  # unmerged
                 ?U)    ((git_num_conflict++)) ;;  # unmerged
                 DD)    ((git_num_conflict++)) ;;  # unmerged (both deleted)
@@ -65,30 +65,58 @@ repo_status() {
             esac
         done <<< "$git_status_porcelain"
 
-        git_branch=$( ( [[ "$git_status" =~ On\ branch\ ([^$'\n']+) ]] && echo ${BASH_REMATCH[1]} ) || echo '?' )
+        # figure out local and remote branch, and ahead/behind/diverged
+        # examples of $git_branch_line:
+        # master...origin/master [ahead 8]
+        # master...origin/master [behind 12]
+        # master...origin/master [ahead 1, behind 7]
+        git_branch_arr=(${git_branch_line//.../ })
+        git_branch=${git_branch_arr[0]}
+        git_branch_arr=("${git_branch_arr[@]:1}") # remove the branch from the array
+        # remote tracking branch
+        if [[ ${git_branch_arr[0]} ]]; then
+            git_origin=${git_branch_arr[0]}
+            git_upstream=${git_origin/origin/upstream}
+            git_branch_arr=("${git_branch_arr[@]:1}") # remove the remote branch from the array
+            git_ahead_behind="${git_branch_arr[*]}" # combine array elements
+            if [[ "$git_ahead_behind" =~ ahead\ ([0-9]+) ]]; then
+                git_ahead="${COLOR_BLUE}${BASH_REMATCH[1]}${COLOR_RESET}⇧ "
+            fi
+            if [[ "$git_ahead_behind" =~ behind\ ([0-9]+) ]]; then
+                git_behind="${COLOR_BLUE}${BASH_REMATCH[1]}${COLOR_RESET}⇩ "
+            fi
+            if [ "$git_behind" ] || [ "$git_ahead" ]; then
+                git_remote_status=" $git_behind$git_ahead"
+            else
+                # all sync-ed up
+                git_remote_status=""
+            fi
+        else
+            # local branch
+            git_remote_status="⇪ "
+        fi
+
         git_rebase=$( ( [[ "$git_status" =~ rebase\ in\ progress ]] && echo '<rebase>' ) || echo '' )
         git_detached=$( ( [[ "$git_status" =~ HEAD\ detached ]] && echo '<detached>' ) || echo '' )
-        git_ahead=$( ( [[ "$git_status" =~ Your\ branch\ is\ ahead\ of\ .*\ by\ ([0-9]+)\ commit ]] && echo "+${COLOR_BLUE}${BASH_REMATCH[1]}${COLOR_RESET}" ) || echo '' )
-        git_behind=$( ( [[ "$git_status" =~ Your\ branch\ is\ behind\ .*\ by\ ([0-9]+)\ commit ]] && echo "-${COLOR_BLUE}${BASH_REMATCH[1]}${COLOR_RESET}" ) || echo '' )
 
         git_staged=$( [ "$git_num_staged" -gt 0 ] && echo "${COLOR_GREEN}*$git_num_staged${COLOR_RESET}" )
         git_modified=$( [ "$git_num_modified" -gt 0 ] && echo "${COLOR_RED}+$git_num_modified${COLOR_RESET}" )
         git_untracked=$( [ "$git_num_untracked" -gt 0 ] && echo "${COLOR_YELLOW}?$git_num_untracked${COLOR_RESET}" )
         git_conflict=$( [ "$git_num_conflict" -gt 0 ] && echo "${COLOR_RED}!$git_num_conflict${COLOR_RESET}" )
 
-        git_ok=$( [[ "$git_status" =~ nothing\ to\ commit|working\ directory\ clean ]] && echo "${COLOR_GREEN}--${COLOR_RESET}" )
+        git_ok=$( [[ "$git_status" =~ nothing\ to\ commit|working\ directory\ clean ]] && echo "${COLOR_GREEN}✓${COLOR_RESET}" )
         # join stat strings with commas
         git_stat_str=($git_staged $git_modified $git_untracked $git_conflict $git_ok)
-        git_stat_str=$(IFS=, ; echo "${git_stat_str[*]}")
-        echo -e " ${COLOR_BLUE}git${COLOR_RESET}|${COLOR_BLUE}$git_rebase$git_detached$git_branch${COLOR_RESET}$git_behind$git_ahead|$git_stat_str"
+        git_stat_str=$(IFS=, ; echo " ${git_stat_str[*]}")
+        echo -e "  ${COLOR_BLUE}git${COLOR_RESET}|${COLOR_BLUE}$git_rebase$git_detached$git_branch${COLOR_RESET}$git_remote_status$git_stat_str"
     elif [ -d .svn ]; then
         svn_info=$(svn info 2>/dev/null)
         svn_path=$( ( [[ "$svn_info" =~ URL:\ ([^$'\n']+) ]] && echo ${BASH_REMATCH[1]} ) || echo '?' )
         svn_protocol=$(expr "$svn_path" : '\([a-z]\+://\)') # remove the svn:// or https:// from the start of the repo
         svn_revision=$( [[ "$svn_info" =~ Revision:\ ([0-9]+) ]] && echo ${BASH_REMATCH[1]} )
         svn_stat=$(svn status 2>/dev/null)
-        svn_dirty=$( ( [[ "$svn_stat" =~ [?!AM]([[:space:]]+[^$'\n']+) ]] && echo 'dirty' ) || echo "${COLOR_GREEN}ok${COLOR_RESET}" )
-        echo -e " ${COLOR_BLUE}svn${COLOR_RESET}|${COLOR_BLUE}${svn_path#$svn_protocol}${COLOR_RESET}@${COLOR_BLUE}$svn_revision${COLOR_RESET} $svn_dirty"
+        svn_dirty=$( ( [[ "$svn_stat" =~ [?!AM]([[:space:]]+[^$'\n']+) ]] && echo 'dirty' ) || echo "${COLOR_GREEN}✓${COLOR_RESET}" )
+        echo -e "  ${COLOR_BLUE}svn${COLOR_RESET}|${COLOR_BLUE}${svn_path#$svn_protocol}${COLOR_RESET}@${COLOR_BLUE}$svn_revision${COLOR_RESET} $svn_dirty"
     else
         echo ''
     fi

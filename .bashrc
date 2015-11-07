@@ -30,10 +30,11 @@ shopt -s checkwinsize
 # add a trailing slash to the PWD if there is not one
 MY_PS='$(echo "$PWD" | sed -e "s|^$HOME|~|" -e "s|/*$|/|")'
 # colors used in the prompt
-COLOR_RED='\033[0;31m'
+COLOR_RED='\033[1;31m'
 COLOR_GREEN='\033[0;32m'
 COLOR_YELLOW='\033[0;33m'
 COLOR_BLUE='\033[1;34m'
+COLOR_ORANGE='\033[38;5;95;38;5;208m'
 COLOR_RESET='\033[0m'
 # show info about what kind of repo we're in
 # some code and ideas from:
@@ -99,16 +100,27 @@ repo_status() {
         git_rebase=$( ( [[ "$git_status" =~ rebase\ in\ progress ]] && echo '<rebase>' ) || echo '' )
         git_detached=$( ( [[ "$git_status" =~ HEAD\ detached ]] && echo '<detached>' ) || echo '' )
 
-        git_staged=$( [ "$git_num_staged" -gt 0 ] && echo "${COLOR_GREEN}*$git_num_staged${COLOR_RESET}" )
-        git_modified=$( [ "$git_num_modified" -gt 0 ] && echo "${COLOR_RED}+$git_num_modified${COLOR_RESET}" )
-        git_untracked=$( [ "$git_num_untracked" -gt 0 ] && echo "${COLOR_YELLOW}?$git_num_untracked${COLOR_RESET}" )
-        git_conflict=$( [ "$git_num_conflict" -gt 0 ] && echo "${COLOR_RED}!$git_num_conflict${COLOR_RESET}" )
+        if [ "$git_num_staged" -gt 0 ]; then
+            git_staged="${COLOR_GREEN}$git_num_staged${COLOR_RESET}⊛"
+        fi
+        if [ "$git_num_modified" -gt 0 ]; then
+            git_modified="${COLOR_ORANGE}$git_num_modified${COLOR_RESET}⊕"
+        fi
+        if [ "$git_num_untracked" -gt 0 ]; then
+            git_untracked="${COLOR_YELLOW}$git_num_untracked${COLOR_RESET}⍰"
+        fi
+        if [ "$git_num_conflict" -gt 0 ]; then
+            git_conflict="${COLOR_RED}$git_num_conflict${COLOR_RESET}⚠"
+        fi
+        if [ "$git_staged" ] || [ "$git_modified" ] || [ "$git_untracked" ] || [ "$git_conflict" ]; then
+            git_stat_arr=($git_staged $git_modified $git_untracked $git_conflict)
+            local IFS=' '
+            git_local_status=" ${git_stat_arr[*]}"
+        else
+            git_local_status="${COLOR_GREEN}✓${COLOR_RESET}"
+        fi
 
-        git_ok=$( [[ "$git_status" =~ nothing\ to\ commit|working\ directory\ clean ]] && echo "${COLOR_GREEN}✓${COLOR_RESET}" )
-        # join stat strings with commas
-        git_stat_str=($git_staged $git_modified $git_untracked $git_conflict $git_ok)
-        git_stat_str=$(IFS=, ; echo " ${git_stat_str[*]}")
-        echo -e "  ${COLOR_BLUE}git${COLOR_RESET}|${COLOR_BLUE}$git_rebase$git_detached$git_branch${COLOR_RESET}$git_remote_status$git_stat_str"
+        echo -e "  ${COLOR_BLUE}git${COLOR_RESET}|${COLOR_BLUE}$git_rebase$git_detached$git_branch${COLOR_RESET}$git_remote_status$git_local_status"
     elif [ -d .svn ]; then
         svn_info=$(svn info 2>/dev/null)
         svn_path=$( ( [[ "$svn_info" =~ URL:\ ([^$'\n']+) ]] && echo ${BASH_REMATCH[1]} ) || echo '?' )

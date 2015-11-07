@@ -81,30 +81,30 @@ repo_status() {
             git_branch_arr=("${git_branch_arr[@]:1}") # remove the remote branch from the array
             git_ahead_behind="${git_branch_arr[*]}" # combine array elements
             if [[ "$git_ahead_behind" =~ ahead\ ([0-9]+) ]]; then
-                git_ahead="${COLOR_BLUE}${BASH_REMATCH[1]}${COLOR_RESET}⇧ "
+                git_ahead="${COLOR_BLUE}${BASH_REMATCH[1]}${COLOR_RESET}⇧"
             fi
             if [[ "$git_ahead_behind" =~ behind\ ([0-9]+) ]]; then
-                git_behind="${COLOR_BLUE}${BASH_REMATCH[1]}${COLOR_RESET}⇩ "
+                git_behind="${COLOR_BLUE}${BASH_REMATCH[1]}${COLOR_RESET}⇩"
             fi
             if [ "$git_behind" ] || [ "$git_ahead" ]; then
-                git_remote_status=" $git_behind$git_ahead"
+                git_remote_status="$git_behind$git_ahead"
             else
                 # all sync-ed up
-                git_remote_status=""
+                git_remote_status="✓"
             fi
         else
             # local branch
-            git_remote_status="⇪ "
+            git_remote_status="⇪"
         fi
 
         git_rebase=$( ( [[ "$git_status" =~ rebase\ in\ progress ]] && echo '<rebase>' ) || echo '' )
         git_detached=$( ( [[ "$git_status" =~ HEAD\ detached ]] && echo '<detached>' ) || echo '' )
 
         if [ "$git_num_staged" -gt 0 ]; then
-            git_staged="${COLOR_GREEN}$git_num_staged${COLOR_RESET}⊛"
+            git_staged="${COLOR_GREEN}$git_num_staged${COLOR_RESET}⊕"
         fi
         if [ "$git_num_modified" -gt 0 ]; then
-            git_modified="${COLOR_ORANGE}$git_num_modified${COLOR_RESET}⊕"
+            git_modified="${COLOR_ORANGE}$git_num_modified${COLOR_RESET}⊛"
         fi
         if [ "$git_num_untracked" -gt 0 ]; then
             git_untracked="${COLOR_YELLOW}$git_num_untracked${COLOR_RESET}⍰"
@@ -115,12 +115,12 @@ repo_status() {
         if [ "$git_staged" ] || [ "$git_modified" ] || [ "$git_untracked" ] || [ "$git_conflict" ]; then
             git_stat_arr=($git_staged $git_modified $git_untracked $git_conflict)
             local IFS=' '
-            git_local_status=" ${git_stat_arr[*]}"
+            git_local_status="${git_stat_arr[*]}"
         else
             git_local_status="${COLOR_GREEN}✓${COLOR_RESET}"
         fi
 
-        echo -e "  ${COLOR_BLUE}git${COLOR_RESET}|${COLOR_BLUE}$git_rebase$git_detached$git_branch${COLOR_RESET}$git_remote_status$git_local_status"
+        echo -e "  ${COLOR_BLUE}git${COLOR_RESET}|${COLOR_BLUE}$git_rebase$git_detached$git_branch${COLOR_RESET} $git_remote_status / $git_local_status"
     elif [ -d .svn ]; then
         svn_info=$(svn info 2>/dev/null)
         svn_path=$( ( [[ "$svn_info" =~ URL:\ ([^$'\n']+) ]] && echo ${BASH_REMATCH[1]} ) || echo '?' )

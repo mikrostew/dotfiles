@@ -54,12 +54,12 @@ repo_status() {
             XY=${line:0:2}
             case "$XY" in
                 \#\#) git_branch_line="${line:3}" ;;
-                U?)    ((git_num_conflict++)) ;;  # unmerged
-                ?U)    ((git_num_conflict++)) ;;  # unmerged
-                DD)    ((git_num_conflict++)) ;;  # unmerged (both deleted)
-                AA)    ((git_num_conflict++)) ;;  # unmerged (both added)
-                ?[MD]) ((git_num_modified++)) ;;  # modified/deleted in working tree
-                \?\?)  ((git_num_untracked++)) ;; # untracked in index and working tree
+                U?)     ((git_num_conflict++)) ;;  # unmerged
+                ?U)     ((git_num_conflict++)) ;;  # unmerged
+                DD)     ((git_num_conflict++)) ;;  # unmerged (both deleted)
+                AA)     ((git_num_conflict++)) ;;  # unmerged (both added)
+                ?[MDT]) ((git_num_modified++)) ;;  # modified/deleted/typechange in working tree
+                \?\?)   ((git_num_untracked++)) ;; # untracked in index and working tree
             esac
             case "$XY" in
                 [MARCD]?) ((git_num_staged++)) ;; # modified/added/renamed/copied/deleted in index
@@ -90,7 +90,7 @@ repo_status() {
                 git_remote_status="$git_behind$git_ahead"
             else
                 # all sync-ed up
-                git_remote_status="✓"
+                git_remote_status="${COLOR_BLUE}✓${COLOR_RESET}"
             fi
         else
             # local branch

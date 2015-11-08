@@ -87,7 +87,9 @@ repo_status() {
                 git_behind="${COLOR_BLUE}${BASH_REMATCH[1]}${COLOR_RESET}⇩"
             fi
             # difference between origin and upstream for forked repos
-            #git_remote_update=$(git remote update 2>/dev/null) # TODO: make this faster, (background process or something)
+            if [[ ! $(ps) =~ git\ remote\ update ]]; then
+                nohup git remote update >/dev/null 2>&1 &
+            fi
             git_rev_list=$(git rev-list --count --left-right ${git_origin}..${git_upstream} 2>/dev/null)
             if [ $? -eq 0 ]; then
                 git_fork_arr=($git_rev_list) # will split into array because it's 2 numbers separated by spaces

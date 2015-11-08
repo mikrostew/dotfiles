@@ -86,8 +86,24 @@ repo_status() {
             if [[ "$git_ahead_behind" =~ behind\ ([0-9]+) ]]; then
                 git_behind="${COLOR_BLUE}${BASH_REMATCH[1]}${COLOR_RESET}⇩"
             fi
-            if [ "$git_behind" ] || [ "$git_ahead" ]; then
-                git_remote_status="$git_behind$git_ahead"
+            # difference between origin and upstream for forked repos
+            #git_remote_update=$(git remote update 2>/dev/null) # TODO: make this faster, (background process or something)
+            git_rev_list=$(git rev-list --count --left-right ${git_origin}..${git_upstream} 2>/dev/null)
+            if [ $? -eq 0 ]; then
+                git_fork_arr=($git_rev_list) # will split into array because it's 2 numbers separated by spaces
+                if [ "${git_fork_arr[0]}" -gt 0 ]; then
+                    git_fork_ahead="${COLOR_BLUE}${git_fork_arr[0]}${COLOR_RESET}"
+                fi
+                if [ "${git_fork_arr[1]}" -gt 0 ]; then
+                    git_fork_behind="${COLOR_BLUE}${git_fork_arr[1]}${COLOR_RESET}"
+                fi
+                #git_fork_status="$='⑂' ; echo "${COLOR_BLUE}${git_fork_arr[*]}${COLOR_RESET}")
+                git_fork_status="${git_fork_ahead}⑂${git_fork_behind}"
+            fi
+            if [ "$git_behind" ] || [ "$git_ahead" ] || [ "$git_fork_status" ]; then
+                git_remote_stat_arr=($git_behind $git_ahead $git_fork_status)
+                local IFS=' '
+                git_remote_status="${git_remote_stat_arr[*]}"
             else
                 # all sync-ed up
                 git_remote_status="${COLOR_BLUE}✓${COLOR_RESET}"

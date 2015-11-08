@@ -67,56 +67,72 @@ repo_status() {
         done <<< "$git_status_porcelain"
 
         # figure out local and remote branch, and ahead/behind/diverged
-        # examples of $git_branch_line:
-        # master...origin/master [ahead 8]
-        # master...origin/master [behind 12]
-        # master...origin/master [ahead 1, behind 7]
-        git_branch_arr=(${git_branch_line//.../ })
-        git_branch=${git_branch_arr[0]}
-        git_branch_arr=("${git_branch_arr[@]:1}") # remove the branch from the array
-        # remote tracking branch
-        if [[ ${git_branch_arr[0]} ]]; then
-            git_origin=${git_branch_arr[0]}
-            git_upstream=${git_origin/origin/upstream}
-            git_branch_arr=("${git_branch_arr[@]:1}") # remove the remote branch from the array
-            git_ahead_behind="${git_branch_arr[*]}" # combine array elements
-            if [[ "$git_ahead_behind" =~ ahead\ ([0-9]+) ]]; then
-                git_ahead="${COLOR_BLUE}${BASH_REMATCH[1]}${COLOR_RESET}⇧"
-            fi
-            if [[ "$git_ahead_behind" =~ behind\ ([0-9]+) ]]; then
-                git_behind="${COLOR_BLUE}${BASH_REMATCH[1]}${COLOR_RESET}⇩"
-            fi
-            # difference between origin and upstream for forked repos
-            if [[ ! $(ps) =~ git\ remote\ update ]]; then
-                nohup git remote update >/dev/null 2>&1 &
-            fi
-            git_rev_list=$(git rev-list --count --left-right ${git_origin}..${git_upstream} 2>/dev/null)
-            if [ $? -eq 0 ]; then
-                git_fork_arr=($git_rev_list) # will split into array because it's 2 numbers separated by spaces
-                if [ "${git_fork_arr[0]}" -gt 0 ]; then
-                    git_fork_ahead="${COLOR_BLUE}${git_fork_arr[0]}${COLOR_RESET}"
-                fi
-                if [ "${git_fork_arr[1]}" -gt 0 ]; then
-                    git_fork_behind="${COLOR_BLUE}${git_fork_arr[1]}${COLOR_RESET}"
-                fi
-                #git_fork_status="$='⑂' ; echo "${COLOR_BLUE}${git_fork_arr[*]}${COLOR_RESET}")
-                git_fork_status="${git_fork_ahead}⑂${git_fork_behind}"
-            fi
-            if [ "$git_behind" ] || [ "$git_ahead" ] || [ "$git_fork_status" ]; then
-                git_remote_stat_arr=($git_behind $git_ahead $git_fork_status)
-                local IFS=' '
-                git_remote_status="${git_remote_stat_arr[*]}"
+        if [[ "$git_branch_line" =~ Initial\ commit\ on\ (.+) ]]; then
+            # "Initial commit on master"
+            git_branch="|${COLOR_BLUE}${BASH_REMATCH[1]}${COLOR_RESET}"
+            git_remote_status="${COLOR_BLUE}-${COLOR_RESET}"
+        elif [[ "$git_branch_line" =~ no\ branch ]]; then
+            # "HEAD (no branch)"
+            git_tag=$(git describe --exact-match 2>/dev/null)
+            if [ -n "$git_tag" ]; then
+                git_branch="▹${COLOR_BLUE}$git_tag${COLOR_RESET}"
+                # TODO: how to tell if tag has been pushed
             else
-                # all sync-ed up
-                git_remote_status="${COLOR_BLUE}✓${COLOR_RESET}"
+                git_commit_hash=$(git rev-parse --short HEAD)
+                git_branch=":${COLOR_BLUE}$git_commit_hash${COLOR_RESET}"
             fi
+            git_remote_status="${COLOR_BLUE}-${COLOR_RESET}"
         else
-            # local branch
-            git_remote_status="⇪"
+            # "master...origin/master [ahead 8]"
+            # "master...origin/master [behind 12]"
+            # "master...origin/master [ahead 1, behind 7]"
+            git_branch_arr=(${git_branch_line//.../ })
+            git_branch="|${COLOR_BLUE}${git_branch_arr[0]}${COLOR_RESET}"
+            git_branch_arr=("${git_branch_arr[@]:1}") # remove the branch from the array
+            # remote tracking branch
+            if [[ ${git_branch_arr[0]} ]]; then
+                git_origin=${git_branch_arr[0]}
+                git_upstream=${git_origin/origin/upstream}
+                git_branch_arr=("${git_branch_arr[@]:1}") # remove the remote branch from the array
+                git_ahead_behind="${git_branch_arr[*]}" # combine array elements
+                if [[ "$git_ahead_behind" =~ ahead\ ([0-9]+) ]]; then
+                    git_ahead="${COLOR_BLUE}${BASH_REMATCH[1]}${COLOR_RESET}⇧"
+                fi
+                if [[ "$git_ahead_behind" =~ behind\ ([0-9]+) ]]; then
+                    git_behind="${COLOR_BLUE}${BASH_REMATCH[1]}${COLOR_RESET}⇩"
+                fi
+                # difference between origin and upstream for forked repos
+                if [[ ! $(ps) =~ git\ remote\ update ]]; then
+                    nohup git remote update >/dev/null 2>&1 &
+                fi
+                git_rev_list=$(git rev-list --count --left-right ${git_origin}..${git_upstream} 2>/dev/null)
+                if [ $? -eq 0 ]; then
+                    git_fork_arr=($git_rev_list) # will split into array because it's 2 numbers separated by spaces
+                    if [ "${git_fork_arr[0]}" -gt 0 ]; then
+                        git_fork_ahead="${COLOR_BLUE}${git_fork_arr[0]}${COLOR_RESET}"
+                    fi
+                    if [ "${git_fork_arr[1]}" -gt 0 ]; then
+                        git_fork_behind="${COLOR_BLUE}${git_fork_arr[1]}${COLOR_RESET}"
+                    fi
+                    #git_fork_status="$='⑂' ; echo "${COLOR_BLUE}${git_fork_arr[*]}${COLOR_RESET}")
+                    git_fork_status="${git_fork_ahead}⑂${git_fork_behind}"
+                fi
+                if [ "$git_behind" ] || [ "$git_ahead" ] || [ "$git_fork_status" ]; then
+                    git_remote_stat_arr=($git_behind $git_ahead $git_fork_status)
+                    local IFS=' '
+                    git_remote_status="${git_remote_stat_arr[*]}"
+                else
+                    # all sync-ed up
+                    git_remote_status="${COLOR_BLUE}✓${COLOR_RESET}"
+                fi
+            else
+                # local branch with no remote tracking
+                # TODO: can I show the number of commits to local branch?
+                git_remote_status="⇪"
+            fi
         fi
 
         git_rebase=$( ( [[ "$git_status" =~ rebase\ in\ progress ]] && echo '<rebase>' ) || echo '' )
-        git_detached=$( ( [[ "$git_status" =~ HEAD\ detached ]] && echo '<detached>' ) || echo '' )
 
         if [ "$git_num_staged" -gt 0 ]; then
             git_staged="${COLOR_GREEN}$git_num_staged${COLOR_RESET}⊕"
@@ -138,7 +154,7 @@ repo_status() {
             git_local_status="${COLOR_GREEN}✓${COLOR_RESET}"
         fi
 
-        echo -e "  ${COLOR_BLUE}git${COLOR_RESET}|${COLOR_BLUE}$git_rebase$git_detached$git_branch${COLOR_RESET} $git_remote_status / $git_local_status"
+        echo -e "  ${COLOR_BLUE}git${COLOR_RESET}$git_branch${COLOR_BLUE}$git_rebase${COLOR_RESET} $git_remote_status / $git_local_status"
     elif [ -d .svn ]; then
         svn_info=$(svn info 2>/dev/null)
         svn_path=$( ( [[ "$svn_info" =~ URL:\ ([^$'\n']+) ]] && echo ${BASH_REMATCH[1]} ) || echo '?' )

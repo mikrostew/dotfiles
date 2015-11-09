@@ -30,7 +30,7 @@ shopt -s checkwinsize
 # add a trailing slash to the PWD if there is not one
 MY_PS='$(echo "$PWD" | sed -e "s|^$HOME|~|" -e "s|/*$|/|")'
 # colors used in the prompt
-COLOR_RED='\033[1;31m'
+COLOR_RED='\033[0;31m'
 COLOR_GREEN='\033[0;32m'
 COLOR_YELLOW='\033[0;33m'
 COLOR_BLUE='\033[1;34m'
@@ -42,10 +42,9 @@ COLOR_RESET='\033[0m'
 # - https://github.com/sjl/oh-my-zsh/commit/3d22ee248c6bce357c018a93d31f8d292d2cb4cd
 # - https://github.com/magicmonty/bash-git-prompt
 repo_status() {
-    git_status=$(git status 2>/dev/null)
+    git_status_porcelain=$(git status --porcelain --untracked-files=all --branch 2>/dev/null)
     if [ $? -eq 0 ]; then
         # count occurrences of each case
-        git_status_porcelain=$(git status --porcelain --untracked-files=all --branch)
         git_num_conflict=0
         git_num_modified=0
         git_num_untracked=0
@@ -132,7 +131,7 @@ repo_status() {
             fi
         fi
 
-        git_rebase=$( ( [[ "$git_status" =~ rebase\ in\ progress ]] && echo '<rebase>' ) || echo '' )
+        git_status=$(git status 2>/dev/null)
 
         if [ "$git_num_staged" -gt 0 ]; then
             git_staged="${COLOR_GREEN}$git_num_staged${COLOR_RESET}⊕"
@@ -146,15 +145,23 @@ repo_status() {
         if [ "$git_num_conflict" -gt 0 ]; then
             git_conflict="${COLOR_RED}$git_num_conflict${COLOR_RESET}⚠"
         fi
-        if [ "$git_staged" ] || [ "$git_modified" ] || [ "$git_untracked" ] || [ "$git_conflict" ]; then
-            git_stat_arr=($git_staged $git_modified $git_untracked $git_conflict)
+        if [[ "$git_status" =~ rebase\ in\ progress ]]; then
+            # TODO: icon for rebase
+            git_rebase="${COLOR_RED}<rebase>${COLOR_RESET}"
+        fi
+        if [[ "$git_status" =~ unmerged\ paths ]]; then
+            # TODO: icon for merge
+            git_merge="${COLOR_RED}<merge>${COLOR_RESET}"
+        fi
+        if [ "$git_staged" ] || [ "$git_modified" ] || [ "$git_untracked" ] || [ "$git_conflict" ] || [ "$git_rebase" ] || [ "$git_merge" ]; then
+            git_stat_arr=($git_staged $git_modified $git_untracked $git_conflict $git_rebase $git_merge)
             local IFS=' '
             git_local_status="${git_stat_arr[*]}"
         else
             git_local_status="${COLOR_GREEN}✓${COLOR_RESET}"
         fi
 
-        echo -e "  ${COLOR_BLUE}git${COLOR_RESET}$git_branch${COLOR_BLUE}$git_rebase${COLOR_RESET} $git_remote_status / $git_local_status"
+        echo -e "  ${COLOR_BLUE}git${COLOR_RESET}$git_branch $git_remote_status / $git_local_status"
     elif [ -d .svn ]; then
         svn_info=$(svn info 2>/dev/null)
         svn_path=$( ( [[ "$svn_info" =~ URL:\ ([^$'\n']+) ]] && echo ${BASH_REMATCH[1]} ) || echo '?' )

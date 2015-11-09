@@ -44,6 +44,7 @@ COLOR_RESET='\033[0m'
 repo_status() {
     git_status_porcelain=$(git status --porcelain --untracked-files=all --branch 2>/dev/null)
     if [ "$?" -eq 0 ]; then
+        git_dir=$(git rev-parse --git-dir)
         # count occurrences of each case
         git_num_conflict=0
         git_num_modified=0
@@ -149,7 +150,6 @@ repo_status() {
             fi
         fi
 
-        git_status=$(git status 2>/dev/null)
         git_stash_list=$(git stash list)
 
         if [ "$git_num_staged" -gt 0 ]; then
@@ -172,13 +172,28 @@ repo_status() {
             # TODO: icon for stashed
             git_stashed="${COLOR_YELLOW}$git_num_stashed${COLOR_RESET}<stashed>"
         fi
-        if [[ "$git_status" =~ rebase\ in\ progress ]]; then
+        if [ -d "$git_dir/rebase-apply" ] || [ -d "$git_dir/rebase-merge" ]; then
+            if [ -f "$git_dir/rebase-apply/head-name" ]; then
+                git_rebase_head="$(cat "$git_dir/rebase-apply/head-name")"
+            elif [ -f "$git_dir/rebase-merge/head-name" ]; then
+                git_rebase_head="$(cat "$git_dir/rebase-merge/head-name")"
+            else
+                git_rebase_head="!!"
+            fi
+            # TODO: strip out everything in front of the branch name
             # TODO: icon for rebase
-            git_rebase="${COLOR_RED}<rebase>${COLOR_RESET}"
+            git_rebase="${COLOR_RED}$git_rebase_head${COLOR_RESET}<rebase>"
         fi
-        if [[ "$git_status" =~ unmerged\ paths ]]; then
+        if [ -f "$git_dir/MERGE_HEAD" ]; then
+            git_merge_head="$(cat "$git_dir/MERGE_HEAD")"
+            git_merge_branch="$(git branch --no-color --contains "$git_merge_head")"
+            if [ "$git_merge_branch" ]; then
+                git_merge_name="${git_merge_branch/\*/ }"
+            else
+                git_merge_name="${git_merge_head:0:8}"
+            fi
             # TODO: icon for merge
-            git_merge="${COLOR_RED}<merge>${COLOR_RESET}"
+            git_merge="${COLOR_RED}$git_merge_name${COLOR_RESET}<merge>"
         fi
         if [ "$git_staged" ] || [ "$git_modified" ] || [ "$git_untracked" ] || [ "$git_conflict" ] || [ "$git_stashed" ] || [ "$git_rebase" ] || [ "$git_merge" ]; then
             git_stat_arr=($git_staged $git_modified $git_untracked $git_conflict $git_stashed $git_rebase $git_merge)

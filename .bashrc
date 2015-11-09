@@ -113,8 +113,9 @@ repo_status() {
                     if [ "${git_fork_arr[1]}" -gt 0 ]; then
                         git_fork_behind="${COLOR_BLUE}${git_fork_arr[1]}${COLOR_RESET}"
                     fi
-                    #git_fork_status="$='⑂' ; echo "${COLOR_BLUE}${git_fork_arr[*]}${COLOR_RESET}")
-                    git_fork_status="${git_fork_ahead}⑂${git_fork_behind}"
+                    if [ "$git_fork_ahead" ] || [ "$git_fork_behind" ]; then
+                        git_fork_status="${git_fork_ahead}⑂${git_fork_behind}"
+                    fi
                 fi
                 if [ "$git_behind" ] || [ "$git_ahead" ] || [ "$git_fork_status" ]; then
                     git_remote_stat_arr=($git_behind $git_ahead $git_fork_status)

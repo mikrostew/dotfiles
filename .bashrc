@@ -43,7 +43,7 @@ COLOR_RESET='\033[0m'
 # - https://github.com/magicmonty/bash-git-prompt
 repo_status() {
     git_status_porcelain=$(git status --porcelain --untracked-files=all --branch 2>/dev/null)
-    if [ $? -eq 0 ]; then
+    if [ "$?" -eq 0 ]; then
         # count occurrences of each case
         git_num_conflict=0
         git_num_modified=0
@@ -105,7 +105,7 @@ repo_status() {
                     nohup git remote update >/dev/null 2>&1 &
                 fi
                 git_rev_list=$(git rev-list --count --left-right ${git_origin}..${git_upstream} 2>/dev/null)
-                if [ $? -eq 0 ]; then
+                if [ "$?" -eq 0 ]; then
                     git_fork_arr=($git_rev_list) # will split into array because it's 2 numbers separated by spaces
                     if [ "${git_fork_arr[0]}" -gt 0 ]; then
                         git_fork_ahead="${COLOR_BLUE}${git_fork_arr[0]}${COLOR_RESET}"
@@ -127,8 +127,25 @@ repo_status() {
                 fi
             else
                 # local branch with no remote tracking
-                # TODO: can I show the number of commits to local branch?
-                git_remote_status="⇪"
+                git_remote_branches=$(git branch -r)
+                if [ "$git_remote_branches" ]; then
+                    git_remotes_arr=($git_remote_branches)
+                    git_excludes_arr=()
+                    for r in "${git_remotes_arr[@]}"; do
+                        if [[ "$r" != "->" ]]; then
+                            git_excludes_arr+=("^$r")
+                        fi
+                    done
+                    git_excludes=$(IFS=' ' ; echo "${git_excludes_arr[*]}")
+                fi
+                # figure out how many commits exist on this branch that are not in the remotes
+                git_local_commits=$(git rev-list --count HEAD ${git_excludes} 2>/dev/null)
+                if [ "$?" -eq 0 ] && [ "$git_local_commits" -gt 0 ]; then
+                    git_remote_status="${COLOR_BLUE}$git_local_commits${COLOR_RESET}⇪"
+                else
+                    git_remote_status="${COLOR_BLUE}-${COLOR_RESET}"
+                fi
+
             fi
         fi
 

@@ -150,6 +150,7 @@ repo_status() {
         fi
 
         git_status=$(git status 2>/dev/null)
+        git_stash_list=$(git stash list)
 
         if [ "$git_num_staged" -gt 0 ]; then
             git_staged="${COLOR_GREEN}$git_num_staged${COLOR_RESET}⊕"
@@ -163,6 +164,14 @@ repo_status() {
         if [ "$git_num_conflict" -gt 0 ]; then
             git_conflict="${COLOR_RED}$git_num_conflict${COLOR_RESET}⚠"
         fi
+        if [ "$git_stash_list" ]; then
+            git_num_stashed=0
+            while IFS='' read -r line; do
+                ((git_num_stashed++))
+            done <<< "$git_stash_list"
+            # TODO: icon for stashed
+            git_stashed="${COLOR_YELLOW}$git_num_stashed${COLOR_RESET}<stashed>"
+        fi
         if [[ "$git_status" =~ rebase\ in\ progress ]]; then
             # TODO: icon for rebase
             git_rebase="${COLOR_RED}<rebase>${COLOR_RESET}"
@@ -171,8 +180,8 @@ repo_status() {
             # TODO: icon for merge
             git_merge="${COLOR_RED}<merge>${COLOR_RESET}"
         fi
-        if [ "$git_staged" ] || [ "$git_modified" ] || [ "$git_untracked" ] || [ "$git_conflict" ] || [ "$git_rebase" ] || [ "$git_merge" ]; then
-            git_stat_arr=($git_staged $git_modified $git_untracked $git_conflict $git_rebase $git_merge)
+        if [ "$git_staged" ] || [ "$git_modified" ] || [ "$git_untracked" ] || [ "$git_conflict" ] || [ "$git_stashed" ] || [ "$git_rebase" ] || [ "$git_merge" ]; then
+            git_stat_arr=($git_staged $git_modified $git_untracked $git_conflict $git_stashed $git_rebase $git_merge)
             local IFS=' '
             git_local_status="${git_stat_arr[*]}"
         else

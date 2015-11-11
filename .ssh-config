@@ -20,7 +20,7 @@ Host 10.0.*
 Host github.com
     Hostname github.com
     IdentityFile    ~/.ssh/github_mikrostew
-    IdentityFile    ~/.ssh/github_mstewart
+    IdentityFile    ~/.ssh/github_mbp
     IdentitiesOnly yes
 Host gitlab.aspera.us
     Hostname gitlab.aspera.us

@@ -29,9 +29,9 @@ shopt -s checkwinsize
 # replace home dir in PWD with ~,
 # add a trailing slash to the PWD if there is not one
 MY_PS='$(echo "$PWD" | sed -e "s|^$HOME|~|" -e "s|/*$|/|")'
-# git status
-if [ -f "$HOME/Dropbox/src/github/git-status-bash/bash_git_status.sh" ]; then
-    source "$HOME/Dropbox/src/github/git-status-bash/bash_git_status.sh"
+# git / svn status
+if [ -f "$HOME/Dropbox/src/github/repo-status-bash/.bash_repo_status" ]; then
+    source "$HOME/Dropbox/src/github/repo-status-bash/.bash_repo_status"
     PS1='\n(\t) \u@\h:$(eval "echo ${MY_PS}")$(repo_status)\n\$ '
 else
     PS1='\n(\t) \u@\h:$(eval "echo ${MY_PS}")\n\$ '

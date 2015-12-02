@@ -21,3 +21,6 @@ bin/
 
 # SVN directories (for tracking svn repos in a branch)
 .svn/
+
+# kitchen log files
+.kitchen/logs

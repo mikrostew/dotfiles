@@ -38,3 +38,6 @@ then, add this to the global config
 
 `ln -s ~/Dropbox/dev/conf/.ssh-config ~/.ssh/config`
 
+## rubocop
+
+`ln -s ~/Dropbox/src/github/.rubocop.yml ~/..rubocop.yml`

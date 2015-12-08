@@ -81,9 +81,8 @@ fi
 # formatting for `ri` documentation
 export RI="-T --format=ansi"
 
-# chruby - source and set a default ruby
+# chruby
 source /usr/local/share/chruby/chruby.sh
-chruby ruby-2
 
 # 256 color support
 export TERM=xterm-256color

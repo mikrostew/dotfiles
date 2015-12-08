@@ -24,3 +24,7 @@ if [ -d "$HOME/Dropbox/dev/includes/cxxtest-4.4/bin" ]; then
     export PATH="$PATH:$HOME/Dropbox/dev/includes/cxxtest-4.4/bin"
     export CXXTEST="$HOME/Dropbox/dev/includes/cxxtest-4.4"
 fi
+
+# setup ruby version with chruby (latest installed ruby version 2.x.x)
+chruby ruby-2
+echo -e "\033[1;31m chruby: using $RUBY_VERSION from $RUBY_ROOT \033[0m"

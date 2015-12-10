@@ -27,4 +27,4 @@ fi
 
 # setup ruby version with chruby (latest installed ruby version 2.x.x)
 chruby ruby-2
-echo -e "\033[1;31m chruby: using $RUBY_VERSION from $RUBY_ROOT \033[0m"
+echo -e "\033[1;31m chruby\033[0m : using \033[1;31m$RUBY_VERSION\033[0m from $RUBY_ROOT"

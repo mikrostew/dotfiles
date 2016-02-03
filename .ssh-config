@@ -1,29 +1,17 @@
-# physical machines
-Host desktop
-    Hostname 10.0.201.97
-    User mstewart
-    IdentityFile ~/.ssh/aspera_rsa
-    IdentitiesOnly yes
-    Port 22
-# Softlayer machines
-Host sldc1
-    Hostname 173.192.196.34
-    User root
-    IdentityFile ~/.ssh/id_rsa_softlayer_console
-    IdentitiesOnly yes
-    Port 22
-# local VMs
-Host 10.0.*
-    IdentityFile ~/.ssh/aspera_rsa
-    IdentitiesOnly yes
-# services
+# personal
 Host github.com
     Hostname github.com
-    IdentityFile    ~/.ssh/github_mikrostew
-    IdentityFile    ~/.ssh/github_mbp
+    User mikrostew
+    # IdentityFile    ~/.ssh/github_mikrostew
+    IdentityFile    ~/.ssh/github_rsa
     IdentitiesOnly yes
-Host gitlab.aspera.us
-    Hostname gitlab.aspera.us
-    User git
-    IdentityFile ~/.ssh/aspera_rsa
-    IdentitiesOnly yes
+
+# LinkedIn
+Host *.linkedin.com
+	IdentityFile 	%d/.ssh/%u_at_linkedin.com_ssh_key
+
+# # local VMs
+# Host 10.0.*
+#     IdentityFile ~/.ssh/aspera_rsa
+#     IdentitiesOnly yes
+

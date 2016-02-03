@@ -28,13 +28,13 @@ shopt -s checkwinsize
 # prompt string:
 # replace home dir in PWD with ~,
 # add a trailing slash to the PWD if there is not one
-MY_PS='$(echo "$PWD" | sed -e "s|^$HOME|~|" -e "s|/*$|/|")'
+MY_PWD='$(echo "$PWD" | sed -e "s|^$HOME|~|" -e "s|/*$|/|")'
 # git / svn status
 if [ -f "$HOME/Dropbox/src/github/repo-status-bash/.bash_repo_status" ]; then
     source "$HOME/Dropbox/src/github/repo-status-bash/.bash_repo_status"
-    PS1='\n(\t) \u@\h:$(eval "echo ${MY_PS}")$(repo_status)\n\$ '
+    PS1='\n(\t) \u@\h:\033[0;32m$(eval "echo ${MY_PWD}")\033[0m$(repo_status)\n\$ '
 else
-    PS1='\n(\t) \u@\h:$(eval "echo ${MY_PS}")\n\$ '
+    PS1='\n(\t) \u@\h:\033[0;32m$(eval "echo ${MY_PWD}")\033[0m\n\$ '
 fi
 
 # If this is an xterm set the title to user@host:dir

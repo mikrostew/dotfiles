@@ -25,6 +25,10 @@ if [ -d "$HOME/Dropbox/dev/includes/cxxtest-4.4/bin" ]; then
     export CXXTEST="$HOME/Dropbox/dev/includes/cxxtest-4.4"
 fi
 
+# bash version
+echo -e "\033[1;34m bash\033[0m :"
+echo "$(bash --version)"
+
 # setup ruby version with chruby (latest installed ruby version 2.x.x)
 chruby ruby-2
 echo -e "\033[1;31m chruby\033[0m : using \033[1;31m$RUBY_VERSION\033[0m from $RUBY_ROOT"

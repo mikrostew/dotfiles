@@ -32,9 +32,9 @@ MY_PWD='$(echo "$PWD" | sed -e "s|^$HOME|~|" -e "s|/*$|/|")'
 # git / svn status
 if [ -f "$HOME/Dropbox/src/github/repo-status-bash/.bash_repo_status" ]; then
     source "$HOME/Dropbox/src/github/repo-status-bash/.bash_repo_status"
-    PS1='\n(\t) \u@\h:\033[0;32m$(eval "echo ${MY_PWD}")\033[0m$(repo_status)\n\$ '
+    PS1='\n(\t) \033[1;30m\u\033[0m@\033[1;30m\h\033[0m:\033[1;30m$(eval "echo ${MY_PWD}")\033[0m$(repo_status)\n\$ '
 else
-    PS1='\n(\t) \u@\h:\033[0;32m$(eval "echo ${MY_PWD}")\033[0m\n\$ '
+    PS1='\n(\t) \033[1;30m\u\033[0m@\033[1;30m\h\033[0m:\033[1;30m$(eval "echo ${MY_PWD}")\033[0m\n\$ '
 fi
 
 # If this is an xterm set the title to user@host:dir

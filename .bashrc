@@ -71,7 +71,13 @@ fi
 export RI="-T --format=ansi"
 
 # chruby
-source /usr/local/share/chruby/chruby.sh
+if [ -f "/usr/local/share/chruby/chruby.sh" ]; then
+    source /usr/local/share/chruby/chruby.sh
+    chruby ruby-2
+    echo -e "\033[1;31m chruby\033[0m : using \033[1;31m$RUBY_VERSION\033[0m from $RUBY_ROOT"
+else
+    echo -e "\033[1;31m chruby\033[0m : not installed"
+fi
 
 # 256 color support
 export TERM=xterm-256color

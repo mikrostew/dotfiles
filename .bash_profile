@@ -14,6 +14,11 @@ if [ -n "$BASH_VERSION" ]; then
     fi
 fi
 
+# other bash_profile things (when on work machine)
+if [ -f "$HOME/.bash_profile-local" ]; then
+    . "$HOME/.bash_profile-local"
+fi
+
 # PATH variable for use with MacPorts
 if [ -d "/opt/local/bin" ] && [ -d "/opt/local/sbin" ]; then
     export PATH="/opt/local/bin:/opt/local/sbin:$PATH"

@@ -70,6 +70,15 @@ fi
 # formatting for `ri` documentation
 export RI="-T --format=ansi"
 
+# show bash version
+bash_version="$(bash --version)"
+if [[ "$bash_version" =~ ([0-9]+\.[0-9]+\.[0-9]+[^ ]*) ]]; then
+    bash_version="${BASH_REMATCH[1]}"
+else
+    bash_version="?.?.?"
+fi
+echo -e "\033[1;34m bash\033[0m : version \033[1;34m${bash_version}\033[0m"
+
 # chruby
 if [ -f "/usr/local/share/chruby/chruby.sh" ]; then
     source /usr/local/share/chruby/chruby.sh

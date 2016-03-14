@@ -77,15 +77,15 @@ if [[ "$bash_version" =~ ([0-9]+\.[0-9]+\.[0-9]+[^ ]*) ]]; then
 else
     bash_version="?.?.?"
 fi
-echo -e "\033[1;34m bash\033[0m : version \033[1;34m${bash_version}\033[0m"
+echo -e " \033[1;34mbash\033[0m : version \033[1;34m${bash_version}\033[0m"
 
 # chruby
 if [ -f "/usr/local/share/chruby/chruby.sh" ]; then
     source /usr/local/share/chruby/chruby.sh
     chruby ruby-2
-    echo -e "\033[1;31m chruby\033[0m : using \033[1;31m$RUBY_VERSION\033[0m from $RUBY_ROOT"
+    echo -e " \033[1;31mchruby\033[0m : using \033[1;31m$RUBY_VERSION\033[0m from $RUBY_ROOT"
 else
-    echo -e "\033[1;31m chruby\033[0m : not installed"
+    echo -e " \033[1;31mchruby\033[0m : not installed"
 fi
 
 # 256 color support

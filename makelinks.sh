@@ -1,31 +1,35 @@
 # Create links for dotfiles
 
+# TODO - input the directory where the repo is checked out
+checkoutdir="$HOME/dotfiles"
+
+# use bash 4.x associative arrays
+declare -A links
+
 # vim
-ln -s ~/Dropbox/src/github/dotfiles/.vimrc ~/.vimrc
-ln -s ~/Dropbox/src/github/dotfiles/.vim ~/.vim
-
+links[".vimrc"]=".vimrc"
+links[".vim"]=".vim"
 # bash
-ln -s ~/Dropbox/src/github/dotfiles/.bash_profile ~/.bash_profile
-ln -s ~/Dropbox/src/github/dotfiles/.bashrc ~/.bashrc
-ln -s ~/Dropbox/src/github/dotfiles/.bash_aliases ~/.bash_aliases
-
+links[".bash_profile"]=".bash_profile"
+links[".bashrc"]=".bashrc"
+links[".bash_aliases"]=".bash_aliases"
 # inputrc
-ln -s ~/Dropbox/src/github/dotfiles/.inputrc ~/.inputrc
-
+links[".inputrc"]=".inputrc"
 # gitignore
-ln -s ~/Dropbox/src/github/dotfiles/.gitignore ~/.gitignore
-
-# then, add this to the global config
-# `git config --global core.excludesfile ~/.gitignore`
-
+links[".gitignore"]=".gitignore"
 # tmux
-ln -s ~/Dropbox/src/github/dotfiles/.tmux.conf ~/.tmux.conf
-
+links[".tmux.conf"]=".tmux.conf"
 # bundler
-ln -s ~/Dropbox/src/github/dotfiles/.bundle ~/.bundle
-
+links[".bundle"]=".bundle"
 # ssh
-ln -s ~/Dropbox/src/github/dotfiles/.ssh-config ~/.ssh/config
-
+links[".ssh/config"]=".ssh-config"
 # rubocop
-ln -s ~/Dropbox/src/github/dotfiles/.rubocop.yml ~/.rubocop.yml
+links[".rubocop.yml"]=".rubocop.yml"
+
+# create the links
+for i in "${!links[@]}"
+do
+  echo "link   : $i"
+  echo "target : ${links[$i]}"
+  ln -s "$HOME/${links[$i]}" "$checkoutdir/$i"
+done

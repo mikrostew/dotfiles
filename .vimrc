@@ -26,9 +26,10 @@ set ttyfast                     " indicates a fast terminal connection, should b
 set ruler                       " show the line and column of the cursor position
 set backspace=indent,eol,start  " allow backspacing over these options in Insert mode
 set laststatus=2                " always show the status line
-if exists('&relativenumber')
-  set relativenumber            " show line number relative to cursor line
-endif
+" if exists('&relativenumber')
+"   set relativenumber            " show line number relative to cursor line
+" endif
+set number                      " show line numbers
 set title                       " show title in console title bar
 let mapleader = " "             " set the leader key to space (easier to type than backslash)
 

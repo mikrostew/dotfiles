@@ -10,6 +10,16 @@ Host github.com
 Host *.linkedin.com
 	IdentityFile 	%d/.ssh/%u_at_linkedin.com_ssh_key
 
+Host desktop
+    Hostname mistewar-ld1.linkedin.biz
+    User mistewar
+    IdentityFile    %d/.ssh/%u_at_linkedin.com_ssh_key
+
+Host laptop
+    Hostname mistewar-mn1.linkedin.biz
+    User mistewar
+    IdentityFile    %d/.ssh/%u_at_linkedin.com_ssh_key
+
 # # local VMs
 # Host 10.0.*
 #     IdentityFile ~/.ssh/aspera_rsa

@@ -173,3 +173,19 @@ function _bigfiles_helper() {
         fi
     fi
 }
+
+# git - rebase against master
+function gram() {
+    local branch_name=$(git rev-parse --abbrev-ref HEAD)
+    if [ "$?" -eq 0 ]; then
+        if [ "$branch_name" = "master" ]; then
+            echo "Come on! You're already on master"
+            return
+        fi
+        if [ "$(git status --porcelain --untracked-files=no)" != "" ]; then
+            echo "Come on! You have uncommitted changes, fix that and try again"
+            return
+        fi
+        git checkout master && git pull --rebase && git checkout "$branch_name" && git rebase master
+    fi
+}

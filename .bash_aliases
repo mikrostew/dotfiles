@@ -186,6 +186,6 @@ function gram() {
             echo "Come on! You have uncommitted changes, fix that and try again"
             return
         fi
-        git checkout master && git pull --rebase && git checkout "$branch_name" && git rebase master
+        ( set -x; git checkout master && git pull --rebase && git checkout "$branch_name" && git rebase master )
     fi
 }

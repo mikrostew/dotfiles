@@ -179,13 +179,18 @@ function gram() {
     local branch_name=$(git rev-parse --abbrev-ref HEAD)
     if [ "$?" -eq 0 ]; then
         if [ "$branch_name" = "master" ]; then
-            echo "Come on! You're already on master"
-            return
+            echoerr "Come on! You're already on master"
+            return -1
         fi
         if [ "$(git status --porcelain --untracked-files=no)" != "" ]; then
-            echo "Come on! You have uncommitted changes, fix that and try again"
-            return
+            echoerr "Come on! You have uncommitted changes, fix that and try again"
+            return -2
         fi
         ( set -x; git checkout master && git pull --rebase && git checkout "$branch_name" && git rebase master )
     fi
+}
+
+# echo to stderr instead of stdout
+function echoerr() {
+    echo "$@" 1>&2;
 }

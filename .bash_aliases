@@ -198,3 +198,58 @@ function gram() {
 function echoerr() {
     echo "$@" 1>&2;
 }
+
+# git - squash commits, "rebase", merge, and submit for my LI workflow
+function gsubmit() {
+    # check that a commit message was passed to this function
+    if [ -z "$1" ]; then
+        echoerr "Come on! You have to pass in a commit message for this"
+        echoerr "For example:"
+        echoerr "  gsubmit \"I made some changes\""
+        return -1
+    fi
+    # find the current branch name
+    local branch_name=$(git rev-parse --abbrev-ref HEAD)
+    if [ "$?" -eq 0 ]; then
+        if [ "$branch_name" = "master" ]; then
+            echoerr "Come on! You're already on master"
+            return -1
+        fi
+        if [ "$(git status --porcelain --untracked-files=no)" != "" ]; then
+            echoerr "Come on! You have uncommitted changes, fix that and try again"
+            return -1
+        fi
+        # number of changes that need to be squashed
+        local git_rev_list_origin=$( set -x; git rev-list --count --left-right ${branch_name}...origin/master 2>/dev/null )
+        if [ "$?" -eq 0 ] && [ -n "$git_rev_list_origin" ]; then
+            local git_origin_arr=($git_rev_list_origin) # will split into array because it's 2 numbers separated by spaces
+            local num_commits_on_branch="${git_origin_arr[0]}"
+            echo "There are ${num_commits_on_branch} commits on branch '${branch_name}'"
+            # "rebase" without having to do things interactively (from Stack Overflow)
+            ( set -x; git reset --soft HEAD~${num_commits_on_branch} && git commit -m "$1" )
+            if [ "$?" -eq 0 ]; then
+                # TODO - figure out how to recover from these
+                # apply the RB to the commit
+                ( set -x; git review dcommit )
+                # rebase against master
+                ( set -x; git pull --rebase origin master && git checkout master && git pull --rebase )
+                # merge into master
+                ( set -x; git merge ${branch_name} )
+                # and submit
+                ( set -x; git submit )
+                # rebase to pick up the change
+                ( set -x; git pull --rebase )
+                # and done!
+            else
+                # TODO what do I do if there is some error here?
+                echoerr "Dang it! \"rebasing\" didn't work"
+            fi
+        else
+            # at this point there were no changes made, so nothing to do here
+            echoerr "Dang it! Couldn't figure out how many changes to squash"
+        fi
+    else
+        # nothing to undo here, haven't done anything
+        echoerr "Dang it! Couldn't figure out the current branch name"
+    fi
+}

@@ -36,6 +36,10 @@ alias tn='tmux new'
 # so that tmux will display 256 colors correctly
 alias tmux='TERM=xterm-256color tmux'
 
+# because I use these all the time at LI
+alias jet='just ember test'
+alias jets='just ember test --serve'
+
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
 #alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'

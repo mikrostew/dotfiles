@@ -36,6 +36,9 @@ alias tn='tmux new'
 # so that tmux will display 256 colors correctly
 alias tmux='TERM=xterm-256color tmux'
 
+# git
+alias gg='git gui'
+
 # because I use these all the time at LI
 alias jet='just ember test'
 alias jets='just ember test --serve'

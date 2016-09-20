@@ -240,6 +240,12 @@ function gsubmit() {
                 ( set -x; git merge ${branch_name} )
                 # and submit
                 ( set -x; git submit )
+                if [ "$?" -ne 0 ]; then
+                    # submit failed, could be precommit, or ACL check, or whatever
+                    echoerr "Dang it! \"git submit\" failed, undoing the merge"
+                    ( set -x; git reset --merge ORIG_HEAD && git checkout ${branch_name} )
+                    return -1
+                fi
                 # rebase to pick up the change
                 ( set -x; git pull --rebase )
                 # and done!

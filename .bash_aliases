@@ -181,6 +181,18 @@ function _bigfiles_helper() {
     fi
 }
 
+# git - checkout new branch (that tracks origin/master)
+function gcb() {
+    # check that a branch name was passed to this function
+    if [ -z "$1" ]; then
+        echoerr "Come on! You have to pass a branch name for this"
+        echoerr "For example:"
+        echoerr "  gcb new-awesome-branch"
+        return -1
+    fi
+    ( set -x; git checkout -b "$1" origin/master )
+}
+
 # git - rebase against master
 function gram() {
     local branch_name=$(git rev-parse --abbrev-ref HEAD)

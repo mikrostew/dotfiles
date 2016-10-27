@@ -209,6 +209,19 @@ function gram() {
     fi
 }
 
+# git - show which files are different from master branch
+function gfiles() {
+    local branch_name=$(git rev-parse --abbrev-ref HEAD)
+    if [ "$?" -eq 0 ]; then
+        if [ "$branch_name" = "master" ]; then
+            echoerr "Come on! You're already on master"
+            return -1
+        fi
+        ( set -x; git diff --name-status master..$branch_name )
+    fi
+}
+
+
 # echo to stderr instead of stdout
 function echoerr() {
     echo "$@" 1>&2;

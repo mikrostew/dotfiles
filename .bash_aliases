@@ -36,10 +36,7 @@ alias tn='tmux new'
 # so that tmux will display 256 colors correctly
 alias tmux='TERM=xterm-256color tmux'
 
-# git
-alias gg='git gui'
-
-# because I use these all the time at LI
+# Ember
 alias jet='just ember test'
 alias jets='just ember test --serve'
 
@@ -180,6 +177,12 @@ function _bigfiles_helper() {
         fi
     fi
 }
+
+################# GIT #########################
+
+alias gg='git gui'
+alias gr='git review'
+alias gru='git review update'
 
 # git - checkout new branch (that tracks origin/master)
 function gcb() {

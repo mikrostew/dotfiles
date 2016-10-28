@@ -190,6 +190,8 @@ alias gr='git review'
 alias gru='git review update'
 alias gs='git status'
 alias gundo='git reset --soft HEAD~1'
+# meta - show the git commands that I have aliased
+alias gcom='alias | grep git | sed "s/alias//"'
 
 # git - checkout new branch (that tracks origin/master)
 function gcb() {

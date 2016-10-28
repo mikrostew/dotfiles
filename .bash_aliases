@@ -185,8 +185,10 @@ function _bigfiles_helper() {
 
 alias gg='git gui'
 alias gp='git push'
+alias gpr='git pull --rebase'
 alias gr='git review'
 alias gru='git review update'
+alias gs='git status'
 alias gundo='git reset --soft HEAD~1'
 
 # git - checkout new branch (that tracks origin/master)

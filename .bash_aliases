@@ -187,6 +187,7 @@ alias gg='git gui'
 alias gp='git push'
 alias gr='git review'
 alias gru='git review update'
+alias gundo='git reset --soft HEAD~1'
 
 # git - checkout new branch (that tracks origin/master)
 function gcb() {

@@ -49,6 +49,12 @@ alias rebash='source $HOME/.bashrc'
 
 # functions
 
+# update this repo
+function updot() {
+    # TODO - deal with uncommitted changes
+    ( set +e; set -x; pushd $HOME/dotfiles/; git pull --rebase; popd; )
+}
+
 # change directory and list
 function cdl() {
     cd "$1"

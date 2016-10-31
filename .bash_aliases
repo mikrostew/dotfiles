@@ -190,15 +190,25 @@ function _bigfiles_helper() {
 
 ################# GIT #########################
 
-alias gg='git gui'
-alias gp='git push'
-alias gpr='git pull --rebase'
-alias gr='git review'
-alias gru='git review update'
-alias gs='git status'
-alias gundo='git reset --soft HEAD~1'
-# meta - show the git commands that I have aliased
-alias gcom='alias | grep git | sed "s/alias//"'
+alias gg='( set -x; git gui )'
+alias gp='( set -x; git push )'
+alias gpr='( set -x; git pull --rebase )'
+alias gr='( set -x; git review )'
+alias gru='( set -x; git review update )'
+alias gs='( set -x; git status )'
+alias gundo='( set -x; git reset --soft HEAD~1 )'
+
+# git meta - show the git commands that I have aliased
+function gcom() {
+    # list of the aliased commands, without 'alias'
+    git_cmds=$(alias | grep git | sed 's/alias //')
+    # remove the parens and 'set -x'
+    mod_cmds=$(echo "$git_cmds" | sed 's/\([a-z]*\)='\''( set -x; \(.*\) )'\''/\1 \2/')
+    # print nicely
+    while read -r cmd_alias cmd; do
+        printf "%5s = %s\n" "$cmd_alias" "$cmd"
+    done <<< "$mod_cmds"
+}
 
 # git - checkout new branch (that tracks origin/master)
 function gcb() {

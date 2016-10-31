@@ -53,6 +53,7 @@ alias rebash='source $HOME/.bashrc'
 function updot() {
     # TODO - deal with uncommitted changes
     ( set +e; set -x; pushd $HOME/dotfiles/; git pull --rebase; popd; )
+    source $HOME/.bashrc
 }
 
 # change directory and list

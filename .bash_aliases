@@ -210,6 +210,35 @@ function gcom() {
     done <<< "$mod_cmds"
 }
 
+# git - move recent commits to a new branch (instead of master)
+function gmove() {
+    local branch_name=$(git rev-parse --abbrev-ref HEAD)
+    if [ "$?" -eq 0 ]; then
+        if [ "$branch_name" != "master" ]; then
+            echoerr "Come on! You must be on 'master' to do this"
+            return -1
+        fi
+        if [ -z "$1" ]; then
+            echoerr "Come on! You have to pass in a branch name"
+            echoerr "For example:"
+            echoerr "  gmove new-awesome-branch"
+            return -1
+        fi
+        # number of changes that need to be moved
+        local git_rev_list_origin=$(git rev-list --count --left-right master...origin/master 2>/dev/null)
+        if [ "$?" -eq 0 ] && [ -n "$git_rev_list_origin" ]; then
+            local git_origin_arr=($git_rev_list_origin) # split into array because it's 2 numbers separated by spaces
+            local num_commits_on_branch="${git_origin_arr[0]}"
+            echo "${num_commits_on_branch} commits will be moved to new branch '$1'"
+            # checkout branch that points to current HEAD
+            # move master back the input number of commits
+            # set the new branch to track origin/master
+            # (see http://stackoverflow.com/a/22654961)
+            ( set -x; git checkout -b "$1"; git branch -f master HEAD~${num_commits_on_branch}; git branch -u origin/master "$1" )
+        fi
+    fi
+}
+
 # git - checkout new branch (that tracks origin/master)
 function gcb() {
     # check that a branch name was passed to this function

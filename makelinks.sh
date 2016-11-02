@@ -13,6 +13,7 @@ links[".vim"]=".vim"
 links[".bash_profile"]=".bash_profile"
 links[".bashrc"]=".bashrc"
 links[".bash_aliases"]=".bash_aliases"
+links[".bash_repo_status"]=".bash_repo_status"
 # inputrc
 links[".inputrc"]=".inputrc"
 # gitignore

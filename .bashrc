@@ -30,12 +30,8 @@ shopt -s checkwinsize
 # add a trailing slash to the PWD if there is not one
 MY_PWD='$(echo "$PWD" | sed -e "s|^$HOME|~|" -e "s|/*$|/|")'
 # git / svn status
-if [ -f "$HOME/repo-status-bash/.bash_repo_status" ]; then
-    source "$HOME/repo-status-bash/.bash_repo_status"
-    PS1='\n(\t) \033[1;30m\u\033[0m@\033[1;30m\h\033[0m:\033[1;30m$(eval "echo ${MY_PWD}")\033[0m$(repo_status)\n\$ '
-else
-    PS1='\n(\t) \033[1;30m\u\033[0m@\033[1;30m\h\033[0m:\033[1;30m$(eval "echo ${MY_PWD}")\033[0m\n\$ '
-fi
+source "$HOME/.bash_repo_status"
+PS1='\n(\t) \033[1;30m\u\033[0m@\033[1;30m\h\033[0m:\033[1;30m$(eval "echo ${MY_PWD}")\033[0m$(repo_status)\n\$ '
 
 # If this is an xterm set the title to user@host:dir
 # (this will overwrite the terminal title after every command - don't want that)

@@ -199,16 +199,25 @@ alias gs='( set -x; git status )'
 alias gundo='( set -x; git reset --soft HEAD~1 )'
 alias gc='( set -x; git checkout )'
 
-# git meta - show the git commands that I have aliased
+# git - (meta) show the git commands that I have aliased
 function gcom() {
+    printf "\nAliases:\n"
     # list of the aliased commands, without 'alias'
     git_cmds=$(alias | grep git | sed 's/alias //')
     # remove the parens and 'set -x'
     mod_cmds=$(echo "$git_cmds" | sed 's/\([a-z]*\)='\''( set -x; \(.*\) )'\''/\1 \2/')
     # print nicely
     while read -r cmd_alias cmd; do
-        printf "%5s = %s\n" "$cmd_alias" "$cmd"
+        printf "%6s = %s\n" "$cmd_alias" "$cmd"
     done <<< "$mod_cmds"
+
+    printf "\nFunctions:\n"
+    # parse the functions from this file
+    git_funcs=$(sed -n -e '/^# git/{ h; n; G; s/\n//; s/function //; s/{# git - //; p; }' $HOME/.bash_aliases | sort)
+    # print nicely
+    while read -r func text; do
+        printf "%10s - %s\n" "$func" "$text"
+    done <<< "$git_funcs"
 }
 
 # git - move recent commits to a new branch (instead of master)
@@ -286,7 +295,7 @@ function echoerr() {
     echo "$@" 1>&2;
 }
 
-# git - squash commits, "rebase", merge, and submit for my LI workflow
+# git - squash commits, "rebase", merge, and submit (for LI workflow)
 function gsubmit() {
     # check that a commit message was passed to this function
     if [ -z "$1" ]; then

@@ -197,6 +197,7 @@ alias gr='( set -x; git review )'
 alias gru='( set -x; git review update )'
 alias gs='( set -x; git status )'
 alias gundo='( set -x; git reset --soft HEAD~1 )'
+alias gc='( set -x; git checkout )'
 
 # git meta - show the git commands that I have aliased
 function gcom() {

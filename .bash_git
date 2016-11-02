@@ -1,0 +1,161 @@
+# aliases and functions for git
+
+alias gg='( set -x; git gui )'
+alias gp='( set -x; git push )'
+alias gpr='( set -x; git pull --rebase )'
+alias gr='( set -x; git review )'
+alias gru='( set -x; git review update )'
+alias gs='( set -x; git status )'
+alias gundo='( set -x; git reset --soft HEAD~1 )'
+alias gc='( set -x; git checkout )'
+
+# git - (meta) show the git commands that I have aliased
+function gcom() {
+    printf "\nAliases:\n"
+    # list of the aliased commands, without 'alias'
+    git_cmds=$(alias | grep git | sed 's/alias //')
+    # remove the parens and 'set -x'
+    mod_cmds=$(echo "$git_cmds" | sed 's/\([a-z]*\)='\''( set -x; \(.*\) )'\''/\1 \2/')
+    # print nicely
+    while read -r cmd_alias cmd; do
+        printf "%6s = %s\n" "$cmd_alias" "$cmd"
+    done <<< "$mod_cmds"
+
+    printf "\nFunctions:\n"
+    # parse the functions from this file
+    git_funcs=$(sed -n -e '/^# git/{ h; n; G; s/\n//; s/function //; s/{# git - //; p; }' "$DOTFILES_DIR/.bash_aliases" | sort)
+    # print nicely
+    while read -r func text; do
+        printf "%10s - %s\n" "$func" "$text"
+    done <<< "$git_funcs"
+}
+
+# git - move recent commits to a new branch (instead of master)
+function gmove() {
+    local branch_name=$(git rev-parse --abbrev-ref HEAD)
+    if [ "$?" -eq 0 ]; then
+        if [ "$branch_name" != "master" ]; then
+            echoerr "Come on! You must be on 'master' to do this"
+            return -1
+        fi
+        if [ -z "$1" ]; then
+            echoerr "Come on! You have to pass in a branch name"
+            echoerr "For example:"
+            echoerr "  gmove new-awesome-branch"
+            return -1
+        fi
+        # number of changes that need to be moved
+        local git_rev_list_origin=$(git rev-list --count --left-right master...origin/master 2>/dev/null)
+        if [ "$?" -eq 0 ] && [ -n "$git_rev_list_origin" ]; then
+            local git_origin_arr=($git_rev_list_origin) # split into array because it's 2 numbers separated by spaces
+            local num_commits_on_branch="${git_origin_arr[0]}"
+            echo "${num_commits_on_branch} commits will be moved to new branch '$1'"
+            # checkout branch that points to current HEAD
+            # move master back the input number of commits
+            # set the new branch to track origin/master
+            # (see http://stackoverflow.com/a/22654961)
+            ( set -x; git checkout -b "$1"; git branch -f master HEAD~${num_commits_on_branch}; git branch -u origin/master "$1" )
+        fi
+    fi
+}
+
+# git - checkout new branch (that tracks origin/master)
+function gcb() {
+    # check that a branch name was passed to this function
+    if [ -z "$1" ]; then
+        echoerr "Come on! You have to pass a branch name for this"
+        echoerr "For example:"
+        echoerr "  gcb new-awesome-branch"
+        return -1
+    fi
+    ( set -x; git checkout -b "$1" origin/master )
+}
+
+# git - rebase against master
+function gram() {
+    local branch_name=$(git rev-parse --abbrev-ref HEAD)
+    if [ "$?" -eq 0 ]; then
+        if [ "$branch_name" = "master" ]; then
+            echoerr "Come on! You're already on master"
+            return -1
+        fi
+        if [ "$(git status --porcelain --untracked-files=no)" != "" ]; then
+            echoerr "Come on! You have uncommitted changes, fix that and try again"
+            return -2
+        fi
+        ( set -x; git checkout master && git pull --rebase && git checkout "$branch_name" && git rebase master )
+    fi
+}
+
+# git - show which files are different from master branch
+function gfiles() {
+    local branch_name=$(git rev-parse --abbrev-ref HEAD)
+    if [ "$?" -eq 0 ]; then
+        if [ "$branch_name" = "master" ]; then
+            echoerr "Come on! You're already on master"
+            return -1
+        fi
+        ( set -x; git diff --name-status master..$branch_name )
+    fi
+}
+
+# git - squash commits, "rebase", merge, and submit (for LI workflow)
+function gsubmit() {
+    # check that a commit message was passed to this function
+    if [ -z "$1" ]; then
+        echoerr "Come on! You have to pass in a commit message for this"
+        echoerr "For example:"
+        echoerr "  gsubmit \"I made some changes\""
+        return -1
+    fi
+    # find the current branch name
+    local branch_name=$(git rev-parse --abbrev-ref HEAD)
+    if [ "$?" -eq 0 ]; then
+        if [ "$branch_name" = "master" ]; then
+            echoerr "Come on! You're already on master"
+            return -1
+        fi
+        if [ "$(git status --porcelain --untracked-files=no)" != "" ]; then
+            echoerr "Come on! You have uncommitted changes, fix that and try again"
+            return -1
+        fi
+        # number of changes that need to be squashed
+        local git_rev_list_origin=$( set -x; git rev-list --count --left-right ${branch_name}...origin/master 2>/dev/null )
+        if [ "$?" -eq 0 ] && [ -n "$git_rev_list_origin" ]; then
+            local git_origin_arr=($git_rev_list_origin) # will split into array because it's 2 numbers separated by spaces
+            local num_commits_on_branch="${git_origin_arr[0]}"
+            echo "There are ${num_commits_on_branch} commits on branch '${branch_name}'"
+            # "rebase" without having to do things interactively (from Stack Overflow)
+            ( set -x; git reset --soft HEAD~${num_commits_on_branch} && git commit -m "$1" )
+            if [ "$?" -eq 0 ]; then
+                # TODO - figure out how to recover from these
+                # apply the RB to the commit
+                ( set -x; git review dcommit )
+                # rebase against master
+                ( set -x; git pull --rebase origin master && git checkout master && git pull --rebase )
+                # merge into master
+                ( set -x; git merge ${branch_name} )
+                # and submit
+                ( set -x; git submit )
+                if [ "$?" -ne 0 ]; then
+                    # submit failed, could be precommit, or ACL check, or whatever
+                    echoerr "Dang it! \"git submit\" failed, undoing the merge"
+                    ( set -x; git reset --merge ORIG_HEAD && git checkout ${branch_name} )
+                    return -1
+                fi
+                # rebase to pick up the change
+                ( set -x; git pull --rebase )
+                # and done!
+            else
+                # TODO what do I do if there is some error here?
+                echoerr "Dang it! \"rebasing\" didn't work"
+            fi
+        else
+            # at this point there were no changes made, so nothing to do here
+            echoerr "Dang it! Couldn't figure out how many changes to squash"
+        fi
+    else
+        # nothing to undo here, haven't done anything
+        echoerr "Dang it! Couldn't figure out the current branch name"
+    fi
+}

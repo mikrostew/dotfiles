@@ -7,6 +7,7 @@ uname_str=$(uname)
 if [ "$uname_str" == "Darwin" ]; then
     platform="Mac"
 elif [ "$uname_str" == "Linux" ]; then
+    # Linux desktop and termux on Android
     platform="Linux"
 fi
 
@@ -16,9 +17,13 @@ if [ "$platform" == "Linux" ]; then
 elif [ "$platform" == "Mac" ]; then
     alias ls='ls -G'
 fi
-alias grep='grep --color=auto'
-alias fgrep='fgrep --color=auto'
-alias egrep='egrep --color=auto'
+
+# --color not supported for grep on Android
+if [ "$(grep --version 2>/dev/null)" -a $? = 0 ]; then
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+fi
 
 # handy aliases
 alias ll='ls -alF'

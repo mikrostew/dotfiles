@@ -54,11 +54,10 @@ alias rebash='source $HOME/.bashrc'
 
 # functions
 
-# update this repo
+# update the dotfiles repo and source .bashrc
 function updot() {
-    # TODO - deal with uncommitted changes
-    ( set +e; set -x; pushd $HOME/dotfiles/; git pull --rebase; popd; )
-    source $HOME/.bashrc
+    ( set +e; set -x; pushd "$DOTFILES_DIR"; git pull --rebase; popd; )
+    source "$HOME/.bashrc"
 }
 
 # change directory and list
@@ -218,7 +217,7 @@ function gcom() {
 
     printf "\nFunctions:\n"
     # parse the functions from this file
-    git_funcs=$(sed -n -e '/^# git/{ h; n; G; s/\n//; s/function //; s/{# git - //; p; }' $HOME/.bash_aliases | sort)
+    git_funcs=$(sed -n -e '/^# git/{ h; n; G; s/\n//; s/function //; s/{# git - //; p; }' "$DOTFILES_DIR/.bash_aliases" | sort)
     # print nicely
     while read -r func text; do
         printf "%10s - %s\n" "$func" "$text"

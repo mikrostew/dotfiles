@@ -8,6 +8,9 @@ case $- in
       *) return;;
 esac
 
+# directory where the dotfiles repo is checked out
+export DOTFILES_DIR="$(dirname "$(readlink "$HOME/.bashrc")")"
+
 # don't put duplicate lines or lines starting with space in the history
 HISTCONTROL=ignoreboth
 
@@ -30,7 +33,7 @@ shopt -s checkwinsize
 # add a trailing slash to the PWD if there is not one
 MY_PWD='$(echo "$PWD" | sed -e "s|^$HOME|~|" -e "s|/*$|/|")'
 # git / svn status
-source "$HOME/.bash_repo_status"
+source "$DOTFILES_DIR/.bash_repo_status"
 PS1='\n(\t) \033[1;30m\u\033[0m@\033[1;30m\h\033[0m:\033[1;30m$(eval "echo ${MY_PWD}")\033[0m$(repo_status)\n\$ '
 
 # If this is an xterm set the title to user@host:dir
@@ -43,14 +46,8 @@ PS1='\n(\t) \033[1;30m\u\033[0m@\033[1;30m\h\033[0m:\033[1;30m$(eval "echo ${MY_
 #    ;;
 #esac
 
-# Alias definitions.
-# You may want to put all your additions into a separate file like
-# ~/.bash_aliases, instead of adding them here directly.
-# See /usr/share/doc/bash-doc/examples in the bash-doc package.
-
-if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_aliases
-fi
+# alias definitions
+[ -f "$DOTFILES_DIR/.bash_aliases" ] && source "$DOTFILES_DIR/.bash_aliases"
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile

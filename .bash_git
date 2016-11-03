@@ -7,11 +7,61 @@ alias gr='( set -x; git review )'
 alias gru='( set -x; git review update )'
 alias gs='( set -x; git status )'
 alias gundo='( set -x; git reset --soft HEAD~1 )'
-alias gc='( set -x; git checkout )'
 
+# shared functions
+
+function in_git_repo() {
+    git status >/dev/null && return 0 || return 1
+}
+
+function current_git_branch() {
+    echo "$(git rev-parse --abbrev-ref HEAD)"
+}
+
+function on_git_branch() {
+    [ "$(current_git_branch)" != "$1" ] && echoerr "Must be on branch '$1' for this" && return -1 || return 0
+}
+
+function not_on_git_branch() {
+    [ "$(current_git_branch)" == "$1" ] && echoerr "Doesn't work on branch '$1'" && return -1 || return 0
+}
+
+function no_uncommitted_changes() {
+    [ "$(git status --porcelain --untracked-files=no)" != "" ] && echoerr "You have uncommitted changes" && return -1 || return 0
+}
+
+function num_arguments_passed() {
+    if [ "$1" -ne "$2" ]; then
+        # TODO join array
+        what="$3"
+        # echoerr "Expected $1, but got $2 argument(s), need to pass in '${3[@]}'"
+        echoerr "Expecting $1 argument(s): '${what[@]}' - got $2 argument(s)"
+        return -1
+    fi
+    return 0
+}
+
+# number of changes between input branch and origin/master
+function commit_diff_on_branch() {
+    local git_rev_list_origin="$(git rev-list --count --left-right "$1"...origin/master 2>/dev/null)"
+    if [ "$?" -eq 0 ] && [ -n "$git_rev_list_origin" ]; then
+        local git_origin_arr=($git_rev_list_origin) # splits into array - it's 2 numbers separated by spaces
+        echo "${git_origin_arr[0]}"
+    fi
+}
+
+
+# git - checkout branch
+function gc() {
+    arguments=('branch name')
+    if in_git_repo && num_arguments_passed 1 "$#" "$arguments"; then
+        ( set -x; git checkout "$1" )
+    fi
+}
 
 # git - (meta) show git aliases and functions from this file
 function gcom() {
+    #arguments=()
     printf "\nAliases:\n"
     # list of the aliased commands, without 'alias', 'set -x', or parenthesis
     git_aliases=$(alias | grep git | sed -e 's/alias //' -e "s/='( set -x;//" -e "s/ )'//")
@@ -21,107 +71,62 @@ function gcom() {
 
     printf "\nFunctions:\n"
     # list of functions and descriptions
-    git_funcs=$(sed -n -e '/^# git/{ h; n; G; s/\n//; s/function //; s/{# git - //; p; }' "$DOTFILES_DIR/.bash_git" | sort)
+    git_functions=$(sed -n -e '/^# git/{ h; n; G; s/\n//; s/function //; s/{# git - //; p; }' "$DOTFILES_DIR/.bash_git" | sort)
     while read -r func text; do
         printf "%10s - %s\n" "$func" "$text"
-    done <<< "$git_funcs"
+    done <<< "$git_functions"
 }
 
 # git - move recent commits to a new branch (instead of master)
 function gmove() {
-    local branch_name=$(git rev-parse --abbrev-ref HEAD)
-    if [ "$?" -eq 0 ]; then
-        if [ "$branch_name" != "master" ]; then
-            echoerr "Come on! You must be on 'master' to do this"
-            return -1
-        fi
-        if [ -z "$1" ]; then
-            echoerr "Come on! You have to pass in a branch name"
-            echoerr "For example:"
-            echoerr "  gmove new-awesome-branch"
-            return -1
-        fi
-        # number of changes that need to be moved
-        local git_rev_list_origin=$(git rev-list --count --left-right master...origin/master 2>/dev/null)
-        if [ "$?" -eq 0 ] && [ -n "$git_rev_list_origin" ]; then
-            local git_origin_arr=($git_rev_list_origin) # split into array because it's 2 numbers separated by spaces
-            local num_commits_on_branch="${git_origin_arr[0]}"
-            echo "${num_commits_on_branch} commits will be moved to new branch '$1'"
-            # checkout branch that points to current HEAD
-            # move master back the input number of commits
-            # set the new branch to track origin/master
-            # (see http://stackoverflow.com/a/22654961)
-            ( set -x; git checkout -b "$1"; git branch -f master HEAD~${num_commits_on_branch}; git branch -u origin/master "$1" )
+    arguments=('new branch name')
+    if in_git_repo && on_git_branch 'master' && num_arguments_passed 1 "$#" "$arguments"; then
+        local num_commits="$(commit_diff_on_branch 'master')"
+        echo "${num_commits} commit(s) will be moved to branch '$1'"
+        if [ "$num_commits" != "" ] && [ "$num_commits" -gt 0 ]; then
+            # (see http://stackoverflow.com/a/22654961 for details)
+            ( set -x; git checkout -b "$1"; git branch -f master HEAD~${num_commits}; git branch -u origin/master "$1" )
         fi
     fi
 }
 
 # git - checkout new branch (that tracks origin/master)
 function gcb() {
-    # check that a branch name was passed to this function
-    if [ -z "$1" ]; then
-        echoerr "Come on! You have to pass a branch name for this"
-        echoerr "For example:"
-        echoerr "  gcb new-awesome-branch"
-        return -1
+    arguments=('new branch name')
+    if in_git_repo && num_arguments_passed 1 "$#" "$arguments"; then
+        ( set -x; git checkout -b "$1" origin/master )
     fi
-    ( set -x; git checkout -b "$1" origin/master )
 }
 
-# git - rebase against master
+# git - rebase current branch against master
 function gram() {
-    local branch_name=$(git rev-parse --abbrev-ref HEAD)
-    if [ "$?" -eq 0 ]; then
-        if [ "$branch_name" = "master" ]; then
-            echoerr "Come on! You're already on master"
-            return -1
-        fi
-        if [ "$(git status --porcelain --untracked-files=no)" != "" ]; then
-            echoerr "Come on! You have uncommitted changes, fix that and try again"
-            return -2
-        fi
+    if in_git_repo && not_on_git_branch 'master' && no_uncommitted_changes; then
+        local branch_name=$(current_git_branch)
         ( set -x; git checkout master && git pull --rebase && git checkout "$branch_name" && git rebase master )
     fi
 }
 
 # git - show which files are different from master branch
 function gfiles() {
-    local branch_name=$(git rev-parse --abbrev-ref HEAD)
-    if [ "$?" -eq 0 ]; then
-        if [ "$branch_name" = "master" ]; then
-            echoerr "Come on! You're already on master"
-            return -1
-        fi
-        ( set -x; git diff --name-status master..$branch_name )
+    if in_git_repo && not_on_git_branch 'master'; then
+        local branch_name=$(current_git_branch)
+        ( set -x; git diff --name-status master.."$branch_name" )
     fi
 }
 
 # git - squash commits, "rebase", merge, and submit (for LI workflow)
 function gsubmit() {
-    # check that a commit message was passed to this function
-    if [ -z "$1" ]; then
-        echoerr "Come on! You have to pass in a commit message for this"
-        echoerr "For example:"
-        echoerr "  gsubmit \"I made some changes\""
-        return -1
-    fi
-    # find the current branch name
-    local branch_name=$(git rev-parse --abbrev-ref HEAD)
-    if [ "$?" -eq 0 ]; then
-        if [ "$branch_name" = "master" ]; then
-            echoerr "Come on! You're already on master"
-            return -1
-        fi
-        if [ "$(git status --porcelain --untracked-files=no)" != "" ]; then
-            echoerr "Come on! You have uncommitted changes, fix that and try again"
-            return -1
-        fi
+    arguments=('commit message')
+    if in_git_repo && not_on_git_branch 'master' && no_uncommitted_changes && num_arguments_passed 1 "$#" "$arguments"; then
+        local branch_name=$(current_git_branch)
+
         # number of changes that need to be squashed
         local git_rev_list_origin=$( set -x; git rev-list --count --left-right ${branch_name}...origin/master 2>/dev/null )
         if [ "$?" -eq 0 ] && [ -n "$git_rev_list_origin" ]; then
             local git_origin_arr=($git_rev_list_origin) # will split into array because it's 2 numbers separated by spaces
             local num_commits_on_branch="${git_origin_arr[0]}"
             echo "There are ${num_commits_on_branch} commits on branch '${branch_name}'"
+
             # "rebase" without having to do things interactively (from Stack Overflow)
             ( set -x; git reset --soft HEAD~${num_commits_on_branch} && git commit -m "$1" )
             if [ "$?" -eq 0 ]; then
@@ -151,8 +156,5 @@ function gsubmit() {
             # at this point there were no changes made, so nothing to do here
             echoerr "Dang it! Couldn't figure out how many changes to squash"
         fi
-    else
-        # nothing to undo here, haven't done anything
-        echoerr "Dang it! Couldn't figure out the current branch name"
     fi
 }

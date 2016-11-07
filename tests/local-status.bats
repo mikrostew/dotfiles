@@ -28,3 +28,17 @@ load test-helper
     compare_status_line "$test_localstat_base_str$test_staged_file_str"
 }
 
+@test "local status | modified file - should return success" {
+    touch "newfile.txt"
+    git add -N "newfile.txt"
+    run repo_status
+    [ "$status" -eq 0 ]
+}
+
+@test "local status | modified file - should return correct status line" {
+    touch "newfile.txt"
+    git add -N "newfile.txt"
+    run repo_status
+    compare_status_line "$test_localstat_base_str$test_staged_file_str $test_modified_file_str"
+}
+

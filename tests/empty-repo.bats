@@ -4,7 +4,6 @@ load test-helper
 
 @test "empty repo | should return success" {
     run repo_status
-    echo "$status" >&2
     [ "$status" -eq 0 ]
 }
 

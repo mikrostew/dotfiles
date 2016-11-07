@@ -2,7 +2,7 @@
 
 source .bash_repo_status
 
-tmpdirname="tmp$RANDOM"
+tmpdirname="$TMPDIR/tmp$RANDOM"
 
 setup() {
     mkdir "$tmpdirname"
@@ -11,7 +11,7 @@ setup() {
 }
 teardown() {
     cd ..
-    rm -r "$tmpdirname"
+    rm -rf "$tmpdirname"
 }
 
 @test "empty repo | should return success" {

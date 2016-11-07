@@ -11,7 +11,7 @@ load test-helper
 @test "local status | untracked file - should return correct status line" {
     touch "newfile.txt"
     run repo_status
-    compare_status_line "$test_localstat_base_str$test_untracked_file_str"
+    compare_local_status "$test_untracked_file_str"
 }
 
 @test "local status | staged file - should return success" {
@@ -25,7 +25,7 @@ load test-helper
     touch "newfile.txt"
     git add "newfile.txt"
     run repo_status
-    compare_status_line "$test_localstat_base_str$test_staged_file_str"
+    compare_local_status "$test_staged_file_str"
 }
 
 @test "local status | modified file - should return success" {
@@ -39,6 +39,6 @@ load test-helper
     touch "newfile.txt"
     git add -N "newfile.txt"
     run repo_status
-    compare_status_line "$test_localstat_base_str$test_staged_file_str $test_modified_file_str"
+    compare_local_status "$test_staged_file_str $test_modified_file_str"
 }
 

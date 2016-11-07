@@ -9,6 +9,6 @@ load test-helper
 
 @test "empty repo | should return the correct status line" {
     run repo_status
-    compare_status_line "$test_localstat_base_str$test_local_ok_str"
+    compare_local_status "$test_local_ok_str"
 }
 

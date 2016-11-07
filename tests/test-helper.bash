@@ -19,14 +19,32 @@ teardown() {
 
 # compare output to the expected status line
 # $1 - the expected status line
+# $2 - the actual status line
 compare_status_line() {
-    local expected="$(echo -e "$1")"
     # these will only be shown if the test fails
-    echo "Expected: $expected" >&2
-    echo "  Actual: ${lines[0]}" >&2
-    echo "$(cmp -bl <(echo "${lines[0]}") <(echo "$expected") )" >&2
+    echo -e "Expected:$COLOR_RESET '$1'" >&2
+    echo -e "  Actual:$COLOR_RESET '$2'" >&2
+    echo "$(cmp -bl <(echo "$1") <(echo "$2") )" >&2
     # compare the strings and return the result
-    [ "${lines[0]}" = "$expected" ]
+    [ "$1" = "$2" ]
+    return
+}
+
+# compare output to the expected status line
+# $1 - the expected status line
+compare_local_status() {
+    local expected="$(echo -e "$1")"
+    local actual="$(echo "${lines[0]}" | sed -e 's|.*/ ||')"
+    $(compare_status_line "$expected" "$actual")
+    return
+}
+
+# compare output to the expected status line
+# $1 - the expected status line
+compare_remote_status() {
+    local expected="$(echo -e "$1")"
+    local actual="$(echo "${lines[0]}" | sed -e 's|  [^ ]* ||' -e 's| /.*$||')"
+    $(compare_status_line "$expected" "$actual")
     return
 }
 
@@ -39,4 +57,3 @@ test_untracked_file_str="${GS_COLOR_UNTRACKED}1$COLOR_RESET$GS_SYM_UNTRACKED"
 test_staged_file_str="${GS_COLOR_STAGED}1$COLOR_RESET$GS_SYM_STAGED"
 test_modified_file_str="${GS_COLOR_MODIFIED}1$COLOR_RESET$GS_SYM_MODIFIED"
 
-test_localstat_base_str="  $test_git_str$test_master_branch_str $test_no_remote_str / "

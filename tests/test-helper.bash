@@ -17,10 +17,11 @@ teardown() {
     rm -rf "$tmpdirname"
 }
 
-# compare output to the expected status line
-# $1 - the expected status line
-# $2 - the actual status line
-compare_status_line() {
+# Compare the input strings and return the result. If strings differ, difference will be shown.
+# arguments:
+#  $1 - the expected string
+#  $2 - the actual string
+compare_status_strings() {
     # these will only be shown if the test fails
     echo -e "Expected:$COLOR_RESET '$1'" >&2
     echo -e "  Actual:$COLOR_RESET '$2'" >&2
@@ -30,21 +31,33 @@ compare_status_line() {
     return
 }
 
-# compare output to the expected status line
-# $1 - the expected status line
-compare_local_status() {
+# Compare the full status string to the expected
+# arguments:
+#  $1 - the expected status line
+compare_full_status() {
     local expected="$(echo -e "$1")"
-    local actual="$(echo "${lines[0]}" | sed -e 's|.*/ ||')"
-    $(compare_status_line "$expected" "$actual")
+    local actual="${lines[0]}"
+    $(compare_status_strings "$expected" "$actual")
     return
 }
 
-# compare output to the expected status line
-# $1 - the expected status line
+# Remove all but the local status from the output line, and compare to expected
+# arguments:
+#  $1 - the expected status line
+compare_local_status() {
+    local expected="$(echo -e "$1")"
+    local actual="$(echo "${lines[0]}" | sed -e 's|.*/ ||')"
+    $(compare_status_strings "$expected" "$actual")
+    return
+}
+
+# Remove all but the remote status from the output line, and compare to expected
+# arguments:
+#  $1 - the expected status line
 compare_remote_status() {
     local expected="$(echo -e "$1")"
     local actual="$(echo "${lines[0]}" | sed -e 's|  [^ ]* ||' -e 's| /.*$||')"
-    $(compare_status_line "$expected" "$actual")
+    $(compare_status_strings "$expected" "$actual")
     return
 }
 

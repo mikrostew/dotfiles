@@ -20,7 +20,7 @@ teardown() {
     [ "$status" -eq 0 ]
 }
 
-@test "empty repo | should return the correct status" {
+@test "empty repo | should return the correct status line" {
     run repo_status
     expected="$(echo -e "  $GS_COLOR_GIT$GS_SYM_GIT$COLOR_RESET$GS_SYM_BRANCH${GS_COLOR_BRANCH}master$COLOR_RESET $GS_COLOR_NO_REMOTE$GS_SYM_NO_REMOTE$COLOR_RESET / $GS_COLOR_LOCAL_OK$GS_SYM_LOCAL_OK$COLOR_RESET")"
     echo "'${lines[0]}' != '$expected'" >&2

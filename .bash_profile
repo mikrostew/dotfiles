@@ -30,3 +30,4 @@ if [ -d "$HOME/Dropbox/dev/includes/cxxtest-4.4/bin" ]; then
     export CXXTEST="$HOME/Dropbox/dev/includes/cxxtest-4.4"
 fi
 
+export PATH="/usr/local/sbin:$PATH"

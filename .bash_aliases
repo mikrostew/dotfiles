@@ -48,6 +48,9 @@ alias jets='just ember test --serve'
 # BashRC
 alias rebash='source $HOME/.bashrc'
 
+# show the TODOs I have left in the code
+alias todo='( set -x; grep -nr --exclude-dir bower_components --exclude-dir node_modules "// TODO" . )'
+
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
 #alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'

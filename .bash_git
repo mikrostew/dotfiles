@@ -1,5 +1,6 @@
 # aliases and functions for git
 
+alias gbl='( set -x; git branch --list -a )'
 alias gg='( set -x; git gui )'
 alias gp='( set -x; git push )'
 alias gpr='( set -x; git pull --rebase )'

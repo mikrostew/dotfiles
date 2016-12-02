@@ -65,6 +65,7 @@ compare_remote_status() {
 test_git_str="$GS_COLOR_GIT$GS_SYM_GIT$COLOR_RESET"
 test_master_branch_str="$GS_SYM_BRANCH${GS_COLOR_BRANCH}master$COLOR_RESET"
 test_no_remote_str="$GS_COLOR_NO_REMOTE$GS_SYM_NO_REMOTE$COLOR_RESET"
+test_commit_no_remote_str="${GS_COLOR_NEED_PUSH_UNTRACKED}1$COLOR_RESET$GS_SYM_NEED_PUSH_UNTRACKED"
 test_local_ok_str="$GS_COLOR_LOCAL_OK$GS_SYM_LOCAL_OK$COLOR_RESET"
 test_untracked_file_str="${GS_COLOR_UNTRACKED}1$COLOR_RESET$GS_SYM_UNTRACKED"
 test_staged_file_str="${GS_COLOR_STAGED}1$COLOR_RESET$GS_SYM_STAGED"

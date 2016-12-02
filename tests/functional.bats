@@ -11,6 +11,15 @@ load test-helper
     compare_full_status "  $test_git_str$test_master_branch_str $test_no_remote_str / $test_local_ok_str"
 }
 
+@test "Functional | full status | 1 commit no remote" {
+    touch "newfile.txt"
+    git add  "newfile.txt"
+    git commit -m "Test commit"
+    run repo_status
+    [ "$status" -eq 0 ]
+    compare_full_status "  $test_git_str$test_master_branch_str $test_commit_no_remote_str / $test_local_ok_str"
+}
+
 # local status
 
 @test "Functional | local status | untracked file" {
@@ -42,5 +51,14 @@ load test-helper
     run repo_status
     [ "$status" -eq 0 ]
     compare_remote_status "$test_no_remote_str"
+}
+
+@test "Functional | remote status | 1 commit no remote" {
+    touch "newfile.txt"
+    git add  "newfile.txt"
+    git commit -m "Test commit"
+    run repo_status
+    [ "$status" -eq 0 ]
+    compare_remote_status "$test_commit_no_remote_str"
 }
 

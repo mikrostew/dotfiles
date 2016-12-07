@@ -83,20 +83,19 @@ function min_arguments_passed() {
 # other functions
 
 # show a desktop notification with sound after a long-running command
-# Use it like this:
+# Usage:
 #   sleep 10; notify
 function notify() {
+    local title="Command Complete [$([ $? = 0 ] && echo "OK" || echo "ERROR!")]"
     if [ "$platform" == "Mac" ]; then
-        local title="Command Completed"
-        local cmd_status="$([ $? = 0 ] && echo "OK" || echo "ERROR!")"
         local cmd="$(history | tail -n1 | sed -e 's/^\ *[0-9]*\ *//' -e 's/[;&|]\ *notify$//')"
         local sound_name="Glass" # see /System/Library/Sounds/ for list of sounds
-        local script="display notification \"$cmd\" with title \"$title\" subtitle \"$cmd_status\" sound name \"$sound_name\""
+        local script="display notification \"$cmd\" with title \"$title\" sound name \"$sound_name\""
         osascript -e "$script"
     else
-        echo "Not yet implementd for Linux"
-        # TODO Linux version (like this?):
-        #alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+        local body="$(history | tail -n1 | sed -e 's/^\s*[0-9]\+\s*//' -e 's/[;&|]\s*notify$//')"
+        local icon="$([ $? = 0 ] && echo terminal || echo error)"
+        notify-send --urgency=low --icon="$icon" "$title" "$body"
     fi
 }
 

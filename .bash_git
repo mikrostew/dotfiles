@@ -31,17 +31,6 @@ function no_uncommitted_changes() {
     [ "$(git status --porcelain --untracked-files=no)" != "" ] && echoerr "You have uncommitted changes" && return -1 || return 0
 }
 
-function num_arguments_passed() {
-    if [ "$1" -ne "$2" ]; then
-        # TODO join array
-        what="$3"
-        # echoerr "Expected $1, but got $2 argument(s), need to pass in '${3[@]}'"
-        echoerr "Expecting $1 argument(s): '${what[@]}' - got $2 argument(s)"
-        return -1
-    fi
-    return 0
-}
-
 # number of changes between input branch and origin/master
 function commit_diff_on_branch() {
     local git_rev_list_origin="$(git rev-list --count --left-right "$1"...origin/master 2>/dev/null)"

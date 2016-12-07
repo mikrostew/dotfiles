@@ -51,11 +51,54 @@ alias rebash='source $HOME/.bashrc'
 # show the TODOs I have left in the code (outputs the lines in each file to /dev/tty)
 alias todo='( set -x; grep -nr --exclude-dir bower_components --exclude-dir node_modules "// TODO" . | tee /dev/tty | wc -l )'
 
-# Add an "alert" alias for long running commands.  Use like so:
-#   sleep 10; alert
-#alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
 # functions
+
+# shared functions
+
+# TODO - document this
+# check for exact number of arguments
+function num_arguments_passed() {
+    if [ "$1" -ne "$2" ]; then
+        what="$3"
+        echoerr "Expecting $1 argument(s): '${what[@]}' - got $2 argument(s)"
+        return -1
+    fi
+    return 0
+}
+
+# check for minimum number of arguments to function
+function min_arguments_passed() {
+    local num_expected="$1"
+    local num_received="$2"
+    local arguments="$3"
+    if [ "$num_received" -lt "$num_expected" ]; then
+        echoerr "Expecting at least $num_expected argument(s): '${arguments[@]}' - got $num_received argument(s)"
+        return -1
+    fi
+    return 0
+}
+
+
+# other functions
+
+# show a desktop notification with sound after a long-running command
+# Use it like this:
+#   sleep 10; notify
+function notify() {
+    if [ "$platform" == "Mac" ]; then
+        local title="Command Completed"
+        local cmd_status="$([ $? = 0 ] && echo "OK" || echo "ERROR!")"
+        local cmd="$(history | tail -n1 | sed -e 's/^\ *[0-9]*\ *//' -e 's/[;&|]\ *notify$//')"
+        local sound_name="Glass" # see /System/Library/Sounds/ for list of sounds
+        local script="display notification \"$cmd\" with title \"$title\" subtitle \"$cmd_status\" sound name \"$sound_name\""
+        osascript -e "$script"
+    else
+        echo "Not yet implementd for Linux"
+        # TODO Linux version (like this?):
+        #alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+    fi
+}
 
 # update the dotfiles repo and source .bashrc
 function updot() {

@@ -52,28 +52,27 @@ alias rebash='source $HOME/.bashrc'
 alias todo='( set -x; grep -nr --exclude-dir bower_components --exclude-dir node_modules "// TODO" . | tee /dev/tty | wc -l )'
 
 
-# functions
-
 # shared functions
 
-# TODO - document this
-# check for exact number of arguments
-function num_arguments_passed() {
-    if [ "$1" -ne "$2" ]; then
-        what="$3"
-        echoerr "Expecting $1 argument(s): '${what[@]}' - got $2 argument(s)"
-        return -1
-    fi
-    return 0
+# echo to stderr instead of stdout
+function echoerr() {
+    echo "$@" 1>&2;
 }
 
-# check for minimum number of arguments to function
-function min_arguments_passed() {
-    local num_expected="$1"
-    local num_received="$2"
-    local arguments="$3"
-    if [ "$num_received" -lt "$num_expected" ]; then
-        echoerr "Expecting at least $num_expected argument(s): '${arguments[@]}' - got $num_received argument(s)"
+# check for exact number of arguments to a function, and print usage if not correct
+# argument(s)
+# - array of expected argument names
+# - number of arguments passed to function
+function num_arguments_ok() {
+    local expected_args=( "${!1}" )
+    local num_args="$2"
+    local expected_num_args="${#expected_args[@]}"
+    if [ "$expected_num_args" -ne "$num_args" ]
+    then
+        # $FUNCNAME is an array of the current call stack
+        echoerr "Come on! This is how to use this:"
+        echoerr ""
+        echoerr "  ${FUNCNAME[1]} ${expected_args[*]}"
         return -1
     fi
     return 0
@@ -235,11 +234,6 @@ function _bigfiles_helper() {
             fi
         fi
     fi
-}
-
-# echo to stderr instead of stdout
-function echoerr() {
-    echo "$@" 1>&2;
 }
 
 # git aliases and functions

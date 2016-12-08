@@ -21,15 +21,15 @@ function current_git_branch() {
 }
 
 function on_git_branch() {
-    [ "$(current_git_branch)" != "$1" ] && echoerr "Must be on branch '$1' for this" && return -1 || return 0
+    [ "$(current_git_branch)" != "$1" ] && echoerr ">_<  Must be on branch '$1' for this" && return -1 || return 0
 }
 
 function not_on_git_branch() {
-    [ "$(current_git_branch)" == "$1" ] && echoerr "Doesn't work on branch '$1'" && return -1 || return 0
+    [ "$(current_git_branch)" == "$1" ] && echoerr ">_<  Doesn't work on branch '$1'" && return -1 || return 0
 }
 
 function no_uncommitted_changes() {
-    [ "$(git status --porcelain --untracked-files=no)" != "" ] && echoerr "You have uncommitted changes" && return -1 || return 0
+    [ "$(git status --porcelain --untracked-files=no)" != "" ] && echoerr ">_<  You have uncommitted changes" && return -1 || return 0
 }
 
 # number of changes between input branch and origin/master
@@ -46,34 +46,39 @@ function commit_diff_on_branch() {
 
 # git - checkout branch
 function gc() {
-    arguments=('branch name')
-    if in_git_repo && num_arguments_passed 1 "$#" "$arguments"; then
+    arguments=( '<branch-name>' )
+    if in_git_repo && num_arguments_ok arguments[@] "$#"
+    then
         ( set -x; git checkout "$1" )
     fi
 }
 
 # git - (meta) show git aliases and functions from this file
 function gcom() {
-    #arguments=()
-    printf "\nAliases:\n"
-    # list of the aliased commands, without 'alias', 'set -x', or parenthesis
-    git_aliases=$(alias | grep git | sed -e 's/alias //' -e "s/='( set -x;//" -e "s/ )'//")
-    while read -r cmd_alias cmd; do
-        printf "%6s = %s\n" "$cmd_alias" "$cmd"
-    done <<< "$git_aliases"
+    arguments=()
+    if num_arguments_ok arguments[@] "$#"
+    then
+        printf "\nAliases:\n"
+        # list of the aliased commands, without 'alias', 'set -x', or parenthesis
+        git_aliases=$(alias | grep git | sed -e 's/alias //' -e "s/='( set -x;//" -e "s/ )'//")
+        while read -r cmd_alias cmd; do
+            printf "%6s = %s\n" "$cmd_alias" "$cmd"
+        done <<< "$git_aliases"
 
-    printf "\nFunctions:\n"
-    # list of functions and descriptions
-    git_functions=$(sed -n -e '/^# git/{ h; n; G; s/\n//; s/function //; s/{# git - //; p; }' "$DOTFILES_DIR/.bash_git" | sort)
-    while read -r func text; do
-        printf "%10s - %s\n" "$func" "$text"
-    done <<< "$git_functions"
+        printf "\nFunctions:\n"
+        # list of functions and descriptions
+        git_functions=$(sed -n -e '/^# git/{ h; n; G; s/\n//; s/function //; s/{# git - //; p; }' "$DOTFILES_DIR/.bash_git" | sort)
+        while read -r func text; do
+            printf "%10s - %s\n" "$func" "$text"
+        done <<< "$git_functions"
+    fi
 }
 
 # git - move recent commits to a new branch (instead of master)
 function gmove() {
-    arguments=('new branch name')
-    if in_git_repo && on_git_branch 'master' && num_arguments_passed 1 "$#" "$arguments"; then
+    arguments=( '<new-branch-name>' )
+    if in_git_repo && on_git_branch 'master' && num_arguments_ok arguments[@] "$#"
+    then
         local num_commits="$(commit_diff_on_branch 'master')"
         echo "${num_commits} commit(s) will be moved to branch '$1'"
         if [ "$num_commits" != "" ] && [ "$num_commits" -gt 0 ]; then
@@ -85,15 +90,18 @@ function gmove() {
 
 # git - checkout new branch (that tracks origin/master)
 function gcb() {
-    arguments=('new branch name')
-    if in_git_repo && num_arguments_passed 1 "$#" "$arguments"; then
+    arguments=( '<new-branch-name>' )
+    if in_git_repo && num_arguments_ok arguments[@] "$#"
+    then
         ( set -x; git checkout -b "$1" origin/master )
     fi
 }
 
 # git - rebase current branch against master
 function gram() {
-    if in_git_repo && not_on_git_branch 'master' && no_uncommitted_changes; then
+    arguments=()
+    if in_git_repo && not_on_git_branch 'master' && no_uncommitted_changes && num_arguments_ok arguments[@] "$#"
+    then
         local branch_name=$(current_git_branch)
         ( set -x; git checkout master && git pull --rebase && git checkout "$branch_name" && git rebase master )
     fi
@@ -101,7 +109,9 @@ function gram() {
 
 # git - show which files are different from master branch
 function gfiles() {
-    if in_git_repo && not_on_git_branch 'master'; then
+    arguments=()
+    if in_git_repo && not_on_git_branch 'master' && num_arguments_ok arguments[@] "$#"
+    then
         local branch_name=$(current_git_branch)
         ( set -x; git diff --name-status master.."$branch_name" )
     fi
@@ -109,8 +119,9 @@ function gfiles() {
 
 # git - squash commits, "rebase", merge, and submit (for LI workflow)
 function gsubmit() {
-    arguments=('commit message')
-    if in_git_repo && not_on_git_branch 'master' && no_uncommitted_changes && num_arguments_passed 1 "$#" "$arguments"; then
+    arguments=( '<commit-message>' )
+    if in_git_repo && not_on_git_branch 'master' && no_uncommitted_changes && num_arguments_ok arguments[@] "$#"
+    then
         local branch_name=$(current_git_branch)
 
         # number of changes that need to be squashed
@@ -154,8 +165,9 @@ function gsubmit() {
 
 # git - branch move (rename current branch)
 function gbm() {
-    arguments=('branch name')
-    if in_git_repo && num_arguments_passed 1 "$#" "$arguments"; then
+    arguments=( '<new-branch-name>' )
+    if in_git_repo && num_arguments_ok arguments[@] "$#"
+    then
         ( set -x; git branch --move "$1" )
     fi
 }

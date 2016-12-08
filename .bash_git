@@ -9,6 +9,7 @@ alias gru='( set -x; git review update )'
 alias gs='( set -x; git status )'
 alias gundo='( set -x; git reset --soft HEAD~1 )'
 
+
 # shared functions
 
 function in_git_repo() {
@@ -40,6 +41,8 @@ function commit_diff_on_branch() {
     fi
 }
 
+
+# functions
 
 # git - checkout branch
 function gc() {
@@ -148,3 +151,12 @@ function gsubmit() {
         fi
     fi
 }
+
+# git - branch move (rename current branch)
+function gbm() {
+    arguments=('branch name')
+    if in_git_repo && num_arguments_passed 1 "$#" "$arguments"; then
+        ( set -x; git branch --move "$1" )
+    fi
+}
+

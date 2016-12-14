@@ -78,6 +78,16 @@ function gcom() {
     fi
 }
 
+# git - merge current branch into master
+function gmm() {
+    arguments=()
+    if in_git_repo && not_on_git_branch 'master' && no_uncommitted_changes && num_arguments_ok arguments[@] "$#"
+    then
+        local branch_name=$(current_git_branch)
+        ( set -x; git checkout master && git merge "$branch_name" )
+    fi
+}
+
 # git - move recent commits to a new branch (instead of master)
 function gmove() {
     arguments=( '<new-branch-name>' )

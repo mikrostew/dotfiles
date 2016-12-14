@@ -7,7 +7,10 @@ alias gpr='( set -x; git pull --rebase )'
 alias gr='( set -x; git review )'
 alias grd='( set -x; git review dcommit )'
 alias gru='( set -x; git review update )'
-alias gs='( set -x; git status )'
+alias gs='( set -x; git stash )'
+alias gsa='( set -x; git stash apply )'
+alias gsp='( set -x; git stash pop )'
+alias gstat='( set -x; git status )'
 alias gundo='( set -x; git reset --soft HEAD~1 )'
 
 

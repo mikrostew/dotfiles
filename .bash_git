@@ -238,15 +238,9 @@ function msubmit() {
                 ( set -x; git merge ${branch_name} )
                 # and submit
                 ( set -x; mint submit )
-                if [ "$?" -ne 0 ]; then
-                    # submit failed, could be precommit, or ACL check, or whatever
-                    echoerr "Dang it! \"mint submit\" failed, undoing the merge"
-                    ( set -x; git reset --merge ORIG_HEAD && git checkout ${branch_name} )
-                    return -1
-                fi
-                # rebase to pick up the change - don't do this for mint submit, have to wait
-                #( set -x; git pull --rebase )
-                # and done!
+                # mint submit is async, so for now undo the merge in case I have to resubmit
+                echo "Done, undoing the merge so I can keep working"
+                ( set -x; git reset --merge ORIG_HEAD && git checkout ${branch_name} )
             else
                 # TODO what do I do if there is some error here?
                 echoerr "Dang it! \"rebasing\" didn't work"

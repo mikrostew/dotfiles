@@ -143,6 +143,16 @@ function gram() {
     fi
 }
 
+# git - rebase current branch against master (using 'mint update' instead of 'git pull')
+function mram() {
+    arguments=()
+    if in_git_repo && not_on_git_branch 'master' && no_uncommitted_changes && num_arguments_ok arguments[@] "$#"
+    then
+        local branch_name=$(current_git_branch)
+        ( set -x; git checkout master && mint update && git checkout "$branch_name" && git rebase master )
+    fi
+}
+
 # git - show which files are different from master branch
 function gfiles() {
     arguments=()

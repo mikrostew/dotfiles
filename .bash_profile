@@ -19,10 +19,4 @@ if [ -f "$HOME/.bash_profile-local" ]; then
     . "$HOME/.bash_profile-local"
 fi
 
-# environment for cxxtext
-if [ -d "$HOME/Dropbox/dev/includes/cxxtest-4.4/bin" ]; then
-    export PATH="$PATH:$HOME/Dropbox/dev/includes/cxxtest-4.4/bin"
-    export CXXTEST="$HOME/Dropbox/dev/includes/cxxtest-4.4"
-fi
-
 export PATH="/usr/local/sbin:$PATH"

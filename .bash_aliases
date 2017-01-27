@@ -51,6 +51,9 @@ alias rebash='source $HOME/.bashrc'
 # show the TODOs I have left in the code (outputs the lines in each file to /dev/tty)
 alias todo='( set -x; grep -nr --exclude-dir bower_components --exclude-dir node_modules "// TODO" . | tee /dev/tty | wc -l )'
 
+# show running processes in OSX, sorted by CPU usage
+alias cpu='top -o cpu'
+
 
 # shared functions
 

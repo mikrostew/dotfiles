@@ -11,6 +11,7 @@ alias gremu='( set -x; git remote update )'
 alias gru='( set -x; git review update )'
 alias gs='( set -x; git stash )'
 alias gsa='( set -x; git stash apply )'
+alias gsd='( set -x; git stash drop )'
 alias gsp='( set -x; git stash pop )'
 alias gstat='( set -x; git status )'
 alias gundo='( set -x; git reset --soft HEAD~1 )'
@@ -45,6 +46,22 @@ function commit_diff_on_branch() {
         local git_origin_arr=($git_rev_list_origin) # splits into array - it's 2 numbers separated by spaces
         echo "${git_origin_arr[0]}"
     fi
+}
+
+# squash the input number of commits on the current branch
+function squash_commits() {
+    if [ "$1" != "" ] && [ "$1" -gt 0 ]; then
+        # "rebase" without having to do things interactively (from Stack Overflow)
+        ( set -x; git reset --soft HEAD~${1} && git commit -m "$2" )
+        if [ "$?" -ne 0 ]; then
+            echoerr "Dang it! Squashing commits failed"
+            return -1;
+        fi
+    else
+        echoerr "-_- No changes to squash"
+        return -1;
+    fi
+    return 0;
 }
 
 
@@ -161,6 +178,19 @@ function gfiles() {
     then
         local branch_name=$(current_git_branch)
         ( set -x; git diff --name-status master.."$branch_name" )
+    fi
+}
+
+# git - squash commits in current branch into a single commit
+function gsqb() {
+    arguments=( '<commit-message>' )
+    if in_git_repo && not_on_git_branch 'master' && no_uncommitted_changes && num_arguments_ok arguments[@] "$#"
+    then
+        local num_commits_on_branch="$(commit_diff_on_branch "$(current_git_branch)")"
+        echo "There are ${num_commits_on_branch} commits to squash"
+        squash_commits "$num_commits_on_branch" "$1"
+    else
+        return -1;
     fi
 }
 

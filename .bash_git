@@ -142,8 +142,17 @@ function gmove() {
     fi
 }
 
-# git - checkout new branch (that tracks origin/master)
+# git - create new branch
 function gcb() {
+    arguments=( '<new-branch-name>' )
+    if in_git_repo && num_arguments_ok arguments[@] "$#"
+    then
+        ( set -x; git checkout -b "$1" )
+    fi
+}
+
+# git - create new branch (that tracks origin/master)
+function gcbm() {
     arguments=( '<new-branch-name>' )
     if in_git_repo && num_arguments_ok arguments[@] "$#"
     then

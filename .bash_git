@@ -5,6 +5,7 @@ alias gbla='( set -x; git branch --list -a )'
 alias gg='( set -x; git gui )'
 alias gp='( set -x; git push )'
 alias gpr='( set -x; git pull --rebase )'
+# TODO: http://heliom.ca/blog/posts/git-tip-rebase-your-stash (pull --rebase with unstaged changes)
 alias gr='( set -x; git review )'
 alias grd='( set -x; git review dcommit )'
 alias gremu='( set -x; git remote update )'
@@ -15,6 +16,7 @@ alias gsd='( set -x; git stash drop )'
 alias gsp='( set -x; git stash pop )'
 alias gstat='( set -x; git status )'
 alias gundo='( set -x; git reset --soft HEAD~1 )'
+
 
 
 # shared functions

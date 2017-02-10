@@ -12,3 +12,9 @@ export PATH="/usr/local/sbin:$PATH"
 # for bash-completion after upgrading to bash 4.x with homebrew
 [ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion
 
+# path for PostgreSQL on OSX
+export PATH=$PATH:/Applications/Postgres.app/Contents/Versions/latest/bin
+
+# for using Jekyll with Github pages - DO NOT COMMIT THIS!!!
+export JEKYLL_GITHUB_TOKEN=d2462529e7083a6e5a23cd115e9c7e9a75f4afd0
+

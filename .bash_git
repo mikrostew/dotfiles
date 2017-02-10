@@ -69,6 +69,8 @@ function squash_commits() {
 
 # functions
 
+# TODO - gpb => git push origin <current branch> "git push branch"
+
 # git - create a patch from the current branch
 function gbpatch() {
     arguments=()

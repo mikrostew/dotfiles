@@ -167,6 +167,10 @@ function gram() {
     then
         local branch_name=$(current_git_branch)
         ( set -x; git checkout master && git pull --rebase && git checkout "$branch_name" && git rebase master )
+        if [ "$?" -ne 0 ]; then
+            # TODO - test this
+            ( set -x; git mergetool --tool=opendiff && git rebase --continue )
+        fi
     fi
 }
 
@@ -222,6 +226,7 @@ function gsubmit() {
             if [ "$?" -eq 0 ]; then
                 # TODO - figure out how to recover from these
                 # apply the RB to the commit
+                # if this fails, means you don't have the necessary ACLs
                 ( set -x; git review dcommit )
                 # rebase against master
                 ( set -x; git pull --rebase origin master && git checkout master && git pull --rebase )

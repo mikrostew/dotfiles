@@ -49,7 +49,8 @@ alias jets='just ember test --serve'
 alias rebash='source $HOME/.bashrc'
 
 # show the TODOs I have left in the code (outputs the lines in each file to /dev/tty)
-alias todo='( set -x; grep -nr --exclude-dir bower_components --exclude-dir node_modules "// TODO" . | tee /dev/tty | wc -l )'
+# TODO make this into a function so I can pass in a directory
+alias todo='( set -x; grep --color=always -nr --exclude-dir bower_components --exclude-dir node_modules "TODO" . | tee /dev/tty | wc -l )'
 
 # show running processes in OSX, sorted by CPU usage
 alias cpu='top -o cpu'

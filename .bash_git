@@ -160,6 +160,16 @@ function gcbm() {
     fi
 }
 
+# git - push current local branch to origin
+function gpb() {
+    arguments=()
+    if in_git_repo && not_on_git_branch 'master' && num_arguments_ok arguments[@] "$#"
+    then
+        local branch_name=$(current_git_branch)
+        ( set -x; git push origin "$branch_name" )
+    fi
+}
+
 # TODO: git - create reviewboard (git review)
 # function gr() {
 #     while read -r line

@@ -160,6 +160,17 @@ function gcbm() {
     fi
 }
 
+# TODO: git - create reviewboard (git review)
+# function gr() {
+#     while read -r line
+#     do
+#         echo "$line"
+#         # TODO: grep line for the URL of the reviewboard, and open that in Chrome after the
+#         # command completes
+#         # echo -e "\ny" | git review
+#     done < <( set -x; git review )
+# }
+
 # git - rebase current branch against master
 function gram() {
     arguments=()

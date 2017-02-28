@@ -55,6 +55,9 @@ alias todo='( set -x; grep --color=always -nr --exclude-dir bower_components --e
 # show running processes in OSX, sorted by CPU usage
 alias cpu='top -o cpu'
 
+# remove trailing newline from a file
+alias rmlf='perl -pi -e "chomp if eof"'
+
 
 # shared functions
 

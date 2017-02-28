@@ -166,7 +166,7 @@ function gpb() {
     if in_git_repo && not_on_git_branch 'master' && num_arguments_ok arguments[@] "$#"
     then
         local branch_name=$(current_git_branch)
-        ( set -x; git push origin "$branch_name" )
+        ( set -x; git push -u origin "$branch_name" )
     fi
 }
 

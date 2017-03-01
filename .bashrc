@@ -108,3 +108,6 @@ function reset_xtrace() {
     unset BASH_XTRACEFD
 }
 
+
+# added by travis gem
+[ -f /Users/mikrostew/.travis/travis.sh ] && source /Users/mikrostew/.travis/travis.sh

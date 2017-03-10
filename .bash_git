@@ -261,6 +261,7 @@ function gsubmit() {
                     ( set -x; git reset --merge ORIG_HEAD && git checkout ${branch_name} )
                     return -1
                 fi
+                echoack "success! pulling changes into master"
                 # rebase to pick up the change
                 ( set -x; git pull --rebase )
                 # and done!
@@ -304,7 +305,7 @@ function msubmit() {
                 # and submit
                 ( set -x; mint submit )
                 # mint submit is async, so for now undo the merge in case I have to resubmit
-                echo "Done, undoing the merge so I can keep working"
+                echoack "Done, undoing the merge so I can keep working"
                 ( set -x; git reset --merge ORIG_HEAD && git checkout ${branch_name} )
             else
                 # TODO what do I do if there is some error here?
@@ -332,5 +333,6 @@ function wait_github() {
     do
         sleep 60
     done
+    echoack "github available"
 }
 

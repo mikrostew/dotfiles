@@ -61,9 +61,18 @@ alias rmlf='perl -pi -e "chomp if eof"'
 
 # shared functions
 
-# echo to stderr instead of stdout
+# echo to stderr with red text
 function echoerr() {
-    echo "$@" 1>&2;
+    COLOR_RED='\033[0;31m'
+    COLOR_RESET='\033[0m'
+    echo -e "${COLOR_RED}$@${COLOR_RESET}" 1>&2
+}
+
+# echo to stdout with green text
+function echoack() {
+    COLOR_GREEN='\033[0;32m'
+    COLOR_RESET='\033[0m'
+    echo -e "${COLOR_GREEN}$@${COLOR_RESET}"
 }
 
 # check for exact number of arguments to a function, and print usage if not correct

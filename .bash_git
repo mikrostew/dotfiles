@@ -326,3 +326,11 @@ function gbm() {
     fi
 }
 
+# git - wait on github to be pingable (pings every 60 seconds)
+function wait_github() {
+    until ping -i 60 -o github.com
+    do
+        sleep 60
+    done
+}
+

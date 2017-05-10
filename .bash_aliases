@@ -131,6 +131,12 @@ function set_title() {
     echo -en "\033]0;$*\a"
 }
 
+# set secrets as environment vars, so I don't commit them to repos :)
+function set_env() {
+    [ -f "$HOME/Dropbox/secret/set-env.sh" ] && . "$HOME/Dropbox/secret/set-env.sh"
+}
+
+
 function _convert_to_bytes() {
     # convert from input like "4.0K" to "4096"
     suffix="${1: -1}"

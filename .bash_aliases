@@ -53,7 +53,7 @@ alias rebash='source $HOME/.bashrc'
 alias todo='( set -x; grep --color=always -nr --exclude-dir bower_components --exclude-dir node_modules "TODO" . | tee /dev/tty | wc -l )'
 
 # show running processes in OSX, sorted by CPU usage
-alias cpu='top -o cpu'
+alias cpu='top -F -R -o cpu'
 
 # remove trailing newline from a file
 alias rmlf='perl -pi -e "chomp if eof"'

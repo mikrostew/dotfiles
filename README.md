@@ -1,43 +1,17 @@
-# Config files used on my development machines
+# Config files for the computers I use
 
-I use these config files on all of my development machines, at work and home. I put this repository in Dropbox, and sync all of the machines to that. These commands work on Linux and Mac. I have not used these at all on Windows.
+## Installing these on a new machine
 
-## vim
+First, transfer my Github RSA key to the new machine
 
-`ln -s Dropbox/dev/conf/.vimrc ~/.vimrc`
-`ln -s ~/Dropbox/dev/plugin/.vim ~/.vim`
+`scp ~/.ssh/github_rsa user@host:/home/user/.ssh/`
 
-## bash
+On that machine, clone this repo over SSH
 
-`ln -s Dropbox/dev/conf/.bash_profile ~/.bash_profile`
+`ssh-agent bash -c 'ssh-add /home/user/.ssh/github_rsa; git clone git@github.com:mikrostew/dotfiles.git'`
 
-`ln -s Dropbox/dev/conf/.bashrc ~/.bashrc`
+Then run the script to make the links to all these files
 
-`ln -s Dropbox/dev/conf/.bash_aliases ~/.bash_aliases`
+`cd dotfiles/`
+`./makelinks.sh`
 
-## inputrc
-
-`ln -s Dropbox/dev/conf/.inputrc ~/.inputrc`
-
-## gitignore
-
-`ln -s Dropbox/dev/conf/.gitignore ~/.gitignore`
-
-then, add this to the global config
-`git config --global core.excludesfile ~/.gitignore`
-
-## tmux
-
-`ln -s ~/Dropbox/dev/conf/.tmux.conf ~/.tmux.conf`
-
-## bundler
-
-`ln -s ~/Dropbox/dev/conf/.bundle ~/.bundle`
-
-## ssh
-
-`ln -s ~/Dropbox/dev/conf/.ssh-config ~/.ssh/config`
-
-## rubocop
-
-`ln -s ~/Dropbox/src/github/.rubocop.yml ~/..rubocop.yml`

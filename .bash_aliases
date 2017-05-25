@@ -1,5 +1,4 @@
 # ~/.bash_aliases: contains extra aliases, sourced from .bashrc
-# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 
 # platform-specific
 platform=''
@@ -134,6 +133,16 @@ function set_title() {
 # set secrets as environment vars, so I don't commit them to repos :)
 function set_env() {
     [ -f "$HOME/Dropbox/secret/set-env.sh" ] && . "$HOME/Dropbox/secret/set-env.sh"
+}
+
+# serve the files in the current directory
+# (from https://stackoverflow.com/a/7105609)
+# argument(s)
+# - port (optional)
+function serve_dir() {
+    port="${1:-8080}"
+    echo "Serving current directory on port $port"
+    ruby -run -e httpd . -p $port
 }
 
 

@@ -145,6 +145,16 @@ function serve_dir() {
     ruby -run -e httpd . -p $port
 }
 
+# remove any trailing newlines from the input file
+# (from https://stackoverflow.com/a/12148703)
+function remove_trailing_lf() {
+    arguments=('<filename>')
+    if num_arguments_ok arguments[@] "$#"
+    then
+        printf %s "$(< $1)" > $1
+    fi
+}
+
 
 function _convert_to_bytes() {
     # convert from input like "4.0K" to "4096"

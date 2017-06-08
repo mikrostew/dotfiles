@@ -47,6 +47,11 @@ alias jets='just ember test --serve'
 # BashRC
 alias rebash='source $HOME/.bashrc'
 
+# bundler
+alias be='bundle exec'
+alias bejb='bundle exec jekyll build'
+alias bejs='bundle exec jekyll serve'
+
 # show the TODOs I have left in the code (outputs the lines in each file to /dev/tty)
 # TODO make this into a function so I can pass in a directory
 alias todo='( set -x; grep --color=always -nr --exclude-dir bower_components --exclude-dir node_modules "TODO" . | tee /dev/tty | wc -l )'

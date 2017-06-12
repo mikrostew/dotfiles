@@ -3,6 +3,7 @@
 alias gbl='( set -x; git branch --list )'
 alias gbla='( set -x; git branch --list -a )'
 alias gg='( set -x; git gui )'
+alias gmt='( set -x; git mergetool --tool=opendiff )'
 alias gp='( set -x; git push )'
 alias gpr='( set -x; git pull --rebase )'
 alias gr='( set -x; git review )'

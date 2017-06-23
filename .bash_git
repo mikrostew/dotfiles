@@ -119,6 +119,15 @@ function gcom() {
     fi
 }
 
+# git - show the current commit hash
+function gcurr() {
+    arguments=()
+    if in_git_repo && num_arguments_ok arguments[@] "$#"
+    then
+        ( set -x; git rev-parse HEAD; git rev-parse --short HEAD; )
+    fi
+}
+
 # git - merge current branch into master
 function gmm() {
     arguments=()

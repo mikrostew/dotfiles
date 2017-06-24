@@ -51,6 +51,7 @@ alias rebash='source $HOME/.bashrc'
 alias be='bundle exec'
 alias bejb='bundle exec jekyll build'
 alias bejs='bundle exec jekyll serve'
+alias bi='bundle install'
 
 # show the TODOs I have left in the code (outputs the lines in each file to /dev/tty)
 # TODO make this into a function so I can pass in a directory

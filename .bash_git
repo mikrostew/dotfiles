@@ -170,7 +170,7 @@ function gcbm() {
     fi
 }
 
-# git - push current local branch to origin
+# git - push current local branch to origin, and set upstream
 function gpb() {
     arguments=()
     if in_git_repo && not_on_git_branch 'master' && num_arguments_ok arguments[@] "$#"

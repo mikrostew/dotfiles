@@ -104,19 +104,29 @@ function num_arguments_ok() {
 # show a desktop notification with sound after a long-running command
 # Usage:
 #   sleep 10; notify
+# Arguments:
+#  1: how many lines to go back in history (used by fgn alias)
 function notify() {
+    local num_lines="1"
+    if [ -n "$1" ]; then
+        num_lines="$1";
+    fi
     local title="Command Complete [$([ $? = 0 ] && echo "OK" || echo "ERROR!")]"
     if [ "$platform" == "Mac" ]; then
-        local cmd="$(history | tail -n1 | sed -e 's/^\ *[0-9]*\ *//' -e 's/[;&|]\ *notify$//')"
+        local cmd="$(history | tail -n $num_lines | sed -e 's/^\ *[0-9]*\ *//' -e 's/[;&|]\ *notify.*$//' -e 's/^fgn$//')"
         local sound_name="Glass" # see /System/Library/Sounds/ for list of sounds
         local script="display notification \"$cmd\" with title \"$title\" sound name \"$sound_name\""
         osascript -e "$script"
     else
-        local body="$(history | tail -n1 | sed -e 's/^\s*[0-9]\+\s*//' -e 's/[;&|]\s*notify$//')"
+        local body="$(history | tail -n $num_lines | sed -e 's/^\s*[0-9]\+\s*//' -e 's/[;&|]\s*notify.*$//' -e 's/^fgn$//')"
         local icon="$([ $? = 0 ] && echo terminal || echo error)"
         notify-send --urgency=low --icon="$icon" "$title" "$body"
     fi
 }
+
+# for long-running commands, when I forget to add a notify at the end
+# hit Ctrl-Z, then use this alias to foreground the command and notify when complete
+alias fgn='echo "(fg; notify)"; fg; notify 2'
 
 # update the dotfiles repo and source .bashrc
 function updot() {

@@ -12,3 +12,6 @@ export PATH="/usr/local/sbin:$PATH"
 # for bash-completion after upgrading to bash 4.x with homebrew
 [ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion
 
+# for aws console
+export PATH="$PATH:~/Library/Python/2.7/bin/"
+

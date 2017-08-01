@@ -128,6 +128,16 @@ function gcurr() {
     fi
 }
 
+# git - sync current branch to the upstream fork (Git Fork Sync)
+function gfs() {
+    arguments=()
+    if in_git_repo && num_arguments_ok arguments[@] "$#"
+    then
+        local branch_name=$(current_git_branch)
+        ( set -x; git fetch upstream; git merge "upstream/$branch_name"; git push )
+    fi
+}
+
 # git - merge current branch into master
 function gmm() {
     arguments=()

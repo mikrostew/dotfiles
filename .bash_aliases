@@ -119,6 +119,8 @@ function notify() {
         osascript -e "$script"
     else
         local body="$(history | tail -n $num_lines | sed -e 's/^\s*[0-9]\+\s*//' -e 's/[;&|]\s*notify.*$//' -e 's/^fgn$//')"
+        # because body isn't shown if it contains an ampersand (see https://bugs.launchpad.net/ubuntu/+source/libnotify/+bug/1424243)
+        body="$(echo "$body" | sed -e 's/[&]/&amp;/g')"
         local icon="$([ $? = 0 ] && echo terminal || echo error)"
         notify-send --urgency=low --icon="$icon" "$title" "$body"
     fi

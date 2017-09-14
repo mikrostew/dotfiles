@@ -299,8 +299,8 @@ function gsubmit() {
 # TODO - reuse functions from gsubmit
 # git - squash commits, "rebase", merge, and mint submit (for LI workflow)
 function msubmit() {
-    arguments=( '<commit-message>' )
-    if in_git_repo && not_on_git_branch 'master' && no_uncommitted_changes && num_arguments_ok arguments[@] "$#"
+    arguments=( '<commit-message>' ) # optional: <review-ID>
+    if in_git_repo && not_on_git_branch 'master' && no_uncommitted_changes && num_arguments_min arguments[@] "$#"
     then
         local branch_name=$(current_git_branch)
 
@@ -316,7 +316,12 @@ function msubmit() {
             if [ "$?" -eq 0 ]; then
                 # TODO - figure out how to recover from these
                 # apply the RB to the commit
-                ( set -x; git review dcommit )
+                if [ -n "$2" ]; then
+                    # with review-ID (if I initially did 'git review' on master instead of a branch)
+                    ( set -x; git review dcommit -r "$2")
+                else
+                    ( set -x; git review dcommit )
+                fi
                 # TODO - this will fail if I need acl checks, parse the output for who to ask for reviews
                 # rebase against master
                 ( set -x; git pull --rebase origin master && git checkout master && git pull --rebase )

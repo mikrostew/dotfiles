@@ -98,6 +98,26 @@ function num_arguments_ok() {
     return 0
 }
 
+# check for minimum number of arguments to a function, and print usage if not correct
+# argument(s)
+# - array of expected argument names
+# - number of arguments passed to function
+# TODO: better way to handle this
+function num_arguments_min() {
+    local expected_args=( "${!1}" )
+    local num_args="$2"
+    local expected_num_args="${#expected_args[@]}"
+    if [ "$num_args" -lt "$expected_num_args" ]
+    then
+        # $FUNCNAME is an array of the current call stack
+        echoerr "Come on! This is how to use this:"
+        echoerr ""
+        echoerr "  ${FUNCNAME[1]} ${expected_args[*]}"
+        return -1
+    fi
+    return 0
+}
+
 
 # other functions
 

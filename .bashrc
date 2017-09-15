@@ -111,3 +111,5 @@ function reset_xtrace() {
 
 # added by travis gem
 [ -f /Users/mikrostew/.travis/travis.sh ] && source /Users/mikrostew/.travis/travis.sh
+
+export PATH="$HOME/.yarn/bin:$PATH"

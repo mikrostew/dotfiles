@@ -1,21 +1,27 @@
 # aliases and functions for git
+ALIAS_COLOR='\033[0;32m'
+ALIAS_RESET='\033[0m'
 
-alias gbl='( set -x; git branch --list )'
-alias gbla='( set -x; git branch --list -a )'
-alias gg='( set -x; git gui )'
-alias gmt='( set -x; git mergetool --tool=opendiff )'
-alias gp='( set -x; git push )'
-alias gpr='( set -x; git pull --rebase )'
-alias gr='( set -x; git review )'
-alias grd='( set -x; git review dcommit )'
-alias gremu='( set -x; git remote update )'
-alias gru='( set -x; git review update )'
-alias gs='( set -x; git stash )'
-alias gsa='( set -x; git stash apply )'
-alias gsd='( set -x; git stash drop )'
-alias gsp='( set -x; git stash pop )'
-alias gstat='( set -x; git status )'
-alias gundo='( set -x; git reset --soft HEAD~1 )'
+alias gbl='echo -e "${ALIAS_COLOR}(git branch --list)${ALIAS_RESET}"; git branch --list'
+alias gbla='echo -e "${ALIAS_COLOR}(git branch --list -a)${ALIAS_RESET}"; git branch --list -a'
+alias gc='echo -e "${ALIAS_COLOR}(git checkout [branch])${ALIAS_RESET}"; git checkout'
+alias gcb='echo -e "${ALIAS_COLOR}(git checkout -b [new-branch])${ALIAS_RESET}"; git checkout -b'
+alias gg='echo -e "${ALIAS_COLOR}(git gui)${ALIAS_RESET}"; git gui'
+alias gmt='echo -e "${ALIAS_COLOR}(git mergetool --tool=opendiff)${ALIAS_RESET}"; git mergetool --tool=opendiff'
+alias gp='echo -e "${ALIAS_COLOR}(git push)${ALIAS_RESET}"; git push'
+alias gpr='echo -e "${ALIAS_COLOR}(git pull --rebase)${ALIAS_RESET}"; git pull --rebase'
+alias gr='echo -e "${ALIAS_COLOR}(git review)${ALIAS_RESET}"; git review'
+alias grd='echo -e "${ALIAS_COLOR}(git review decommit [-r RB_ID])${ALIAS_RESET}"; git review dcommit'
+alias gremu='echo -e "${ALIAS_COLOR}(git remote update)${ALIAS_RESET}"; git remote update'
+alias gru='echo -e "${ALIAS_COLOR}(git review update)${ALIAS_RESET}"; git review update'
+alias gs='echo -e "${ALIAS_COLOR}(git stash)${ALIAS_RESET}"; git stash'
+alias gsa='echo -e "${ALIAS_COLOR}(git stash apply [stash])${ALIAS_RESET}"; git stash apply'
+alias gsd='echo -e "${ALIAS_COLOR}(git stash drop [stash])${ALIAS_RESET}"; git stash drop'
+alias gsl='echo -e "${ALIAS_COLOR}(git stash list)${ALIAS_RESET}"; git stash list'
+alias gsp='echo -e "${ALIAS_COLOR}(git stash pop)${ALIAS_RESET}"; git stash pop'
+alias gss='echo -e "${ALIAS_COLOR}(git stash save <message>)${ALIAS_RESET}"; git stash save'
+alias gstat='echo -e "${ALIAS_COLOR}(git status)${ALIAS_RESET}"; git status'
+alias gundo='echo -e "${ALIAS_COLOR}(git reset --soft HEAD~1)${ALIAS_RESET}"; git reset --soft HEAD~1'
 
 
 # shared functions
@@ -89,23 +95,14 @@ function gbapply() {
     fi
 }
 
-# git - checkout branch
-function gc() {
-    arguments=( '<branch-name>' )
-    if in_git_repo && num_arguments_ok arguments[@] "$#"
-    then
-        ( set -x; git checkout "$1" )
-    fi
-}
-
 # git - (meta) show git aliases and functions from this file
 function gcom() {
     arguments=()
     if num_arguments_ok arguments[@] "$#"
     then
         printf "\nAliases:\n"
-        # list of the aliased commands, without 'alias', 'set -x', or parenthesis
-        git_aliases=$(alias | grep git | sed -e 's/alias //' -e "s/='( set -x;//" -e "s/ )'//")
+        # list of the aliased commands, without 'alias', 'echo', or parenthesis
+        git_aliases=$(alias | grep git | sed -e 's/alias //' -e "s/='echo -e \"\${[A-Z_]*}(.*)\${[A-Z_]*}\";//" -e "s/'$//")
         while read -r cmd_alias cmd; do
             printf "%6s = %s\n" "$cmd_alias" "$cmd"
         done <<< "$git_aliases"
@@ -159,15 +156,6 @@ function gmove() {
             # (see http://stackoverflow.com/a/22654961 for details)
             ( set -x; git checkout -b "$1"; git branch -f master HEAD~${num_commits}; git branch -u origin/master "$1" )
         fi
-    fi
-}
-
-# git - create new branch
-function gcb() {
-    arguments=( '<new-branch-name>' )
-    if in_git_repo && num_arguments_ok arguments[@] "$#"
-    then
-        ( set -x; git checkout -b "$1" )
     fi
 }
 

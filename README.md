@@ -22,3 +22,20 @@ Then run the script to make the links to all these files
 $ cd dotfiles/
 $ ./makelinks.sh
 ```
+
+Setup other stuff
+
+chruby
+```
+git clone git@github.com:postmodern/chruby.git
+cd chruby/
+sudo ./scripts/setup.sh
+```
+
+ruby-install
+```
+git clone git@github.com:postmodern/ruby-install.git
+cd ruby-install/
+sudo ./setup.sh
+```
+

@@ -2,9 +2,11 @@
 
 ## Installing these on a new machine
 
-First, transfer my Github RSA key to the new machine
+First, transfer my SSH setup (keys and authorization) to the new machine
 
 ```
+$ ssh user@host "mkdir -p /home/user/.ssh/"
+$ scp ~/.ssh/authorized_keys user@host:/home/user/.ssh/
 $ scp ~/.ssh/github_rsa user@host:/home/user/.ssh/
 ```
 

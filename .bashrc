@@ -112,4 +112,18 @@ function reset_xtrace() {
 # added by travis gem
 [ -f /Users/mikrostew/.travis/travis.sh ] && source /Users/mikrostew/.travis/travis.sh
 
+# yarn
 export PATH="$HOME/.yarn/bin:$PATH"
+
+# for nvm
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+#[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# show nvm version
+if [ -f "$NVM_DIR/nvm.sh" ]; then
+    echo -e " \033[1;34mnvm\033[0m : using \033[1;34m$(nvm current)\033[0m from $NVM_BIN"
+else
+    echo -e " \033[1;34mnvm\033[0m : not installed"
+fi
+

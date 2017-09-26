@@ -1,3 +1,11 @@
+# Re-enable the ssh-dss (DSA) public key algorithm
+Host *
+
+    HostkeyAlgorithms +ssh-dss
+    PubkeyAcceptedKeyTypes +ssh-dss
+    AddKeysToAgent yes
+    UseKeychain yes
+
 # personal
 Host github.com
     Hostname github.com

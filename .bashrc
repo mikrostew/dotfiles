@@ -115,15 +115,15 @@ function reset_xtrace() {
 # yarn
 export PATH="$HOME/.yarn/bin:$PATH"
 
-# for nvm
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+# for nvm - this slows down new tab startup, and I'm not using it right now
+#export NVM_DIR="$HOME/.nvm"
+#[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 #[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # show nvm version
 if [ -f "$NVM_DIR/nvm.sh" ]; then
     echo -e " \033[1;34mnvm\033[0m : using \033[1;34m$(nvm current)\033[0m from $NVM_BIN"
 else
-    echo -e " \033[1;34mnvm\033[0m : not installed"
+    echo -e " \033[1;34mnvm\033[0m : not installed (or not configured)"
 fi
 

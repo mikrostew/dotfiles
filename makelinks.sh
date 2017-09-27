@@ -32,11 +32,20 @@ links[".tmux.conf"]=".tmux.conf"
 # bundler
 links[".bundle"]=".bundle"
 
-# ssh
-links[".ssh/config"]=".ssh-config"
-
 # rubocop
 links[".rubocop.yml"]=".rubocop.yml"
+
+# platform-specific
+platform=''
+uname_str=$(uname)
+if [ "$uname_str" == "Darwin" ]; then  # Mac
+    # ssh
+    links[".ssh/config"]=".ssh-config-mac"
+
+elif [ "$uname_str" == "Linux" ]; then  # Linux desktop and termux on Android
+    # ssh
+    links[".ssh/config"]=".ssh-config-linux"
+fi
 
 # create the links
 for i in "${!links[@]}"

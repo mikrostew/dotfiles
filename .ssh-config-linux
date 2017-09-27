@@ -1,0 +1,31 @@
+# personal
+Host github.com
+    Hostname github.com
+    User mikrostew
+    # IdentityFile    ~/.ssh/github_mikrostew
+    IdentityFile    ~/.ssh/github_rsa
+    IdentitiesOnly yes
+
+# LinkedIn
+Host *.linkedin.com
+	IdentityFile 	%d/.ssh/%u_at_linkedin.com_ssh_key
+
+Host desktop
+    Hostname mistewar-ld2.linkedin.biz
+    User mistewar
+    IdentityFile    %d/.ssh/%u_at_linkedin.com_ssh_key
+
+Host laptop
+    Hostname mistewar-mn1.linkedin.biz
+    User mistewar
+    IdentityFile    %d/.ssh/%u_at_linkedin.com_ssh_key
+
+Host pi
+    Hostname raspberrypi
+    User pi
+
+# # local VMs
+# Host 10.0.*
+#     IdentityFile ~/.ssh/aspera_rsa
+#     IdentitiesOnly yes
+

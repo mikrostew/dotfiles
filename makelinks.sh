@@ -2,6 +2,7 @@
 
 BLUE="\033[1;34m"
 GREEN="\033[0;32m"
+RED="\033[0;31m"
 RESET="\033[0m"
 
 # TODO - input the directory where the repo is checked out
@@ -51,6 +52,11 @@ fi
 for i in "${!links[@]}"
 do
   echo -n "$HOME/$i => $checkoutdir/${links[$i]}"
+  if [ -L "$HOME/$i" ]
+  then
+    echo -ne " ${RED}(symlink already exists, skipping)${RESET}"
+    continue
+  fi
   if [ -e "$HOME/$i" ]
   then
     echo -ne " ${BLUE}(file exists, renamed to '$HOME/$i-old')${RESET}"

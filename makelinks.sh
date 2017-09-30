@@ -54,7 +54,7 @@ do
   echo -n "$HOME/$i => $checkoutdir/${links[$i]}"
   if [ -L "$HOME/$i" ]
   then
-    echo -ne " ${RED}(symlink already exists, skipping)${RESET}"
+    echo -e " ${RED}(symlink already exists, skipping)${RESET}"
     continue
   fi
   if [ -e "$HOME/$i" ]

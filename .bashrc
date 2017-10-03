@@ -65,21 +65,42 @@ export RI="-T --format=ansi"
 
 # show bash version
 bash_version="$(bash --version)"
-if [[ "$bash_version" =~ ([0-9]+\.[0-9]+\.[0-9]+[^ ]*) ]]; then
-    bash_version="${BASH_REMATCH[1]}"
+bash_version_str=""
+if [[ "$bash_version" =~ ([0-9]+)\.([0-9]+)\.([0-9]+[^ ]*) ]]; then
+    # want at least bash 4.x
+    if [ "${BASH_REMATCH[1]}" -ge 4 ]; then
+      bash_version_str="\033[1;34m${BASH_REMATCH[1]}.${BASH_REMATCH[2]}.${BASH_REMATCH[3]}\033[0m"
+    else
+      bash_version_str="\033[1;31m${BASH_REMATCH[1]}.${BASH_REMATCH[2]}.${BASH_REMATCH[3]} (want >= 4.x)\033[0m"
+    fi
 else
-    bash_version="?.?.?"
+    bash_version_str="\033[1;31m?.?.?\033[0m"
 fi
-echo -e " \033[1;34mbash\033[0m : version \033[1;34m${bash_version}\033[0m"
+echo -e " bash : $bash_version_str"
 
 # chruby
 if [ -f "/usr/local/share/chruby/chruby.sh" ]; then
     source /usr/local/share/chruby/chruby.sh
     chruby ruby-2
-    echo -e " \033[1;31mchruby\033[0m : using \033[1;31m$RUBY_VERSION\033[0m from $RUBY_ROOT"
+    echo -e " chruby : \033[1;34m$RUBY_VERSION\033[0m ($RUBY_ROOT)"
 else
-    echo -e " \033[1;31mchruby\033[0m : not installed"
+    echo -e " chruby : \033[1;31mnot installed\033[0m"
 fi
+
+# git
+git_version="$(git --version | awk '{print $3}')"
+git_version_str=""
+if [[ "$git_version" =~ ([0-9]+)\.([0-9]+)\.([0-9]+[^ ]*) ]]; then
+    # want at least git 2.14
+    if [ "${BASH_REMATCH[1]}" -ge 2 ] && [ "${BASH_REMATCH[2]}" -ge 14 ]; then
+      git_version_str="\033[1;34m${BASH_REMATCH[1]}.${BASH_REMATCH[2]}.${BASH_REMATCH[3]}\033[0m"
+    else
+      git_version_str="\033[1;31m${BASH_REMATCH[1]}.${BASH_REMATCH[2]}.${BASH_REMATCH[3]} (want >= 2.14)\033[0m"
+    fi
+else
+    git_version_str="\033[1;31m?.?.?\033[0m"
+fi
+echo -e " git : $git_version_str ($(which git))"
 
 # 256 color support
 export TERM=xterm-256color
@@ -115,15 +136,15 @@ function reset_xtrace() {
 # yarn
 export PATH="$HOME/.yarn/bin:$PATH"
 
-# for nvm - this slows down new tab startup, and I'm not using it right now
+# nvm
+# - this slows down new tab startup, and I'm not using it right now
 #export NVM_DIR="$HOME/.nvm"
 #[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 #[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # show nvm version
-if [ -f "$NVM_DIR/nvm.sh" ]; then
-    echo -e " \033[1;34mnvm\033[0m : using \033[1;34m$(nvm current)\033[0m from $NVM_BIN"
-else
-    echo -e " \033[1;34mnvm\033[0m : not installed (or not configured)"
-fi
-
+# if [ -f "$NVM_DIR/nvm.sh" ]; then
+#     echo -e " nvm : \033[1;34m$(nvm current)\033[0m ($NVM_BIN)"
+# else
+#     echo -e " nvm : \033[1;31mnot installed (or not configured)\033[0m"
+# fi

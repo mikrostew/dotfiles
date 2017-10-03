@@ -126,30 +126,45 @@ function num_arguments_min() {
 # Usage:
 #   sleep 10; notify
 # Arguments:
-#  1: how many lines to go back in history (used by fgn alias)
+#  1: string containing the command to display (so don't get from history)
 function notify() {
-    local num_lines="1"
-    if [ -n "$1" ]; then
-        num_lines="$1";
-    fi
+    local cmd_string="$1";
     local title="Command Complete [$([ $? = 0 ] && echo "OK" || echo "ERROR!")]"
+    local cmd=""
     if [ "$platform" == "Mac" ]; then
-        local cmd="$(history | tail -n $num_lines | sed -e 's/^\ *[0-9]*\ *//' -e 's/[;&|]\ *notify.*$//' -e 's/^fgn$//')"
+        if [ -n "$cmd_string" ]; then
+            cmd="$cmd_string"
+        else
+            cmd="$(history | tail -n 1 | sed -e 's/^\ *[0-9]*\ *//' -e 's/[;&|]\ *notify.*$//' )"
+        fi
         local sound_name="Glass" # see /System/Library/Sounds/ for list of sounds
         local script="display notification \"$cmd\" with title \"$title\" sound name \"$sound_name\""
         osascript -e "$script"
     else
-        local body="$(history | tail -n $num_lines | sed -e 's/^\s*[0-9]\+\s*//' -e 's/[;&|]\s*notify.*$//' -e 's/^fgn$//')"
-        # because body isn't shown if it contains an ampersand (see https://bugs.launchpad.net/ubuntu/+source/libnotify/+bug/1424243)
-        body="$(echo "$body" | sed -e 's/[&]/&amp;/g')"
+        if [ -n "$cmd_string" ]; then
+            cmd="$cmd_string"
+        else
+            cmd="$(history | tail -n 1 | sed -e 's/^\s*[0-9]\+\s*//' -e 's/[;&|]\s*notify.*$//' )"
+        fi
+        # because the notification body isn't shown if it contains an ampersand (see https://bugs.launchpad.net/ubuntu/+source/libnotify/+bug/1424243)
+        cmd="$(echo "$cmd" | sed -e 's/[&]/&amp;/g')"
         local icon="$([ $? = 0 ] && echo terminal || echo error)"
-        notify-send --urgency=low --icon="$icon" "$title" "$body"
+        notify-send --urgency=low --icon="$icon" "$title" "$cmd"
     fi
 }
 
 # for long-running commands, when I forget to add a notify at the end
 # hit Ctrl-Z, then use this alias to foreground the command and notify when complete
-alias fgn='echo "(fg; notify)"; fg; notify 2'
+function fgn() {
+  local recent_job_info="$(jobs %% 2>/dev/null)"
+  if [ -n "$recent_job_info" ]; then
+    local cmd="$(echo "$recent_job_info" | sed -e 's/^\[[0-9]*\].\ *[A-Za-z]*\ *//' )"
+    echoack "(fg; notify '$cmd')"
+    fg; notify "$cmd"
+  else
+    echoerr "(no background jobs running)"
+  fi
+}
 
 # update the dotfiles repo and source .bashrc
 function updot() {
@@ -317,4 +332,3 @@ function _bigfiles_helper() {
 
 # git aliases and functions
 [ -f "$DOTFILES_DIR/.bash_git" ] && source "$DOTFILES_DIR/.bash_git"
-

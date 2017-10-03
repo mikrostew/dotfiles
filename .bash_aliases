@@ -128,8 +128,9 @@ function num_arguments_min() {
 # Arguments:
 #  1: string containing the command to display (so don't get from history)
 function notify() {
-    local cmd_string="$1";
+    # have to do this first, before $? is changed by anything in here
     local title="Command Complete [$([ $? = 0 ] && echo "OK" || echo "ERROR!")]"
+    local cmd_string="$1";
     local cmd=""
     if [ "$platform" == "Mac" ]; then
         if [ -n "$cmd_string" ]; then

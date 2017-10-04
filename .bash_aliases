@@ -1,5 +1,8 @@
 # ~/.bash_aliases: contains extra aliases, sourced from .bashrc
 
+# colors
+source "$DOTFILES_DIR/.bash_colors"
+
 # platform-specific
 platform=''
 uname_str=$(uname)
@@ -68,16 +71,12 @@ alias rmlf='perl -pi -e "chomp if eof"'
 
 # echo to stderr with red text
 function echoerr() {
-    COLOR_RED='\033[0;31m'
-    COLOR_RESET='\033[0m'
-    echo -e "${COLOR_RED}$@${COLOR_RESET}" 1>&2
+    echo -e "${COLOR_FG_RED}$@${COLOR_RESET}" 1>&2
 }
 
 # echo to stdout with green text
 function echoack() {
-    COLOR_GREEN='\033[0;32m'
-    COLOR_RESET='\033[0m'
-    echo -e "${COLOR_GREEN}$@${COLOR_RESET}"
+    echo -e "${COLOR_FG_GREEN}$@${COLOR_RESET}"
 }
 
 # check for exact number of arguments to a function, and print usage if not correct

@@ -81,12 +81,12 @@ bash_version_str=""
 if [[ "$bash_version" =~ ([0-9]+)\.([0-9]+)\.([0-9]+[^ ]*) ]]; then
     # want at least bash 4.x
     if [ "${BASH_REMATCH[1]}" -ge 4 ]; then
-      bash_version_str="\033[1;34m${BASH_REMATCH[1]}.${BASH_REMATCH[2]}.${BASH_REMATCH[3]}\033[0m"
+      bash_version_str="${COLOR_FG_BOLD_BLUE}${BASH_REMATCH[1]}.${BASH_REMATCH[2]}.${BASH_REMATCH[3]}${COLOR_RESET}"
     else
-      bash_version_str="\033[1;31m${BASH_REMATCH[1]}.${BASH_REMATCH[2]}.${BASH_REMATCH[3]} (want >= 4.x)\033[0m"
+      bash_version_str="${COLOR_FG_BOLD_RED}${BASH_REMATCH[1]}.${BASH_REMATCH[2]}.${BASH_REMATCH[3]} (want >= 4.x)${COLOR_RESET}"
     fi
 else
-    bash_version_str="\033[1;31m?.?.?\033[0m"
+    bash_version_str="${COLOR_FG_BOLD_RED}?.?.?${COLOR_RESET}"
 fi
 echo -e " bash : $bash_version_str"
 
@@ -94,9 +94,9 @@ echo -e " bash : $bash_version_str"
 if [ -f "/usr/local/share/chruby/chruby.sh" ]; then
     source /usr/local/share/chruby/chruby.sh
     chruby ruby-2
-    echo -e " chruby : \033[1;34m$RUBY_VERSION\033[0m ($RUBY_ROOT)"
+    echo -e " chruby : ${COLOR_FG_BOLD_BLUE}$RUBY_VERSION${COLOR_RESET} ($RUBY_ROOT)"
 else
-    echo -e " chruby : \033[1;31mnot installed\033[0m"
+    echo -e " chruby : ${COLOR_FG_BOLD_RED}not installed${COLOR_RESET}"
 fi
 
 # git
@@ -105,12 +105,12 @@ git_version_str=""
 if [[ "$git_version" =~ ([0-9]+)\.([0-9]+)\.([0-9]+[^ ]*) ]]; then
     # want at least git 2.14
     if [ "${BASH_REMATCH[1]}" -ge 2 ] && [ "${BASH_REMATCH[2]}" -ge 14 ]; then
-      git_version_str="\033[1;34m${BASH_REMATCH[1]}.${BASH_REMATCH[2]}.${BASH_REMATCH[3]}\033[0m"
+      git_version_str="${COLOR_FG_BOLD_BLUE}${BASH_REMATCH[1]}.${BASH_REMATCH[2]}.${BASH_REMATCH[3]}${COLOR_RESET}"
     else
-      git_version_str="\033[1;31m${BASH_REMATCH[1]}.${BASH_REMATCH[2]}.${BASH_REMATCH[3]} (want >= 2.14)\033[0m"
+      git_version_str="${COLOR_FG_BOLD_RED}${BASH_REMATCH[1]}.${BASH_REMATCH[2]}.${BASH_REMATCH[3]} (want >= 2.14)${COLOR_RESET}"
     fi
 else
-    git_version_str="\033[1;31m?.?.?\033[0m"
+    git_version_str="${COLOR_FG_BOLD_RED}?.?.?${COLOR_RESET}"
 fi
 echo -e " git : $git_version_str ($(which git))"
 
@@ -156,7 +156,7 @@ export PATH="$HOME/.yarn/bin:$PATH"
 
 # show nvm version
 # if [ -f "$NVM_DIR/nvm.sh" ]; then
-#     echo -e " nvm : \033[1;34m$(nvm current)\033[0m ($NVM_BIN)"
+#     echo -e " nvm : ${COLOR_FG_BOLD_BLUE}$(nvm current)${COLOR_RESET} ($NVM_BIN)"
 # else
-#     echo -e " nvm : \033[1;31mnot installed (or not configured)\033[0m"
+#     echo -e " nvm : \${COLOR_FG_BOLD_RED}[1;31mnot installed (or not configured)${COLOR_RESET}"
 # fi

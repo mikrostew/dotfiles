@@ -1,9 +1,7 @@
 # Create links for dotfiles
 
-BLUE="\033[1;34m"
-GREEN="\033[0;32m"
-RED="\033[0;31m"
-RESET="\033[0m"
+# colors
+source "./.bash_colors"
 
 # TODO - input the directory where the repo is checked out
 checkoutdir="$HOME/dotfiles"
@@ -54,15 +52,14 @@ do
   echo -n "$HOME/$i => $checkoutdir/${links[$i]}"
   if [ -L "$HOME/$i" ]
   then
-    echo -e " ${RED}(symlink already exists, skipping)${RESET}"
+    echo -e " ${COLOR_FG_RED}(symlink already exists, skipping)${COLOR_RESET}"
     continue
   fi
   if [ -e "$HOME/$i" ]
   then
-    echo -ne " ${BLUE}(file exists, renamed to '$HOME/$i-old')${RESET}"
+    echo -ne " ${COLOR_FG_BOLD_BLUE}(file exists, renamed to '$HOME/$i-old')${COLOR_RESET}"
     mv "$HOME/$i" "$HOME/$i-old"
   fi
   ln -s "$checkoutdir/${links[$i]}" "$HOME/$i"
-  echo -e " [${GREEN}OK${RESET}]"
+  echo -e " [${COLOR_FG_GREEN}OK${COLOR_RESET}]"
 done
-

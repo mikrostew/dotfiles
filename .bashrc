@@ -28,13 +28,25 @@ shopt -s checkwinsize
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
-# prompt string:
-# replace home dir in PWD with ~,
-# add a trailing slash to the PWD if there is not one
-MY_PWD='$(echo "$PWD" | sed -e "s|^$HOME|~|" -e "s|/*$|/|")'
+# colors:
+source "$DOTFILES_DIR/.bash_colors"
+
 # git / svn status
 source "$DOTFILES_DIR/.bash_repo_status"
-PS1='\n(\t) \033[1;30m\u\033[0m@\033[1;30m\h\033[0m:\033[1;30m$(eval "echo ${MY_PWD}")\033[0m  $(repo_status)\n\$ '
+
+# prompt string
+# see https://www.gnu.org/software/bash/manual/bash.html#Controlling-the-Prompt
+# single quotes so these are included as-is, and re-eval-ed for every prompt
+ps_time_24h='\t'
+ps_user='\u'
+ps_host='\h'
+ps_pwd='\w'
+ps_repo_status='$(repo_status)'
+PS1="\n($ps_time_24h) "\
+"${COLOR_FG_BOLD_BLACK}$ps_user${COLOR_RESET}"\
+"@${COLOR_FG_BOLD_BLACK}$ps_host${COLOR_RESET}"\
+":${COLOR_FG_BOLD_BLACK}$ps_pwd/${COLOR_RESET}"\
+"  $ps_repo_status\n\$ "
 
 # If this is an xterm set the title to user@host:dir
 # (this will overwrite the terminal title after every command - don't want that)
@@ -47,7 +59,7 @@ PS1='\n(\t) \033[1;30m\u\033[0m@\033[1;30m\h\033[0m:\033[1;30m$(eval "echo ${MY_
 #esac
 
 # alias definitions
-[ -f "$DOTFILES_DIR/.bash_aliases" ] && source "$DOTFILES_DIR/.bash_aliases"
+source "$DOTFILES_DIR/.bash_aliases"
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile

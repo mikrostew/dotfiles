@@ -9,6 +9,7 @@ alias gbla='echo -e "${ALIAS_COLOR}(git branch --list -a)${COLOR_RESET}"; git br
 alias gc='echo -e "${ALIAS_COLOR}(git checkout [branch])${COLOR_RESET}"; git checkout'
 alias gcb='echo -e "${ALIAS_COLOR}(git checkout -b [new-branch])${COLOR_RESET}"; git checkout -b'
 alias gg='echo -e "${ALIAS_COLOR}(git gui)${COLOR_RESET}"; git gui'
+alias glast='echo -e "${ALIAS_COLOR}(git log -n1)${COLOR_RESET}"; git log -n1'
 alias gmt='echo -e "${ALIAS_COLOR}(git mergetool --tool=opendiff)${COLOR_RESET}"; git mergetool --tool=opendiff'
 alias gp='echo -e "${ALIAS_COLOR}(git push)${COLOR_RESET}"; git push'
 alias gpr='echo -e "${ALIAS_COLOR}(git pull --rebase)${COLOR_RESET}"; git pull --rebase'

@@ -260,50 +260,51 @@ function gsqb() {
     fi
 }
 
-# git - squash commits, "rebase", merge, and submit (for LI workflow)
+# git - squash commits, rebase, merge, and submit (for LI workflow)
 function gsubmit() {
-    arguments=( '<commit-message>' )
-    if in_git_repo && not_on_git_branch 'master' && no_uncommitted_changes && num_arguments_ok arguments[@] "$#"
+    arguments=( '<commit-message> [, <extra-line>]' )
+    if in_git_repo && not_on_git_branch 'master' && no_uncommitted_changes && num_arguments_min arguments[@] "$#"
     then
         local branch_name=$(current_git_branch)
 
-        # number of changes that need to be squashed
-        local git_rev_list_origin=$( set -x; git rev-list --count --left-right ${branch_name}...origin/master 2>/dev/null )
-        if [ "$?" -eq 0 ] && [ -n "$git_rev_list_origin" ]; then
-            local git_origin_arr=($git_rev_list_origin) # will split into array because it's 2 numbers separated by spaces
-            local num_commits_on_branch="${git_origin_arr[0]}"
-            echo "There are ${num_commits_on_branch} commits on branch '${branch_name}'"
-
-            # "rebase" without having to do things interactively (from Stack Overflow)
-            ( set -x; git reset --soft HEAD~${num_commits_on_branch} && git commit -m "$1" )
-            if [ "$?" -eq 0 ]; then
-                # TODO - figure out how to recover from these
-                # apply the RB to the commit
-                # if this fails, means you don't have the necessary ACLs
-                ( set -x; git review dcommit )
-                # rebase against master
-                ( set -x; git pull --rebase origin master && git checkout master && git pull --rebase )
-                # merge into master
-                ( set -x; git merge ${branch_name} )
-                # and submit
-                ( set -x; git submit )
-                if [ "$?" -ne 0 ]; then
-                    # submit failed, could be precommit, or ACL check, or whatever
-                    echoerr "Dang it! \"git submit\" failed, undoing the merge"
-                    ( set -x; git reset --merge ORIG_HEAD && git checkout ${branch_name} )
-                    return -1
-                fi
-                echoack "success! pulling changes into master"
-                # rebase to pick up the change
-                ( set -x; git pull --rebase )
-                # and done!
-            else
-                # TODO what do I do if there is some error here?
-                echoerr "Dang it! \"rebasing\" didn't work"
+        # squash changes on this branch
+        gsqb "$1" "$2"
+        if [ "$?" -eq 0 ]; then
+            # rebase against master
+            ( set -x; git pull --rebase origin master && git checkout master && git pull --rebase )
+            if [ "$?" -ne 0 ]; then
+                echoerr "Dang it! rebase failed - good luck (TODO: auto recovery)"
+                return -1
             fi
+            # merge into master
+            ( set -x; git merge ${branch_name} )
+            if [ "$?" -ne 0 ]; then
+                echoerr "Dang it! merge failed - good luck (TODO: auto recovery)"
+                return -1
+            fi
+            # apply the RB to the commit
+            # if this fails, means you don't have the necessary ACLs
+            ( set -x; git review dcommit )
+            if [ "$?" -ne 0 ]; then
+                # dcommit failed, probably missing a shipit from ACL
+                echoerr "Dang it! \"git review dcommit\" failed, undoing the merge"
+                ( set -x; git reset --merge ORIG_HEAD && git checkout ${branch_name} )
+                return -1
+            fi
+            # and submit
+            ( set -x; git submit )
+            if [ "$?" -ne 0 ]; then
+                # submit failed, could be precommit, or ACL check, or whatever
+                echoerr "Dang it! \"git submit\" failed, undoing the merge"
+                ( set -x; git reset --merge ORIG_HEAD && git checkout ${branch_name} )
+                return -1
+            fi
+            echoack "Success! Pulling changes into master"
+            # rebase to pick up the change
+            ( set -x; git pull --rebase )
+            # and done!
         else
-            # at this point there were no changes made, so nothing to do here
-            echoerr "Dang it! Couldn't figure out how many changes to squash"
+            echoerr "Dang it! squashing failed (TODO: auto recovery here?)"
         fi
     fi
 }
@@ -365,6 +366,7 @@ function gbm() {
 }
 
 # git - wait on github to be pingable (pings every 60 seconds)
+# TODO: generalize this for whatever input URL
 function wait_github() {
     until ping -i 60 -o github.com
     do

@@ -6,7 +6,6 @@ load test-helper
 # full status
 
 @test "Functional | full status | empty repo" {
-    skip "need to fix empty repo handling"
     run repo_status
     [ "$status" -eq 0 ]
     compare_status "$test_git_str$test_master_branch_str $test_no_remote_str / $test_local_ok_str"
@@ -65,6 +64,16 @@ load test-helper
     compare_status "HEAD (no branch)"
 }
 
+# parse head and origin
+
+@test "Functional | parse head and origin | empty repo" {
+    run test_git_head_origin_head_nocolor
+    [ "$status" -eq 0 ]
+    compare_status "master"
+}
+
+
+
 # local status
 
 @test "Functional | local status | untracked file" {
@@ -94,7 +103,6 @@ load test-helper
 # remote status
 
 @test "Functional | remote status | empty repo" {
-    skip "need to fix empty repo handling"
     run repo_status
     [ "$status" -eq 0 ]
     compare_remote_status "$test_no_remote_str"

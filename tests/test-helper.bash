@@ -1,9 +1,6 @@
 # shared testing code
 # TODO: probably move this back into the file
 
-# need to make the functions available
-source .bash_repo_status
-
 # create test repos in tmp directories
 tmpdirname="$TMPDIR/tmp$RANDOM"
 

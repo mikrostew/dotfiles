@@ -67,9 +67,34 @@ load test-helper
 # parse head and origin
 
 @test "Functional | parse head and origin | empty repo" {
+    run test_git_head_origin_head
+    [ "$status" -eq 0 ]
+    compare_status "${GS_SYM_BRANCH}${GS_COLOR_BRANCH}master${COLOR_RESET}"
+
     run test_git_head_origin_head_nocolor
     [ "$status" -eq 0 ]
     compare_status "master"
+
+    run test_git_head_origin_origin
+    [ "$status" -eq 0 ]
+    compare_status ""
+}
+
+@test "Functional | parse head and origin | empty repo, with remote" {
+    rm -rf .git/
+    git clone git@github.com:mikrostew/empty-repo-for-testing.git ./
+
+    run test_git_head_origin_head
+    [ "$status" -eq 0 ]
+    compare_status "${GS_SYM_BRANCH}${GS_COLOR_BRANCH}master${COLOR_RESET}"
+
+    run test_git_head_origin_head_nocolor
+    [ "$status" -eq 0 ]
+    compare_status "master"
+
+    run test_git_head_origin_origin
+    [ "$status" -eq 0 ]
+    compare_status "origin/master"
 }
 
 

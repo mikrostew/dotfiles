@@ -1,4 +1,5 @@
 # shared testing code
+# TODO: probably move this back into the file
 
 # need to make the functions available
 source .bash_repo_status
@@ -34,19 +35,9 @@ compare_status_strings() {
 # Compare the full status string to the expected
 # arguments:
 #  $1 - the expected status line
-compare_full_status() {
+compare_status() {
     local expected="$(echo -e "$1")"
     local actual="${lines[0]}"
-    $(compare_status_strings "$expected" "$actual")
-    return
-}
-
-# Remove all but the local status from the output line, and compare to expected
-# arguments:
-#  $1 - the expected status line
-compare_local_status() {
-    local expected="$(echo -e "$1")"
-    local actual="$(echo "${lines[0]}" | sed -e 's|.*/ ||')"
     $(compare_status_strings "$expected" "$actual")
     return
 }

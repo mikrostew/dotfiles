@@ -8,7 +8,7 @@ load test-helper
 @test "Functional | full status | empty repo" {
     run repo_status
     [ "$status" -eq 0 ]
-    compare_full_status "  $test_git_str$test_master_branch_str $test_no_remote_str / $test_local_ok_str"
+    compare_full_status "$test_git_str$test_master_branch_str $test_no_remote_str / $test_local_ok_str"
 }
 
 @test "Functional | full status | 1 commit no remote" {
@@ -17,7 +17,7 @@ load test-helper
     git commit -m "Test commit"
     run repo_status
     [ "$status" -eq 0 ]
-    compare_full_status "  $test_git_str$test_master_branch_str $test_commit_no_remote_str / $test_local_ok_str"
+    compare_full_status "$test_git_str$test_master_branch_str $test_commit_no_remote_str / $test_local_ok_str"
 }
 
 # local status
@@ -61,4 +61,3 @@ load test-helper
     [ "$status" -eq 0 ]
     compare_remote_status "$test_commit_no_remote_str"
 }
-

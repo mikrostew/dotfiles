@@ -56,7 +56,7 @@ compare_local_status() {
 #  $1 - the expected status line
 compare_remote_status() {
     local expected="$(echo -e "$1")"
-    local actual="$(echo "${lines[0]}" | sed -e 's|  [^ ]* ||' -e 's| /.*$||')"
+    local actual="$(echo "${lines[0]}" | sed -e 's|[^ ]* ||' -e 's| /.*$||')"
     $(compare_status_strings "$expected" "$actual")
     return
 }
@@ -70,4 +70,3 @@ test_local_ok_str="$GS_COLOR_LOCAL_OK$GS_SYM_LOCAL_OK$COLOR_RESET"
 test_untracked_file_str="${GS_COLOR_UNTRACKED}1$COLOR_RESET$GS_SYM_UNTRACKED"
 test_staged_file_str="${GS_COLOR_STAGED}1$COLOR_RESET$GS_SYM_STAGED"
 test_modified_file_str="${GS_COLOR_MODIFIED}1$COLOR_RESET$GS_SYM_MODIFIED"
-

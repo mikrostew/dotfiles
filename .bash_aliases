@@ -71,7 +71,7 @@ alias rmlf='perl -pi -e "chomp if eof"'
 
 # echo to stderr with red text
 function echoerr() {
-    echo -e "${COLOR_FG_RED}$@${COLOR_RESET}" 1>&2
+    echo -e "${COLOR_FG_RED}$@${COLOR_RESET}" >&2
 }
 
 # echo to stdout with green text
@@ -205,6 +205,81 @@ function remove_trailing_lf() {
     if num_arguments_ok arguments[@] "$#"
     then
         printf %s "$(< $1)" > $1
+    fi
+}
+
+# check minimum version, and print out the result
+# use this like:
+# min_version_check "bash" "$(bash --version)" "4.x.x"
+# min_version_check "ruby" "$RUBY_VERSION" "2.2.x" "$RUBY_ROOT"
+# min_version_check "git" "$(git --version | awk '{print $3}')" "2.14.x" "$(which git)"
+function min_version_check() {
+    if [ -n "$4" ]; then
+        path_string=" ($4)"
+    else
+        path_string=""
+    fi
+    if [ -n "$2" ]; then
+        if meets_version "$2" "$3"; then
+            echo -e "$1 : ${COLOR_FG_BOLD_BLUE}$2${COLOR_RESET}$path_string"
+        else
+            echo -e "$1 : ${COLOR_FG_RED}$2 (want >= $3)${COLOR_RESET}$path_string"
+        fi
+    else
+        echo -e "$1 : ${COLOR_FG_RED} unknown version (want >= $3)${COLOR_RESET}"
+    fi
+}
+
+# compare input semver with input constraint
+# to make this easier, both must be X.X.X format
+# $1 - version (semver)
+# $2 - version constraint
+function meets_version() {
+    # parse input version
+    if [[ "$1" =~ ([0-9]+)\.([0-9]+)\.([0-9]+[^ ]*) ]]; then
+        input_major="${BASH_REMATCH[1]}"
+        input_minor="${BASH_REMATCH[2]}"
+        input_patch="${BASH_REMATCH[3]}"
+    else
+        echoerr "bad input version: $1"
+        return 1;
+    fi
+    # parse input version constraint
+    if [[ "$2" =~ ([0-9]+)\.([0-9]+|\*)\.([0-9]+|\*)$ ]]; then
+        constraint_major="${BASH_REMATCH[1]}"
+        constraint_minor="${BASH_REMATCH[2]}"
+        constraint_patch="${BASH_REMATCH[3]}"
+    else
+        echoerr "bad version constraint: $2"
+        return 1;
+    fi
+
+    # check major version
+    if [ "$input_major" -gt "$constraint_major" ]; then
+        return 0;
+    elif [ "$input_major" -lt "$constraint_major" ]; then
+        return 2;
+    else
+        # major versions are equal, check minor version
+        if [ "$constraint_minor" = "*" ]; then
+            return 0;
+        elif [ "$input_minor" -gt "$constraint_minor" ]; then
+            return 0;
+        elif [ "$input_minor" -lt "$constraint_minor" ]; then
+            return 3;
+        else
+            # major and minor equal, check patch version
+            if [ "$constraint_patch" = "*" ]; then
+                return 0;
+            elif [ "$input_patch" -gt "$constraint_patch" ]; then
+                return 0;
+            elif [ "$input_patch" -lt "$constraint_patch" ]; then
+                return 4;
+            else
+                # versions are equal
+                return 0;
+            fi
+        fi
     fi
 }
 

@@ -405,5 +405,30 @@ function _bigfiles_helper() {
     fi
 }
 
+# kill the coproc, if it is running
+# optionally pass in the name of the coproc
+function kill_coproc() {
+    if [ -n "$1" ]; then
+        proc_pid="${1}_PID"
+        [ -n "${!proc_pid}" ] && kill "${!proc_pid}"
+    else
+        [ -n "$COPROC_PID" ] && kill "$COPROC_PID"
+    fi
+}
+
+# show xtrace output in blue
+function show_blue_xtrace() {
+    coproc XTRACE { BLUE="$(echo -e "\033[1;34m")"; RESET="$(echo -e "\033[0m")"; sed -e "s/.*/${BLUE}&${RESET}/"; } >&2
+    exec 6>&${XTRACE[1]}
+    export BASH_XTRACEFD="6"
+}
+
+# reset xtrace output to normal (stderr, default color)
+function reset_xtrace() {
+    kill_coproc 'XTRACE'
+    unset BASH_XTRACEFD
+}
+
+
 # git aliases and functions
 [ -f "$DOTFILES_DIR/.bash_git" ] && source "$DOTFILES_DIR/.bash_git"

@@ -429,6 +429,16 @@ function reset_xtrace() {
     unset BASH_XTRACEFD
 }
 
+# nvm
+# - this slows down new tab startup, and I use it infrequently, so now it's a function
+function load_nvm() {
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+    # show version
+    min_version_check "node" "$(nvm current)" "1.*.*" "$NVM_BIN"
+}
 
 # git aliases and functions
 [ -f "$DOTFILES_DIR/.bash_git" ] && source "$DOTFILES_DIR/.bash_git"

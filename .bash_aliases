@@ -194,7 +194,9 @@ function set_env() {
 # - port (optional)
 function serve_dir() {
     port="${1:-8080}"
-    echo "Serving current directory on port $port"
+    address="$(ifconfig | awk '/inet / && $2 != "127.0.0.1"{print $2}')"
+    echo -e "Current directory: ${COLOR_FG_BOLD_BLUE}$PWD${COLOR_RESET}"
+    echo -e "Serving at ${COLOR_FG_BOLD_BLUE}$address:$port${COLOR_RESET}"
     ruby -run -e httpd . -p $port
 }
 

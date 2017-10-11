@@ -5,6 +5,14 @@
 source "$DOTFILES_DIR/.bash_colors"
 
 
+# for platform-specific things
+function platform_is_mac() {
+    [ "$(uname)" == "Darwin" ] # OSX
+}
+function platform_is_linux() {
+    [ "$(uname)" == "Linux" ] # Linux desktop and termux on Android
+}
+
 # echo to stderr with red text
 function echoerr() {
     echo -e "${COLOR_FG_RED}$@${COLOR_RESET}" >&2

@@ -3,20 +3,14 @@
 # colors
 source "$DOTFILES_DIR/.bash_colors"
 
-# platform-specific
-platform=''
-uname_str=$(uname)
-if [ "$uname_str" == "Darwin" ]; then
-    platform="Mac"
-elif [ "$uname_str" == "Linux" ]; then
-    # Linux desktop and termux on Android
-    platform="Linux"
-fi
+# shared functions
+source "$DOTFILES_DIR/.bash_shared_functions"
+
 
 # color support for some commands
-if [ "$platform" == "Linux" ]; then
+if platform_is_linux; then
     alias ls='ls --color=auto'
-elif [ "$platform" == "Mac" ]; then
+elif platform_is_mac; then
     alias ls='ls -G'
 fi
 
@@ -48,7 +42,7 @@ alias jet='just ember test'
 alias jets='just ember test --serve'
 
 # BashRC
-alias rebash='source $HOME/.bashrc'
+alias rebash='unalias -a; source $HOME/.bashrc'
 
 # bundler
 alias be='bundle exec'
@@ -63,9 +57,6 @@ alias cpu='top -F -R -o cpu'
 alias rmlf='perl -pi -e "chomp if eof"'
 
 
-# shared functions
-source "$DOTFILES_DIR/.bash_shared_functions"
-
 # other functions
 # TODO: put these in .bash_functions or something like that
 
@@ -79,7 +70,7 @@ function notify() {
     local title="Command Complete [$([ $? = 0 ] && echo "OK" || echo "ERROR!")]"
     local cmd_string="$1";
     local cmd=""
-    if [ "$platform" == "Mac" ]; then
+    if platform_is_mac; then
         if [ -n "$cmd_string" ]; then
             cmd="$cmd_string"
         else
@@ -88,7 +79,7 @@ function notify() {
         local sound_name="Glass" # see /System/Library/Sounds/ for list of sounds
         local script="display notification \"$cmd\" with title \"$title\" sound name \"$sound_name\""
         osascript -e "$script"
-    else
+    else # Linux
         if [ -n "$cmd_string" ]; then
             cmd="$cmd_string"
         else

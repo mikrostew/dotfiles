@@ -1,8 +1,11 @@
-#! /usr/bin/env bash
-# $DOTFILES_DIR/.bash_git: sourced from .bash_aliases
+#!/usr/bin/env bash
+# $DOTFILES_DIR/.bash_git: git aliases and functions, sourced from .bashrc
 
 # colors
 source "$DOTFILES_DIR/.bash_colors"
+
+# shared functions
+source "$DOTFILES_DIR/.bash_shared_functions"
 
 # aliases and functions for git
 ALIAS_COLOR="$COLOR_FG_GREEN"

@@ -36,7 +36,7 @@ source "$DOTFILES_DIR/.bash_repo_status"
 
 # prompt string
 # see https://www.gnu.org/software/bash/manual/bash.html#Controlling-the-Prompt
-# single quotes so these are included as-is, and re-eval-ed for every prompt
+# single quotes so these are included as-is, and evaluated for every prompt
 ps_time_24h='\t'
 ps_user='\u'
 ps_host='\h'
@@ -48,18 +48,12 @@ PS1="\n($ps_time_24h) "\
 ":${COLOR_FG_BOLD_BLACK}$ps_pwd/${COLOR_RESET}"\
 "  $ps_repo_status\n\$ "
 
-# If this is an xterm set the title to user@host:dir
-# (this will overwrite the terminal title after every command - don't want that)
-#case "$TERM" in
-#xterm*|rxvt*)
-#    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
-#    ;;
-#*)
-#    ;;
-#esac
 
 # aliases and functions
 source "$DOTFILES_DIR/.bash_aliases"
+
+# git aliases and functions
+source "$DOTFILES_DIR/.bash_git"
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile

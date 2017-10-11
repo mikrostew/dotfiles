@@ -1,4 +1,4 @@
-# ~/.bash_aliases: contains extra aliases, sourced from .bashrc
+# $DOTFILES_DIR/.bash_aliases: contains extra aliases, sourced from .bashrc
 
 # colors
 source "$DOTFILES_DIR/.bash_colors"
@@ -64,57 +64,7 @@ alias rmlf='perl -pi -e "chomp if eof"'
 
 
 # shared functions
-# TODO: put this shared stuff in a separate file, .bash_shared maybe?
-
-# echo to stderr with red text
-function echoerr() {
-    echo -e "${COLOR_FG_RED}$@${COLOR_RESET}" >&2
-}
-
-# echo to stdout with green text
-function echoack() {
-    echo -e "${COLOR_FG_GREEN}$@${COLOR_RESET}"
-}
-
-# check for exact number of arguments to a function, and print usage if not correct
-# argument(s)
-# - array of expected argument names
-# - number of arguments passed to function
-function num_arguments_ok() {
-    local expected_args=( "${!1}" )
-    local num_args="$2"
-    local expected_num_args="${#expected_args[@]}"
-    if [ "$expected_num_args" -ne "$num_args" ]
-    then
-        # $FUNCNAME is an array of the current call stack
-        echoerr "Come on! This is how to use this:"
-        echoerr ""
-        echoerr "  ${FUNCNAME[1]} ${expected_args[*]}"
-        return -1
-    fi
-    return 0
-}
-
-# check for minimum number of arguments to a function, and print usage if not correct
-# argument(s)
-# - array of expected argument names
-# - number of arguments passed to function
-# TODO: better way to handle this
-function num_arguments_min() {
-    local expected_args=( "${!1}" )
-    local num_args="$2"
-    local expected_num_args="${#expected_args[@]}"
-    if [ "$num_args" -lt "$expected_num_args" ]
-    then
-        # $FUNCNAME is an array of the current call stack
-        echoerr "Come on! This is how to use this:"
-        echoerr ""
-        echoerr "  ${FUNCNAME[1]} ${expected_args[*]}"
-        return -1
-    fi
-    return 0
-}
-
+source "$DOTFILES_DIR/.bash_shared_functions"
 
 # other functions
 # TODO: put these in .bash_functions or something like that
@@ -445,6 +395,3 @@ function load_nvm() {
     # show version
     min_version_check "node" "$(nvm current)" "1.*.*" "$NVM_BIN"
 }
-
-# git aliases and functions
-[ -f "$DOTFILES_DIR/.bash_git" ] && source "$DOTFILES_DIR/.bash_git"

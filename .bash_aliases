@@ -56,10 +56,6 @@ alias bejb='bundle exec jekyll build'
 alias bejs='bundle exec jekyll serve'
 alias bi='bundle install'
 
-# show the TODOs I have left in the code (outputs the lines in each file to /dev/tty)
-# TODO make this into a function so I can pass in a directory
-alias todo='( set -x; grep --color=always -nr --exclude-dir bower_components --exclude-dir node_modules "TODO" . | tee /dev/tty | wc -l )'
-
 # show running processes in OSX, sorted by CPU usage
 alias cpu='top -F -R -o cpu'
 
@@ -68,6 +64,7 @@ alias rmlf='perl -pi -e "chomp if eof"'
 
 
 # shared functions
+# TODO: put this shared stuff in a separate file, .bash_shared maybe?
 
 # echo to stderr with red text
 function echoerr() {
@@ -120,6 +117,7 @@ function num_arguments_min() {
 
 
 # other functions
+# TODO: put these in .bash_functions or something like that
 
 # show a desktop notification with sound after a long-running command
 # Usage:
@@ -170,6 +168,12 @@ function fgn() {
 function updot() {
     ( set +e; set -x; pushd "$DOTFILES_DIR"; git pull --rebase; popd; )
     source "$HOME/.bashrc"
+}
+
+# show the TODOs I have left in the code (outputs the lines in each file to /dev/tty)
+function todo() {
+    local in_dir="${1:-.}" # default to current directory ('.')
+    ( set -x; grep --color=always -nr --exclude-dir bower_components --exclude-dir node_modules "TODO" "$in_dir" | tee /dev/tty | wc -l )
 }
 
 # change directory and list

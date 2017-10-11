@@ -386,3 +386,30 @@ function load_nvm() {
     # show version
     min_version_check "node" "$(nvm current)" "1.*.*" "$NVM_BIN"
 }
+
+# courtesy of https://stackoverflow.com/a/3352015
+function trim() {
+    local var="$*"
+    # remove leading whitespace characters
+    var="${var#"${var%%[![:space:]]*}"}"
+    # remove trailing whitespace characters
+    var="${var%"${var##*[![:space:]]}"}"
+    echo -n "$var"
+}
+
+# count lines of code for the input files
+# (non-comment count currently only works for bash)
+function lines_of_code() {
+    all_files="$(cat "$@")"
+    all_files_no_blank="$(echo "$all_files" | sed '/^[[:space:]]*$/d')"
+    # TODO: some way to specify the comment char, or detect it from the text
+    all_files_no_comments="$(echo "$all_files_no_blank" | sed '/^[[:space:]]*#/d')"
+
+    num_lines="$(echo "$all_files" | wc -l )"
+    num_lines_no_blank="$(echo "$all_files_no_blank" | wc -l )"
+    num_lines_no_comments="$(echo "$all_files_no_comments" | wc -l )"
+
+    echo "Total          : $(trim $num_lines)"
+    echo "No empty lines : $(trim $num_lines_no_blank)"
+    echo "No comments    : $(trim $num_lines_no_comments)"
+}

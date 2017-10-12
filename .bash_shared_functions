@@ -6,20 +6,20 @@ source "$DOTFILES_DIR/.bash_colors"
 
 
 # for platform-specific things
-function platform_is_mac() {
+platform_is_mac() {
     [ "$(uname)" == "Darwin" ] # OSX
 }
-function platform_is_linux() {
+platform_is_linux() {
     [ "$(uname)" == "Linux" ] # Linux desktop and termux on Android
 }
 
 # echo to stderr with red text
-function echoerr() {
+echoerr() {
     echo -e "${COLOR_FG_RED}$@${COLOR_RESET}" >&2
 }
 
 # echo to stdout with green text
-function echoack() {
+echoack() {
     echo -e "${COLOR_FG_GREEN}$@${COLOR_RESET}"
 }
 
@@ -27,7 +27,7 @@ function echoack() {
 # argument(s)
 # - array of expected argument names
 # - number of arguments passed to function
-function num_arguments_ok() {
+num_arguments_ok() {
     local expected_args=( "${!1}" )
     local num_args="$2"
     local expected_num_args="${#expected_args[@]}"
@@ -47,7 +47,7 @@ function num_arguments_ok() {
 # - array of expected argument names
 # - number of arguments passed to function
 # TODO: better way to handle this
-function num_arguments_min() {
+num_arguments_min() {
     local expected_args=( "${!1}" )
     local num_args="$2"
     local expected_num_args="${#expected_args[@]}"

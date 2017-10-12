@@ -1,13 +1,10 @@
 #!/usr/bin/env bash
 # $DOTFILES_DIR/.bash_git: git aliases and functions, sourced from .bashrc
 
-# colors
 source "$DOTFILES_DIR/.bash_colors"
-
-# shared functions
 source "$DOTFILES_DIR/.bash_shared_functions"
 
-# aliases and functions for git
+
 ALIAS_COLOR="$COLOR_FG_GREEN"
 
 alias gbl='echo -e "${ALIAS_COLOR}(git branch --list)${COLOR_RESET}"; git branch --list'
@@ -36,29 +33,29 @@ alias gundo='echo -e "${ALIAS_COLOR}(git reset --soft HEAD~1)${COLOR_RESET}"; gi
 
 # shared functions
 
-function in_git_repo() {
+in_git_repo() {
     git status >/dev/null && return 0 || return 1
 }
 
-function current_git_branch() {
+current_git_branch() {
     echo "$(git rev-parse --abbrev-ref HEAD)"
 }
 
-function on_git_branch() {
+on_git_branch() {
     [ "$(current_git_branch)" != "$1" ] && echoerr ">_<  Must be on branch '$1' for this" && return -1 || return 0
 }
 
-function not_on_git_branch() {
+not_on_git_branch() {
     [ "$(current_git_branch)" == "$1" ] && echoerr ">_<  Doesn't work on branch '$1'" && return -1 || return 0
 }
 
-function no_uncommitted_changes() {
+no_uncommitted_changes() {
     [ "$(git status --porcelain --untracked-files=no)" != "" ] && echoerr ">_<  You have uncommitted changes" && return -1 || return 0
 }
 
 # number of changes between two input branches
 # (typically a branch and master, or master and origin/master)
-function commit_diff_on_branch() {
+commit_diff_on_branch() {
     local git_rev_list_origin="$(git rev-list --count --left-right "$1"..."$2" 2>/dev/null)"
     if [ "$?" -eq 0 ] && [ -n "$git_rev_list_origin" ]; then
         local git_origin_arr=($git_rev_list_origin) # splits into array - it's 2 numbers separated by spaces
@@ -72,7 +69,7 @@ function commit_diff_on_branch() {
 # $1: number of commits to squash
 # $2: commit message
 # $3: extra line for message (extra info, overrides, etc.)
-function squash_commits() {
+squash_commits() {
     if [ -n "$1" ] && [ "$1" -gt 0 ]; then
         if [ -n "$2" ]; then
             if [ -n "$3" ]; then
@@ -101,7 +98,7 @@ function squash_commits() {
 # functions
 
 # git - create a patch from the current branch
-function gbpatch() {
+gbpatch() {
     arguments=()
     if in_git_repo && not_on_git_branch 'master' && no_uncommitted_changes && num_arguments_ok arguments[@] "$#"
     then
@@ -111,7 +108,7 @@ function gbpatch() {
 }
 
 # git - apply a patch to a new branch, named after the input .patch file
-function gbapply() {
+gbapply() {
     arguments=('<patch-file>')
     if in_git_repo && on_git_branch 'master' && no_uncommitted_changes && num_arguments_ok arguments[@] "$#"
     then
@@ -122,7 +119,7 @@ function gbapply() {
 }
 
 # git - (meta) show git aliases and functions from this file
-function gcom() {
+gcom() {
     arguments=()
     if num_arguments_ok arguments[@] "$#"
     then
@@ -135,7 +132,7 @@ function gcom() {
 
         printf "\nFunctions:\n"
         # list of functions and descriptions
-        git_functions=$(sed -n -e '/^# git/{ h; n; G; s/\n//; s/function //; s/{# git - //; p; }' "$DOTFILES_DIR/.bash_git" | sort)
+        git_functions=$(sed -n -e '/^# git/{ h; n; G; s/\n//; s/{# git - //; p; }' "$DOTFILES_DIR/.bash_git" | sort)
         while read -r func text; do
             printf "%10s - %s\n" "$func" "$text"
         done <<< "$git_functions"
@@ -143,7 +140,7 @@ function gcom() {
 }
 
 # git - show the current commit hash
-function gcurr() {
+gcurr() {
     arguments=()
     if in_git_repo && num_arguments_ok arguments[@] "$#"
     then
@@ -152,7 +149,7 @@ function gcurr() {
 }
 
 # git - sync current branch to the upstream fork (Git Fork Sync)
-function gfs() {
+gfs() {
     arguments=()
     if in_git_repo && num_arguments_ok arguments[@] "$#"
     then
@@ -162,7 +159,7 @@ function gfs() {
 }
 
 # git - merge current branch into master
-function gmm() {
+gmm() {
     arguments=()
     if in_git_repo && not_on_git_branch 'master' && no_uncommitted_changes && num_arguments_ok arguments[@] "$#"
     then
@@ -172,7 +169,7 @@ function gmm() {
 }
 
 # git - move recent commits to a new branch (instead of master)
-function gmove() {
+gmove() {
     arguments=( '<new-branch-name>' )
     if in_git_repo && on_git_branch 'master' && num_arguments_ok arguments[@] "$#"
     then
@@ -186,7 +183,7 @@ function gmove() {
 }
 
 # git - create new branch (that tracks origin/master)
-function gcbm() {
+gcbm() {
     arguments=( '<new-branch-name>' )
     if in_git_repo && num_arguments_ok arguments[@] "$#"
     then
@@ -195,7 +192,7 @@ function gcbm() {
 }
 
 # git - push current local branch to origin, and set upstream
-function gpb() {
+gpb() {
     arguments=()
     if in_git_repo && not_on_git_branch 'master' && num_arguments_ok arguments[@] "$#"
     then
@@ -205,7 +202,7 @@ function gpb() {
 }
 
 # TODO: git - create reviewboard (git review)
-# function gr() {
+# gr() {
 #     while read -r line
 #     do
 #         echo "$line"
@@ -216,7 +213,7 @@ function gpb() {
 # }
 
 # git - rebase current branch against master
-function gram() {
+gram() {
     arguments=()
     if in_git_repo && not_on_git_branch 'master' && no_uncommitted_changes && num_arguments_ok arguments[@] "$#"
     then
@@ -230,7 +227,7 @@ function gram() {
 }
 
 # git - rebase current branch against master (using 'mint update' instead of 'git pull')
-function mram() {
+mram() {
     arguments=()
     if in_git_repo && not_on_git_branch 'master' && no_uncommitted_changes && num_arguments_ok arguments[@] "$#"
     then
@@ -240,7 +237,7 @@ function mram() {
 }
 
 # git - show which files are different from master branch
-function gfiles() {
+gfiles() {
     arguments=()
     if in_git_repo && not_on_git_branch 'master' && num_arguments_ok arguments[@] "$#"
     then
@@ -250,7 +247,7 @@ function gfiles() {
 }
 
 # git - squash commits in current branch into a single commit
-function gsqb() {
+gsqb() {
     arguments=( '<commit-message> [, <extra-line>]' )
     if in_git_repo && not_on_git_branch 'master' && no_uncommitted_changes && num_arguments_min arguments[@] "$#"
     then
@@ -264,7 +261,7 @@ function gsqb() {
 }
 
 # git - squash commits, rebase, merge, and submit (for LI workflow)
-function gsubmit() {
+gsubmit() {
     arguments=( '<commit-message> [, <extra-line>]' )
     if in_git_repo && not_on_git_branch 'master' && no_uncommitted_changes && num_arguments_min arguments[@] "$#"
     then
@@ -314,7 +311,7 @@ function gsubmit() {
 
 # TODO - reuse functions from gsubmit
 # git - squash commits, "rebase", merge, and mint submit (for LI workflow)
-function msubmit() {
+msubmit() {
     arguments=( '<commit-message>' ) # optional: <review-ID>
     if in_git_repo && not_on_git_branch 'master' && no_uncommitted_changes && num_arguments_min arguments[@] "$#"
     then
@@ -360,7 +357,7 @@ function msubmit() {
 }
 
 # git - branch move (rename current branch)
-function gbm() {
+gbm() {
     arguments=( '<new-branch-name>' )
     if in_git_repo && num_arguments_ok arguments[@] "$#"
     then
@@ -368,9 +365,9 @@ function gbm() {
     fi
 }
 
-# git - wait on github to be pingable (pings every 60 seconds)
 # TODO: generalize this for whatever input URL
-function wait_github() {
+# git - wait on github to be pingable (pings every 60 seconds)
+wait_github() {
     until ping -i 60 -o github.com
     do
         sleep 60

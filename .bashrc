@@ -66,6 +66,13 @@ if ! shopt -oq posix; then
   fi
 fi
 
+# for homebrew I think?
+export PATH="/usr/local/sbin:$PATH"
+
+# for bash-completion after upgrading to bash 4.x with homebrew
+[ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion
+
+
 # formatting for `ri` documentation
 export RI="-T --format=ansi"
 

@@ -2,6 +2,20 @@
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 
+# for platform-specific things
+platform_is_mac() {
+    [ "$(uname)" == "Darwin" ] # OSX
+}
+platform_is_linux() {
+    [ "$(uname)" == "Linux" ] # Linux desktop and termux on Android
+}
+
+if platform_is_mac; then
+  bashrc_start=$(gdate +%s%3N)
+else
+  bashrc_start=$(date +%s%3N)
+fi
+
 # if not interactive, return (if flags do not contain "i")
 case $- in
     *i*) ;;
@@ -95,3 +109,13 @@ export PATH="$HOME/.yarn/bin:$PATH"
 min_version_check "bash" "$(bash --version | sed -n -E 's/[^0-9]*([0-9]+\.[0-9]+\.[0-9]+[^ ]*).*/\1/p')" "4.*.*"
 min_version_check "ruby" "$RUBY_VERSION" "2.2.*" "$RUBY_ROOT"
 min_version_check "git" "$(git --version | awk '{print $3}')" "2.14.*" "$(which git)"
+
+
+if platform_is_mac; then
+  bashrc_finish=$(gdate +%s%3N)
+else
+  bashrc_finish=$(date +%s%3N)
+fi
+
+bashrc_run_time=$((bashrc_finish - bashrc_start))
+echo "~/.bashrc loaded in ${bashrc_run_time}ms"

@@ -164,13 +164,15 @@ min_version_check() {
     fi
     if [ -n "$2" ]; then
         if meets_version "$2" "$3"; then
-            echo -e "$1 : ${COLOR_FG_BOLD_BLUE}$2${COLOR_RESET}$path_string"
+            # don't print anything for this
+            return
         else
             echo -e "$1 : ${COLOR_FG_RED}$2 (want >= $3)${COLOR_RESET}$path_string"
         fi
     else
         echo -e "$1 : ${COLOR_FG_RED} unknown version (want >= $3)${COLOR_RESET}"
     fi
+    return -1 # if it hasn't already returned, it didn't meet the version
 }
 
 # compare input semver with input constraint

@@ -106,9 +106,15 @@ export TERM=xterm-256color
 export PATH="$HOME/.yarn/bin:$PATH"
 
 # version checks
-min_version_check "bash" "$(bash --version | sed -n -E 's/[^0-9]*([0-9]+\.[0-9]+\.[0-9]+[^ ]*).*/\1/p')" "4.*.*"
-min_version_check "ruby" "$RUBY_VERSION" "2.2.*" "$RUBY_ROOT"
-min_version_check "git" "$(git --version | awk '{print $3}')" "2.14.*" "$(which git)"
+failed_version_checks=0
+min_version_check "bash" "$(bash --version | sed -n -E 's/[^0-9]*([0-9]+\.[0-9]+\.[0-9]+[^ ]*).*/\1/p')" "4.*.*" || ((failed_version_checks++))
+min_version_check "ruby" "$RUBY_VERSION" "2.2.*" "$RUBY_ROOT" || ((failed_version_checks++))
+min_version_check "git" "$(git --version | awk '{print $3}')" "2.14.*" "$(which git)" || ((failed_version_checks++))
+if [ $failed_version_checks -gt 0 ]; then
+  echo -e "${COLOR_FG_RED}$failed_version_checks version check(s) failed${COLOR_RESET}"
+else
+  echo -e "All version checks ${COLOR_FG_GREEN}OK${COLOR_RESET}"
+fi
 
 
 if platform_is_mac; then

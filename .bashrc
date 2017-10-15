@@ -110,6 +110,7 @@ failed_version_checks=0
 min_version_check "bash" "$(bash --version | sed -n -E 's/[^0-9]*([0-9]+\.[0-9]+\.[0-9]+[^ ]*).*/\1/p')" "4.*.*" || ((failed_version_checks++))
 min_version_check "ruby" "$RUBY_VERSION" "2.2.*" "$RUBY_ROOT" || ((failed_version_checks++))
 min_version_check "git" "$(git --version | awk '{print $3}')" "2.14.*" "$(which git)" || ((failed_version_checks++))
+min_version_check "jq" "$(jq --version | sed 's/jq-//').0" "1.5.*" "$(which jq)" || ((failed_version_checks++))
 if [ $failed_version_checks -gt 0 ]; then
   echo -e "${COLOR_FG_RED}$failed_version_checks version check(s) failed${COLOR_RESET}"
 else

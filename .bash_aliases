@@ -416,7 +416,8 @@ lines_of_code() {
 # using OpenWeatherMap API - http://openweathermap.org/api
 weather() {
   local zip=${1:-94015} # default to home zip
-  local page=$(curl "http://api.openweathermap.org/data/2.5/weather?zip=${zip},us&appid=ad0a07216a37247cd8965df59f003986" 2>/dev/null)
+  local api_key="$($HOME/Dropbox/secret/open-weather-map-key.sh)"
+  local page=$(curl "http://api.openweathermap.org/data/2.5/weather?zip=${zip},us&appid=${api_key}" 2>/dev/null)
   local name="$(echo $page | jq -M '.name' | tr -d '"')"
   local temp_kelvin="$(echo $page | jq -M '.main.temp')"
   local temp_f=$(echo "(1.8 * ($temp_kelvin - 273.15)) + 32" | bc -q | xargs printf "%.0f") # convert to F, remove decimals

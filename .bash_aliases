@@ -52,6 +52,9 @@ alias cpu='top -F -R -o cpu'
 # remove trailing newline from a file
 alias rmlf='perl -pi -e "chomp if eof"'
 
+# TODO: get some functions from these:
+# - https://bbs.archlinux.org/viewtopic.php?id=30155
+# - https://www.intuitivestories.com/wicked/wicked-cool-shell-script-library.shtml
 
 # other functions
 # TODO: put these in .bash_functions or something like that

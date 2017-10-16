@@ -5,32 +5,6 @@ source "$DOTFILES_DIR/.bash_colors"
 source "$DOTFILES_DIR/.bash_shared_functions"
 
 
-ALIAS_COLOR="$COLOR_FG_GREEN"
-
-alias gbl='echo -e "${ALIAS_COLOR}(git branch --list)${COLOR_RESET}"; git branch --list'
-alias gbla='echo -e "${ALIAS_COLOR}(git branch --list -a)${COLOR_RESET}"; git branch --list -a'
-alias gc='echo -e "${ALIAS_COLOR}(git checkout [branch])${COLOR_RESET}"; git checkout'
-alias gcb='echo -e "${ALIAS_COLOR}(git checkout -b [new-branch])${COLOR_RESET}"; git checkout -b'
-alias gg='echo -e "${ALIAS_COLOR}(git gui)${COLOR_RESET}"; git gui'
-alias glast='echo -e "${ALIAS_COLOR}(git log -n1)${COLOR_RESET}"; git log -n1'
-alias gmt='echo -e "${ALIAS_COLOR}(git mergetool --tool=opendiff)${COLOR_RESET}"; git mergetool --tool=opendiff'
-alias gp='echo -e "${ALIAS_COLOR}(git push)${COLOR_RESET}"; git push'
-alias gpr='echo -e "${ALIAS_COLOR}(git pull --rebase)${COLOR_RESET}"; git pull --rebase'
-alias gr='echo -e "${ALIAS_COLOR}(git review)${COLOR_RESET}"; git review'
-alias grd='echo -e "${ALIAS_COLOR}(git review dcommit [-r RB_ID])${COLOR_RESET}"; git review dcommit'
-alias gremu='echo -e "${ALIAS_COLOR}(git remote update)${COLOR_RESET}"; git remote update'
-alias grs='echo -e "${ALIAS_COLOR}(git review status)${COLOR_RESET}"; git review status'
-alias gru='echo -e "${ALIAS_COLOR}(git review update)${COLOR_RESET}"; git review update'
-alias gs='echo -e "${ALIAS_COLOR}(git stash)${COLOR_RESET}"; git stash'
-alias gsa='echo -e "${ALIAS_COLOR}(git stash apply [stash])${COLOR_RESET}"; git stash apply'
-alias gsd='echo -e "${ALIAS_COLOR}(git stash drop [stash])${COLOR_RESET}"; git stash drop'
-alias gsl='echo -e "${ALIAS_COLOR}(git stash list)${COLOR_RESET}"; git stash list'
-alias gsp='echo -e "${ALIAS_COLOR}(git stash pop)${COLOR_RESET}"; git stash pop'
-alias gss='echo -e "${ALIAS_COLOR}(git stash save <message>)${COLOR_RESET}"; git stash save'
-alias gstat='echo -e "${ALIAS_COLOR}(git status)${COLOR_RESET}"; git status'
-alias gundo='echo -e "${ALIAS_COLOR}(git reset --soft HEAD~1)${COLOR_RESET}"; git reset --soft HEAD~1'
-
-
 # shared functions
 
 in_git_repo() {
@@ -94,8 +68,140 @@ squash_commits() {
     return 0;
 }
 
+# echo the input command arguments, then run it
+do_git_command() {
+  echo -e "${COLOR_FG_GREEN}($@)${COLOR_RESET}"
+  # TODO: eventually take away the 'set -x' once I've tested everything that uses this (manually?)
+  ( set -x; "$@" )
+}
+
 
 # functions
+
+# git - list branches (git branch list)
+gbl() {
+  do_git_command git branch --list
+}
+
+# git - list local and remote branches (git branch list all)
+gbla() {
+  do_git_command git branch --list -a
+}
+
+# git - checkout branch/tag/hash (git checkout)
+gc() {
+  arguments=('<branch-tag-or-hash>')
+  if in_git_repo && num_arguments_ok arguments[@] "$#"
+  then
+    do_git_command git checkout "$1"
+  fi
+}
+
+# git - create new branch
+gcb() {
+  arguments=( '<new-branch-name>' )
+  if in_git_repo && num_arguments_ok arguments[@] "$#"
+  then
+    do_git_command git checkout -b "$1"
+  fi
+}
+
+# git - create new branch (that tracks origin/master)
+gcbm() {
+  arguments=( '<new-branch-name>' )
+  if in_git_repo && num_arguments_ok arguments[@] "$#"
+  then
+    do_git_command git checkout -b "$1" origin/master
+  fi
+}
+
+# git - gui (git gui)
+gg() {
+  do_git_command git gui
+}
+
+# git - show last commit info - (git last)
+glast() {
+  do_git_command git log -n1
+}
+
+# git - run mergetool for conflicts (git merge tool)
+gmt() {
+  do_git_command git mergetool --tool=opendiff
+}
+
+# git - push changes (git push)
+gp() {
+  do_git_command git push
+}
+
+# git - push current local branch to origin, and set upstream
+gpb() {
+  arguments=()
+  if in_git_repo && not_on_git_branch 'master' && num_arguments_ok arguments[@] "$#"
+  then
+    local branch_name=$(current_git_branch)
+    do_git_command git push -u origin "$branch_name"
+  fi
+}
+
+# git - pull with rebase (git pull rebase)
+gpr() {
+  do_git_command git pull --rebase
+}
+
+# git - create review for LI workflow (git review)
+gr() {
+  do_git_command git review
+}
+
+# git - show ACLs needed for review, with optional RB_ID (git review dcommit)
+grd() {
+  if [ -n "$1" ]
+  then
+    do_git_command git review dcommit -r "$1"
+  else
+    do_git_command git review dcommit
+  fi
+}
+
+# TODO: these should all be functions, since they don't change the behavior of these things
+ALIAS_COLOR="$COLOR_FG_GREEN"
+alias gremu='echo -e "${ALIAS_COLOR}(git remote update)${COLOR_RESET}"; git remote update'
+alias grs='echo -e "${ALIAS_COLOR}(git review status)${COLOR_RESET}"; git review status'
+alias gru='echo -e "${ALIAS_COLOR}(git review update)${COLOR_RESET}"; git review update'
+alias gs='echo -e "${ALIAS_COLOR}(git stash)${COLOR_RESET}"; git stash'
+alias gsa='echo -e "${ALIAS_COLOR}(git stash apply [stash])${COLOR_RESET}"; git stash apply'
+alias gsd='echo -e "${ALIAS_COLOR}(git stash drop [stash])${COLOR_RESET}"; git stash drop'
+
+# git - list all stashes (git stash list)
+gsl() {
+  do_git_command git stash list
+}
+
+# git - pop the last stash (git stash pop)
+gsp() {
+  do_git_command git stash pop
+}
+
+# git - stash current changes with a message (git stash save)
+gss() {
+  arguments=('<message>')
+  if in_git_repo && num_arguments_ok arguments[@] "$#"
+  then
+    do_git_command git stash save "$1"
+  fi
+}
+
+# git - show repo status (git status)
+gstat() {
+  do_git_command git status
+}
+
+# git - undo the last commit (git undo)
+gundo() {
+  do_git_command git reset --soft HEAD~1
+}
 
 # git - create a patch from the current branch
 gbpatch() {
@@ -179,25 +285,6 @@ gmove() {
             # (see http://stackoverflow.com/a/22654961 for details)
             ( set -x; git checkout -b "$1"; git branch -f master HEAD~${num_commits}; git branch -u origin/master "$1" )
         fi
-    fi
-}
-
-# git - create new branch (that tracks origin/master)
-gcbm() {
-    arguments=( '<new-branch-name>' )
-    if in_git_repo && num_arguments_ok arguments[@] "$#"
-    then
-        ( set -x; git checkout -b "$1" origin/master )
-    fi
-}
-
-# git - push current local branch to origin, and set upstream
-gpb() {
-    arguments=()
-    if in_git_repo && not_on_git_branch 'master' && num_arguments_ok arguments[@] "$#"
-    then
-        local branch_name=$(current_git_branch)
-        ( set -x; git push -u origin "$branch_name" )
     fi
 }
 

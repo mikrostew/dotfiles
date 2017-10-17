@@ -270,6 +270,9 @@ gsubmit() {
         # squash changes on this branch
         gsqb "$1" "$2"
         if [ "$?" -eq 0 ]; then
+            # get review board ID
+            local review_id=$(git config --get branch.$branch_name.reviewid)
+            echo -e "${COLOR_FG_GREEN}Review ID: $review_id${COLOR_RESET}"
             # rebase against master
             ( set -x; git pull --rebase origin master && git checkout master && git pull --rebase )
             if [ "$?" -ne 0 ]; then
@@ -284,13 +287,22 @@ gsubmit() {
             fi
             # apply the RB to the commit
             # if this fails, means you don't have the necessary ACLs
-            ( set -x; git review dcommit )
+            ( set -x; git review dcommit -r $review_id)
             if [ "$?" -ne 0 ]; then
                 # dcommit failed, probably missing a shipit from ACL
                 echoerr "Dang it! \"git review dcommit\" failed, undoing the merge"
                 ( set -x; git reset --merge ORIG_HEAD && git checkout ${branch_name} )
                 return -1
             fi
+
+            # TODO: get https://tools.corp.linkedin.com/apps/tools/commit-queue-manager/api/v1/allowed-repos/
+            # check if repo is in there
+            # if so, can 'git submit'
+            # otherwise need to 'git push'
+
+            # TODO: also, check product-spec.json for 'build.commands.submit'
+            # if that exists, use 'mint submit'
+
             # and submit
             ( set -x; git submit )
             if [ "$?" -ne 0 ]; then
@@ -309,7 +321,7 @@ gsubmit() {
     fi
 }
 
-# TODO - reuse functions from gsubmit
+# TODO - do this in gsubmit (after checking that it's possible)
 # git - squash commits, "rebase", merge, and mint submit (for LI workflow)
 msubmit() {
     arguments=( '<commit-message>' ) # optional: <review-ID>

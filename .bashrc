@@ -86,7 +86,6 @@ export PATH="/usr/local/sbin:$PATH"
 # for bash-completion after upgrading to bash 4.x with homebrew
 [ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion
 
-
 # formatting for `ri` documentation
 export RI="-T --format=ansi"
 
@@ -102,20 +101,20 @@ export TERM=xterm-256color
 # travis gem
 [ -f "$HOME/.travis/travis.sh" ] && source "$HOME/.travis/travis.sh"
 
+# TODO: put PATH stuff all in one place
 # yarn
 export PATH="$HOME/.yarn/bin:$PATH"
 
-# version checks
-failed_version_checks=0
-min_version_check "bash" "$(bash --version | sed -n -E 's/[^0-9]*([0-9]+\.[0-9]+\.[0-9]+[^ ]*).*/\1/p')" "4.*.*" || ((failed_version_checks++))
-min_version_check "ruby" "$RUBY_VERSION" "2.2.*" "$RUBY_ROOT" || ((failed_version_checks++))
-min_version_check "git" "$(git --version | awk '{print $3}')" "2.14.*" "$(which git)" || ((failed_version_checks++))
-min_version_check "jq" "$(jq --version | sed 's/jq-//').0" "1.5.*" "$(which jq)" || ((failed_version_checks++))
-if [ $failed_version_checks -gt 0 ]; then
-  echo -e "${COLOR_FG_RED}$failed_version_checks version check(s) failed${COLOR_RESET}"
-else
-  echo -e "All version checks ${COLOR_FG_GREEN}OK${COLOR_RESET}"
-fi
+# run version checks async to speed up load time
+# should only run into version issues when first setting up a system
+(
+  min_version_check "bash" "$(bash --version | sed -n -E 's/[^0-9]*([0-9]+\.[0-9]+\.[0-9]+[^ ]*).*/\1/p')" "5.*.*";
+  min_version_check "ruby" "$RUBY_VERSION" "3.2.*" "$RUBY_ROOT";
+  min_version_check "git" "$(git --version | awk '{print $3}')" "3.14.*" "$(which git)";
+  min_version_check "jq" "$(jq --version | sed 's/jq-//').0" "2.5.*" "$(which jq)";
+) & disown
+
+# TODO: verify that the links to these files haven't changed (run async)
 
 
 if platform_is_mac; then

@@ -112,6 +112,7 @@ export PATH="$HOME/.yarn/bin:$PATH"
   min_version_check "ruby" "$RUBY_VERSION" "2.2.*" "$RUBY_ROOT";
   min_version_check "git" "$(git --version | awk '{print $3}')" "2.14.*" "$(which git)";
   min_version_check "jq" "$(jq --version | sed 's/jq-//').0" "1.5.*" "$(which jq)";
+  min_version_check "expect" "$(expect -version | awk '{print $3}').0" "5.*.*" "$(which expect)";
 ) & disown
 
 # TODO: verify that the links to these files haven't changed (run async)

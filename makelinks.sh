@@ -16,6 +16,7 @@ links[".vim"]=".vim"
 # bash
 links[".bash_profile"]=".bash_profile"
 links[".bashrc"]=".bashrc"
+links[".bash_logout"]=".bash_logout"
 
 # inputrc
 links[".inputrc"]=".inputrc"

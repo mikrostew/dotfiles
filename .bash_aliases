@@ -429,3 +429,21 @@ weather() {
   echo -e "Temperature: ${COLOR_FG_BOLD_BLUE}$temp_f${COLOR_RESET}"
   echo -e "Humidity: ${COLOR_FG_BOLD_BLUE}$humidity%${COLOR_RESET}"
 }
+
+# TODO: run this automatically on login?
+# use ssh-agent and ssh-add to setup the SSH key for accessing LI repos
+ssh_add_li_key() {
+    # start ssh-agent if it's not already running for this session
+    if [ -z "$SSH_AUTH_SOCK" ] ; then
+        eval $(ssh-agent)
+    fi
+    expect <<EndOfSSHExpect
+        # add the SSH key using ssh-add with expect
+        spawn ssh-add $HOME/.ssh/mistewar_at_linkedin.com_ssh_key
+        expect "Enter passphrase for $HOME/.ssh/mistewar_at_linkedin.com_ssh_key:"
+        send "password\r" # TODO use the real password here
+        expect eof
+EndOfSSHExpect
+    echo "Added SSH key"
+}
+

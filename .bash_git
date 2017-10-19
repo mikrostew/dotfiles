@@ -483,3 +483,6 @@ wait_github() {
     done
     echoack "github available"
 }
+
+# TODO: nuke voyager-web to clean state, update, init, build
+# ( git clean -fdx; mint update; just init)

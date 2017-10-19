@@ -80,8 +80,9 @@ if ! shopt -oq posix; then
   fi
 fi
 
-# for homebrew I think?
-export PATH="/usr/local/sbin:$PATH"
+# PATH
+# homebrew, yarn
+export PATH="/usr/local/sbin:$HOME/.yarn/bin:$PATH"
 
 # for bash-completion after upgrading to bash 4.x with homebrew
 [ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion
@@ -100,10 +101,6 @@ export TERM=xterm-256color
 
 # travis gem
 [ -f "$HOME/.travis/travis.sh" ] && source "$HOME/.travis/travis.sh"
-
-# TODO: put PATH stuff all in one place
-# yarn
-export PATH="$HOME/.yarn/bin:$PATH"
 
 # run version checks async to speed up load time
 # should only run into version issues when first setting up a system

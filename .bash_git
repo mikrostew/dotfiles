@@ -152,6 +152,7 @@ gpr() {
 
 # git - create review for LI workflow (git review)
 gr() {
+  # TODO: use `expect` to automatically answer the prompts
   do_git_command git review
 }
 
@@ -297,17 +298,6 @@ gmove() {
         fi
     fi
 }
-
-# TODO: git - create reviewboard (git review)
-# gr() {
-#     while read -r line
-#     do
-#         echo "$line"
-#         # TODO: grep line for the URL of the reviewboard, and open that in Chrome after the
-#         # command completes
-#         # echo -e "\ny" | git review
-#     done < <( set -x; git review )
-# }
 
 # git - rebase current branch against master
 gram() {

@@ -155,27 +155,46 @@ remove_trailing_lf() {
 }
 
 # check minimum version, and print out the result
-# use this like:
-# min_version_check "bash" "$(bash --version)" "4.x.x"
-# min_version_check "ruby" "$RUBY_VERSION" "2.2.x" "$RUBY_ROOT"
-# min_version_check "git" "$(git --version | awk '{print $3}')" "2.14.x" "$(which git)"
+# Arguments:
+# $1 - program/command/language name
+# $2 - minimum version required
+# $3 - how to get the version of this (will be eval-ed)
+# $4 - [optional] path to where this is installed, instead of using `which` (will be eval-ed)
 min_version_check() {
-    if [ -n "$4" ]; then
-        path_string=" ($4)"
+  # 1) check if this is installed
+  if [ -n "$4" ]; then
+    install_path=$(eval "$4")
+  else
+    install_path=$(which "$1")
+  fi
+  if [ -z "$install_path" ]; then
+    echo -e "$1 : ${COLOR_FG_RED}not installed (want >= $2)${COLOR_RESET}"
+    return 1
+  fi
+  # 2) check the minimum version
+  current_version=$(eval "$3")
+  if [ -n "$current_version" ]; then
+    if meets_version "$(normalize_version $current_version)" "$2"; then
+      # don't print anything for this
+      return
     else
-        path_string=""
+      echo -e "$1 : ${COLOR_FG_RED}found $current_version (want >= $2)${COLOR_RESET} ($install_path)"
     fi
-    if [ -n "$2" ]; then
-        if meets_version "$2" "$3"; then
-            # don't print anything for this
-            return
-        else
-            echo -e "$1 : ${COLOR_FG_RED}$2 (want >= $3)${COLOR_RESET}$path_string"
-        fi
-    else
-        echo -e "$1 : ${COLOR_FG_RED} unknown version (want >= $3)${COLOR_RESET}"
-    fi
-    return -1 # if it hasn't already returned, it didn't meet the version
+  else
+    echo -e "$1 : ${COLOR_FG_RED}unknown version (want >= $2)${COLOR_RESET} ($install_path)"
+  fi
+  return 1 # if it hasn't already returned, it didn't meet the version
+}
+
+# convert versions to X.X.X format
+normalize_version() {
+  if [[ "$1" =~ ^[0-9]+$ ]]; then
+    echo "$1.0.0"
+  elif [[ "$1" =~ ^[0-9]+\.[0-9]+$ ]]; then
+    echo "$1.0"
+  else
+    echo "$1"
+  fi
 }
 
 # compare input semver with input constraint
@@ -449,4 +468,3 @@ ssh_add_li_key() {
 EndOfSSHExpect
     echo "Added SSH key"
 }
-

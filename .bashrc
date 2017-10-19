@@ -108,11 +108,11 @@ export PATH="$HOME/.yarn/bin:$PATH"
 # run version checks async to speed up load time
 # should only run into version issues when first setting up a system
 (
-  min_version_check "bash" "$(bash --version | sed -n -E 's/[^0-9]*([0-9]+\.[0-9]+\.[0-9]+[^ ]*).*/\1/p')" "4.*.*";
-  min_version_check "ruby" "$RUBY_VERSION" "2.2.*" "$RUBY_ROOT";
-  min_version_check "git" "$(git --version | awk '{print $3}')" "2.14.*" "$(which git)";
-  min_version_check "jq" "$(jq --version | sed 's/jq-//').0" "1.5.*" "$(which jq)";
-  min_version_check "expect" "$(expect -version | awk '{print $3}').0" "5.*.*" "$(which expect)";
+  min_version_check "bash" "4.*.*" "bash --version | sed -n -E 's/[^0-9]*([0-9]+\.[0-9]+\.[0-9]+[^ ]*).*/\1/p'";
+  min_version_check "ruby" "2.2.*" 'echo $RUBY_VERSION' 'echo $RUBY_ROOT';
+  min_version_check "git" "2.14.*" "git --version | awk '{print \$3}'";
+  min_version_check "jq" "1.5.*" "jq --version | sed 's/jq-//'";
+  min_version_check "expect" "5.*.*" "expect -version | awk '{print \$3}'";
 ) & disown
 
 # TODO: verify that the links to these files haven't changed (run async)

@@ -113,6 +113,7 @@ export PATH="$HOME/.yarn/bin:$PATH"
   min_version_check "git" "2.14.*" "git --version | awk '{print \$3}'";
   min_version_check "jq" "1.5.*" "jq --version | sed 's/jq-//'";
   min_version_check "expect" "5.*.*" "expect -version | awk '{print \$3}'";
+  min_version_check "bats" "0.4.*" "bats --version | awk '{print \$2}'";
 ) & disown
 
 # TODO: verify that the links to these files haven't changed (run async)

@@ -165,14 +165,35 @@ grd() {
   fi
 }
 
-# TODO: these should all be functions, since they don't change the behavior of these things
-ALIAS_COLOR="$COLOR_FG_GREEN"
-alias gremu='echo -e "${ALIAS_COLOR}(git remote update)${COLOR_RESET}"; git remote update'
-alias grs='echo -e "${ALIAS_COLOR}(git review status)${COLOR_RESET}"; git review status'
-alias gru='echo -e "${ALIAS_COLOR}(git review update)${COLOR_RESET}"; git review update'
-alias gs='echo -e "${ALIAS_COLOR}(git stash)${COLOR_RESET}"; git stash'
-alias gsa='echo -e "${ALIAS_COLOR}(git stash apply [stash])${COLOR_RESET}"; git stash apply'
-alias gsd='echo -e "${ALIAS_COLOR}(git stash drop [stash])${COLOR_RESET}"; git stash drop'
+# git - update remote tracking branch (git remote update)
+gru() {
+  do_git_command git remote update
+}
+
+# git - show status of RB - which ACLs are needed (git review status)
+grs() {
+  do_git_command git review status
+}
+
+# git - update RB with new changes (git review update)
+gru() {
+  do_git_command git review update
+}
+
+# git - stash uncommitted changes (git stash)
+gs() {
+  do_git_command git stash
+}
+
+# git - apply stashed changes (git stash apply [stash])
+gsa() {
+  do_git_command git stash apply "$1"
+}
+
+# git - dtop stashed changes (git stash drop [stash])
+gsd() {
+  do_git_command git stash drop "$1"
+}
 
 # git - list all stashes (git stash list)
 gsl() {
@@ -224,25 +245,14 @@ gbapply() {
     fi
 }
 
-# git - (meta) show git aliases and functions from this file
-gcom() {
-    arguments=()
-    if num_arguments_ok arguments[@] "$#"
-    then
-        printf "\nAliases:\n"
-        # list of the aliased commands, without 'alias', 'echo', or parenthesis
-        git_aliases=$(alias | grep git | sed -e 's/alias //' -e "s/='echo -e \"\${[A-Z_]*}(.*)\${[A-Z_]*}\";//" -e "s/'$//")
-        while read -r cmd_alias cmd; do
-            printf "%6s = %s\n" "$cmd_alias" "$cmd"
-        done <<< "$git_aliases"
-
-        printf "\nFunctions:\n"
-        # list of functions and descriptions
-        git_functions=$(sed -n -e '/^# git/{ h; n; G; s/\n//; s/{# git - //; p; }' "$DOTFILES_DIR/.bash_git" | sort)
-        while read -r func text; do
-            printf "%10s - %s\n" "$func" "$text"
-        done <<< "$git_functions"
-    fi
+# git - (meta) show git functions from this file
+gfun() {
+  printf "\nFunctions:\n"
+  # list of functions and descriptions
+  git_functions=$(sed -n -e '/^# git/{ h; n; G; s/\n//; s/{# git - //; p; }' "$DOTFILES_DIR/.bash_git" | sort)
+  while read -r func text; do
+    printf "%10s - %s\n" "$func" "$text"
+  done <<< "$git_functions"
 }
 
 # git - show the current commit hash

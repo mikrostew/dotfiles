@@ -145,9 +145,12 @@ gpb() {
   fi
 }
 
-# git - pull with rebase (git pull rebase)
+# git - pull changes from origin, with rebase (git pull rebase)
 gpr() {
-  do_git_command git pull --rebase
+  # sometimes `git pull --rebase` fails with "fatal: Cannot rebase onto multiple branches."
+  # so try doing the full command (https://stackoverflow.com/a/35844073)
+  local branch_name=$(current_git_branch)
+  do_git_command git pull origin $branch_name --rebase
 }
 
 # git - create review for LI workflow (git review)

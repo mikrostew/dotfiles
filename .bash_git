@@ -161,6 +161,22 @@ gr() {
   do_git review
 }
 
+# git - rebase current branch against master
+gram() {
+    arguments=()
+    if in_git_repo && not_on_git_branch 'master' && no_uncommitted_changes && num_arguments_ok arguments[@] "$#"
+    then
+        local branch_name=$(current_git_branch)
+        do_git checkout master && gpr && do_git checkout "$branch_name" && do_git rebase master
+        while [ "$?" -ne 0 ]; do
+          gmt && do_git rebase --continue
+          # TODO: how to detect that I should abort?
+        done
+        # delete any *.orig files leftover from merge conflicts
+        grmorig
+    fi
+}
+
 # git - show ACLs needed for review, with optional RB_ID (git review dcommit)
 grd() {
   if [ -n "$1" ]
@@ -169,6 +185,11 @@ grd() {
   else
     do_git review dcommit
   fi
+}
+
+# git - delete *.orig files, usually leftover after merge or rebase with conflicts
+grmorig() {
+  ( set -x; git ls-files --others --exclude-standard | grep \.orig$ | xargs rm -v )
 }
 
 # git - update remote tracking branch (git remote update)
@@ -301,20 +322,6 @@ gmove() {
             # (see http://stackoverflow.com/a/22654961 for details)
             ( set -x; git checkout -b "$1"; git branch -f master HEAD~${num_commits}; git branch -u origin/master "$1" )
         fi
-    fi
-}
-
-# git - rebase current branch against master
-gram() {
-    arguments=()
-    if in_git_repo && not_on_git_branch 'master' && no_uncommitted_changes && num_arguments_ok arguments[@] "$#"
-    then
-        local branch_name=$(current_git_branch)
-        do_git checkout master && gpr && do_git checkout "$branch_name" && do_git rebase master
-        while [ "$?" -ne 0 ]; do
-          gmt && do_git rebase --continue
-          # TODO: how to detect that I should abort?
-        done
     fi
 }
 

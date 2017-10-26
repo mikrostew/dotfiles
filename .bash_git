@@ -68,11 +68,12 @@ squash_commits() {
     return 0;
 }
 
-# echo the input command arguments, then run it
-do_git_command() {
-  echo -e "${COLOR_FG_GREEN}($@)${COLOR_RESET}"
+# echo the input arguments to git, then run the command
+# this way I can leave off 'git' since that will always be used
+do_git() {
+  echo -e "${COLOR_FG_GREEN}(git $@)${COLOR_RESET}"
   # TODO: eventually take away the 'set -x' once I've tested everything that uses this (manually?)
-  ( set -x; "$@" )
+  ( set -x; git "$@" )
 }
 
 
@@ -80,12 +81,12 @@ do_git_command() {
 
 # git - list branches (git branch list)
 gbl() {
-  do_git_command git branch --list
+  do_git branch --list
 }
 
 # git - list local and remote branches (git branch list all)
 gbla() {
-  do_git_command git branch --list -a
+  do_git branch --list -a
 }
 
 # git - checkout branch/tag/hash (git checkout)
@@ -93,7 +94,7 @@ gc() {
   arguments=('<branch-tag-or-hash>')
   if in_git_repo && num_arguments_ok arguments[@] "$#"
   then
-    do_git_command git checkout "$1"
+    do_git checkout "$1"
   fi
 }
 
@@ -102,7 +103,7 @@ gcb() {
   arguments=( '<new-branch-name>' )
   if in_git_repo && num_arguments_ok arguments[@] "$#"
   then
-    do_git_command git checkout -b "$1"
+    do_git checkout -b "$1"
   fi
 }
 
@@ -111,28 +112,29 @@ gcbm() {
   arguments=( '<new-branch-name>' )
   if in_git_repo && num_arguments_ok arguments[@] "$#"
   then
-    do_git_command git checkout -b "$1" origin/master
+    do_git checkout -b "$1" origin/master
   fi
 }
 
 # git - gui (git gui)
 gg() {
-  do_git_command git gui
+  do_git gui
 }
 
 # git - show last commit info - (git last)
 glast() {
-  do_git_command git log -n1
+  do_git log -n1
 }
 
-# git - run mergetool for conflicts (git merge tool)
+# git - run mergetool for conflicts (git mergetool)
 gmt() {
-  do_git_command git mergetool --tool=opendiff
+  # TODO: different tool for Mac/Linux
+  do_git mergetool --tool=opendiff
 }
 
 # git - push changes (git push)
 gp() {
-  do_git_command git push
+  do_git push
 }
 
 # git - push current local branch to origin, and set upstream
@@ -141,7 +143,7 @@ gpb() {
   if in_git_repo && not_on_git_branch 'master' && num_arguments_ok arguments[@] "$#"
   then
     local branch_name=$(current_git_branch)
-    do_git_command git push -u origin "$branch_name"
+    do_git push -u origin "$branch_name"
   fi
 }
 
@@ -150,63 +152,63 @@ gpr() {
   # sometimes `git pull --rebase` fails with "fatal: Cannot rebase onto multiple branches."
   # so try doing the full command (https://stackoverflow.com/a/35844073)
   local branch_name=$(current_git_branch)
-  do_git_command git pull origin $branch_name --rebase
+  do_git pull origin $branch_name --rebase
 }
 
 # git - create review for LI workflow (git review)
 gr() {
   # TODO: use `expect` to automatically answer the prompts
-  do_git_command git review
+  do_git review
 }
 
 # git - show ACLs needed for review, with optional RB_ID (git review dcommit)
 grd() {
   if [ -n "$1" ]
   then
-    do_git_command git review dcommit -r "$1"
+    do_git review dcommit -r "$1"
   else
-    do_git_command git review dcommit
+    do_git review dcommit
   fi
 }
 
 # git - update remote tracking branch (git remote update)
 gru() {
-  do_git_command git remote update
+  do_git remote update
 }
 
 # git - show status of RB - which ACLs are needed (git review status)
 grs() {
-  do_git_command git review status
+  do_git review status
 }
 
 # git - update RB with new changes (git review update)
 gru() {
-  do_git_command git review update
+  do_git review update
 }
 
 # git - stash uncommitted changes (git stash)
 gs() {
-  do_git_command git stash
+  do_git stash
 }
 
 # git - apply stashed changes (git stash apply [stash])
 gsa() {
-  do_git_command git stash apply "$1"
+  do_git stash apply "$1"
 }
 
 # git - dtop stashed changes (git stash drop [stash])
 gsd() {
-  do_git_command git stash drop "$1"
+  do_git stash drop "$1"
 }
 
 # git - list all stashes (git stash list)
 gsl() {
-  do_git_command git stash list
+  do_git stash list
 }
 
 # git - pop the last stash (git stash pop)
 gsp() {
-  do_git_command git stash pop
+  do_git stash pop
 }
 
 # git - stash current changes with a message (git stash save)
@@ -214,18 +216,18 @@ gss() {
   arguments=('<message>')
   if in_git_repo && num_arguments_ok arguments[@] "$#"
   then
-    do_git_command git stash save "$1"
+    do_git stash save "$1"
   fi
 }
 
 # git - show repo status (git status)
 gstat() {
-  do_git_command git status
+  do_git status
 }
 
 # git - undo the last commit (git undo)
 gundo() {
-  do_git_command git reset --soft HEAD~1
+  do_git reset --soft HEAD~1
 }
 
 # git - create a patch from the current branch
@@ -308,11 +310,11 @@ gram() {
     if in_git_repo && not_on_git_branch 'master' && no_uncommitted_changes && num_arguments_ok arguments[@] "$#"
     then
         local branch_name=$(current_git_branch)
-        ( set -x; git checkout master && git pull --rebase && git checkout "$branch_name" && git rebase master )
-        if [ "$?" -ne 0 ]; then
-            # TODO - test this
-            ( set -x; git mergetool --tool=opendiff && git rebase --continue )
-        fi
+        do_git checkout master && gpr && do_git checkout "$branch_name" && do_git rebase master
+        while [ "$?" -ne 0 ]; do
+          gmt && do_git rebase --continue
+          # TODO: how to detect that I should abort?
+        done
     fi
 }
 

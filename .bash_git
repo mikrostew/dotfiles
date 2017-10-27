@@ -214,12 +214,20 @@ gs() {
 
 # git - apply stashed changes (git stash apply [stash])
 gsa() {
-  do_git stash apply "$1"
+  if [ -n "$1" ]; then
+    do_git stash apply "$1"
+  else
+    do_git stash apply
+  fi
 }
 
 # git - dtop stashed changes (git stash drop [stash])
 gsd() {
-  do_git stash drop "$1"
+  if [ -n "$1" ]; then
+    do_git stash drop "$1"
+  else
+    do_git stash drop
+  fi
 }
 
 # git - list all stashes (git stash list)

@@ -15,6 +15,11 @@ echoack() {
     echo -e "${COLOR_FG_GREEN}$@${COLOR_RESET}"
 }
 
+# echo to stdout with blue text
+echo_info() {
+    echo -e "${COLOR_FG_BOLD_BLUE}$@${COLOR_RESET}"
+}
+
 # check for exact number of arguments to a function, and print usage if not correct
 # argument(s)
 # - array of expected argument names

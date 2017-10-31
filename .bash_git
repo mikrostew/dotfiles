@@ -426,8 +426,7 @@ gsubmit() {
     read -p "Press any key to continue... " -n1 -s # DEBUG
 
     local review_id="$(git_review_board_id $branch_name)"
-    echo -e "${COLOR_FG_GREEN}Review ID: $review_id${COLOR_RESET}"
-    read -p "Press any key to continue... " -n1 -s # DEBUG
+    echo_info "Review ID: $review_id"
 
     # rebase against master
     do_git pull --rebase origin master && do_git checkout master && do_git pull --rebase
@@ -457,19 +456,20 @@ gsubmit() {
 
     # check if can use 'git submit' (LinkedIn), otherwise need to 'git push'
     local repo_url="$(git_repo_url)"
-    echo -e "${COLOR_FG_BOLD_BLUE}repo URL: '$repo_url'${COLOR_RESET}"
+    echo_info "repo URL: '$repo_url'"
     if in_git_submit_repo "$repo_url"; then
-      echo -e "${COLOR_FG_BOLD_BLUE}repo supports 'git submit'${COLOR_RESET}"
+      echo_info "git submit - OK"
 
       # also, check product-spec.json for 'mint submit'
       if in_mint_submit_repo; then
-        echo -e "${COLOR_FG_BOLD_BLUE}repo also supports 'mint submit'${COLOR_RESET}"
+        echo_info "mint submit - OK"
         # mint submit
         do_cmd mint submit
         # mint submit is async, so for now undo the merge in case I have to resubmit
         echoack "Done, undoing the merge so I can keep working"
         do_git reset --merge ORIG_HEAD && do_git checkout "$branch_name"
       else
+        echo_info "mint submit - not supported"
         # git submit
         do_git submit
         if [ "$?" -ne 0 ]; then
@@ -484,10 +484,15 @@ gsubmit() {
         # and done!
       fi
     else
-      echo -e "${COLOR_FG_BOLD_BLUE}repo $repo_url does NOT support 'git submit', pushing...${COLOR_RESET}"
-      # TODO
-      echo "That's TODO - you need to manually push now"
-      echo "Then edit .bash_git and update this command :)"
+      echo_info "git submit - not supported, pushing..."
+      do_git push
+      if [ "$?" -ne 0 ]; then
+        # push failed
+        echoerr "Dang it! \"git push\" failed, undoing the merge"
+        do_git reset --merge ORIG_HEAD && do_git checkout "$branch_name"
+        return 1
+      fi
+      echoack "Success!"
     fi
   fi
 }

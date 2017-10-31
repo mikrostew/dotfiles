@@ -463,7 +463,8 @@ ssh_add_li_key() {
         # add the SSH key using ssh-add with expect
         spawn ssh-add $HOME/.ssh/mistewar_at_linkedin.com_ssh_key
         expect "Enter passphrase for $HOME/.ssh/mistewar_at_linkedin.com_ssh_key:"
-        send "password\r" # TODO use the real password here
+        # SSH key has no password
+        send "\r"
         expect eof
 EndOfSSHExpect
     echo "Added SSH key"

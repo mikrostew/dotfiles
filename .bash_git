@@ -91,22 +91,22 @@ squash_commits() {
         if [ -n "$2" ]; then
             if [ -n "$3" ]; then
                 # multiple lines of commit messages
-                ( set -x; git reset --soft HEAD~${1} && git commit -m "$2" -m "$3")
+                do_git reset --soft HEAD~${1} && do_git commit -m "$2" -m "$3"
             else
                 # "squash" commits by combining all into a single commit (from SO)
-                ( set -x; git reset --soft HEAD~${1} && git commit -m "$2" )
+                do_git reset --soft HEAD~${1} && do_git commit -m "$2"
             fi
             if [ "$?" -ne 0 ]; then
                 echoerr "Dang it! Squashing commits failed somehow"
-                return -1;
+                return 1;
             fi
         else
             echoerr "Come on! You gotta have a commit message"
-            return -1;
+            return 1;
         fi
     else
         echoerr "-_- No changes to squash"
-        return -1;
+        return 1;
     fi
     return 0;
 }
@@ -394,16 +394,16 @@ gfiles() {
     fi
 }
 
-# git - squash commits in current branch into a single commit
+# git - squash commits in current branch into a single commit (git squash branch)
 gsqb() {
     arguments=( '<commit-message> [, <extra-line>]' )
     if in_git_repo && not_on_git_branch 'master' && no_uncommitted_changes && num_arguments_min arguments[@] "$#"
     then
         local branch_name=$(current_git_branch)
         local based_on=$(based_on_master_or_origin $branch_name)
-        # this is better but maybe not exactly what I want in all situations
+        # TODO: this may not be what I want in all situations?
         local num_commits_on_branch="$(commit_diff_on_branch $branch_name $based_on)"
-        echo "$num_commits_on_branch change(s) between '$branch_name' and '$based_on'"
+        echo_info "$num_commits_on_branch change(s) between '$branch_name' and '$based_on'"
         squash_commits "$num_commits_on_branch" "$1" "$2"
     else
         return -1;
@@ -423,7 +423,6 @@ gsubmit() {
       echoerr "Dang it! squashing failed (TODO: auto recovery here?)"
       return 1
     fi
-    read -p "Press any key to continue... " -n1 -s # DEBUG
 
     local review_id="$(git_review_board_id $branch_name)"
     echo_info "Review ID: $review_id"
@@ -489,6 +488,7 @@ gsubmit() {
       if [ "$?" -ne 0 ]; then
         # push failed
         echoerr "Dang it! \"git push\" failed, undoing the merge"
+        # TODO: should have a function for this:
         do_git reset --merge ORIG_HEAD && do_git checkout "$branch_name"
         return 1
       fi
@@ -516,5 +516,5 @@ wait_github() {
     echoack "github available"
 }
 
-# TODO: nuke voyager-web to clean state, update, init, build
-# ( git clean -fdx; mint update; just init)
+# TODO: nuke MP (e.g. voyager-web) to clean state, update, init
+# ( git clean -fdx; mint update; just init )

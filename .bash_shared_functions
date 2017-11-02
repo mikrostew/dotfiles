@@ -2,7 +2,7 @@
 # $DOTFILES_DIR/.bash_shared_functions: library of shared functions, sourced from multiple files
 
 # colors
-source "$DOTFILES_DIR/.bash_colors"
+require "$DOTFILES_DIR/.bash_colors"
 
 
 # echo to stderr with red text

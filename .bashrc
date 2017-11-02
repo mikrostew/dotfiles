@@ -25,6 +25,9 @@ esac
 # directory where the dotfiles repo is checked out
 export DOTFILES_DIR="$(dirname "$(readlink "$HOME/.bashrc")")"
 
+# so I can use 'require' instead of 'source'
+source "$DOTFILES_DIR/.bash_require"
+
 # don't put duplicate lines or lines starting with space in the history
 HISTCONTROL=ignoreboth
 
@@ -43,10 +46,10 @@ shopt -s checkwinsize
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
 # colors:
-source "$DOTFILES_DIR/.bash_colors"
+require "$DOTFILES_DIR/.bash_colors"
 
 # git / svn status
-source "$DOTFILES_DIR/.bash_repo_status"
+require "$DOTFILES_DIR/.bash_repo_status"
 
 # prompt string
 # see https://www.gnu.org/software/bash/manual/bash.html#Controlling-the-Prompt
@@ -64,10 +67,10 @@ PS1="\n($ps_time_24h) "\
 
 
 # aliases and functions
-source "$DOTFILES_DIR/.bash_aliases"
+require "$DOTFILES_DIR/.bash_aliases"
 
 # git aliases and functions
-source "$DOTFILES_DIR/.bash_git"
+require "$DOTFILES_DIR/.bash_git"
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
@@ -91,8 +94,9 @@ export PATH="/usr/local/sbin:$HOME/.yarn/bin:$PATH"
 export RI="-T --format=ansi"
 
 # chruby
+# TODO: is this the same on mac and linux?
 if [ -f "/usr/local/share/chruby/chruby.sh" ]; then
-    source /usr/local/share/chruby/chruby.sh
+    require /usr/local/share/chruby/chruby.sh
     chruby ruby-2
 fi
 
@@ -100,7 +104,7 @@ fi
 export TERM=xterm-256color
 
 # travis gem
-[ -f "$HOME/.travis/travis.sh" ] && source "$HOME/.travis/travis.sh"
+[ -f "$HOME/.travis/travis.sh" ] && require "$HOME/.travis/travis.sh"
 
 # run version checks async to speed up load time
 # should only run into version issues when first setting up a system

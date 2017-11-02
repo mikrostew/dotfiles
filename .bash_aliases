@@ -1,7 +1,7 @@
 # $DOTFILES_DIR/.bash_aliases: contains extra aliases, sourced from .bashrc
 
-source "$DOTFILES_DIR/.bash_colors"
-source "$DOTFILES_DIR/.bash_shared_functions"
+require "$DOTFILES_DIR/.bash_colors"
+require "$DOTFILES_DIR/.bash_shared_functions"
 
 # color support for some commands
 if platform_is_linux; then
@@ -107,6 +107,7 @@ fgn() {
 # update the dotfiles repo and source .bashrc
 updot() {
     ( set +e; set -x; pushd "$DOTFILES_DIR"; git pull --rebase; popd; )
+    unalias -a
     source "$HOME/.bashrc"
 }
 

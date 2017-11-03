@@ -46,9 +46,6 @@ alias bejb='bundle exec jekyll build'
 alias bejs='bundle exec jekyll serve'
 alias bi='bundle install'
 
-# show running processes in OSX, sorted by CPU usage
-alias cpu='top -F -R -o cpu'
-
 # remove trailing newline from a file
 alias rmlf='perl -pi -e "chomp if eof"'
 
@@ -58,6 +55,11 @@ alias rmlf='perl -pi -e "chomp if eof"'
 
 # other functions
 # TODO: put these in .bash_functions or something like that
+
+# show running processes in OSX, sorted by CPU usage
+cpu() {
+    do_cmd top -F -R -o cpu
+}
 
 # show a desktop notification with sound after a long-running command
 # Usage:

@@ -470,8 +470,9 @@ gsubmit() {
         echo_info "mint submit - OK"
         # mint submit
         do_cmd mint submit
+        if [ "$?" -ne 0 ];then echoerr "Failed :("; else echoack "Success :)"; fi
         # mint submit is async, so for now undo the merge in case I have to resubmit
-        echoack "Done, undoing the merge so I can keep working"
+        echo_info "Undoing the merge so I can keep working"
         do_git reset --merge ORIG_HEAD && do_git checkout "$branch_name"
       else
         echo_info "mint submit - not supported"

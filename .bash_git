@@ -119,6 +119,17 @@ do_git() {
 
 # functions
 
+# git - apply a patch to a new branch, named after the input .patch file (from gbpatch)
+gbapply() {
+  arguments=('<patch-file>')
+  if in_git_repo && on_git_branch 'master' && no_uncommitted_changes && num_arguments_ok arguments[@] "$#"
+  then
+    local patch_file="$1"
+    local new_branch_name=$(basename "$patch_file")
+    do_git checkout -b "${new_branch_name%.*}" && do_git apply --check "$patch_file" && do_git apply "$patch_file"
+  fi
+}
+
 # git - list branches (git branch list)
 gbl() {
   do_git branch --list
@@ -127,6 +138,17 @@ gbl() {
 # git - list local and remote branches (git branch list all)
 gbla() {
   do_git branch --list -a
+}
+
+# git - create a patch from the current branch (for use with gbapply)
+gbpatch() {
+  arguments=()
+  if in_git_repo && not_on_git_branch 'master' && no_uncommitted_changes && num_arguments_ok arguments[@] "$#"
+  then
+    local branch_name=$(current_git_branch)
+    local tracking_branch=$(based_on_master_or_origin)
+    do_git format-patch $tracking_branch --stdout > "${branch_name}.patch"
+  fi
 }
 
 # git - checkout branch/tag/hash (git checkout)
@@ -302,27 +324,6 @@ gstat() {
 # git - undo the last commit (git undo)
 gundo() {
   do_git reset --soft HEAD~1
-}
-
-# git - create a patch from the current branch
-gbpatch() {
-    arguments=()
-    if in_git_repo && not_on_git_branch 'master' && no_uncommitted_changes && num_arguments_ok arguments[@] "$#"
-    then
-        local branch_name=$(current_git_branch)
-        ( set -x; git format-patch master --stdout > "${branch_name}.patch" )
-    fi
-}
-
-# git - apply a patch to a new branch, named after the input .patch file
-gbapply() {
-    arguments=('<patch-file>')
-    if in_git_repo && on_git_branch 'master' && no_uncommitted_changes && num_arguments_ok arguments[@] "$#"
-    then
-        local patch_file="$1"
-        local new_branch_name=$(basename "$patch_file")
-        ( set -x; git checkout -b "${new_branch_name%.*}" && git apply --check "$patch_file" && git apply "$patch_file" )
-    fi
 }
 
 # git - (meta) show git functions from this file

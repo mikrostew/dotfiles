@@ -72,6 +72,12 @@ commit_diff_on_branch() {
     fi
 }
 
+# files changed on the current branch
+file_diff_on_branch() {
+  local tracking_branch="$(based_on_master_or_origin)"
+  echo "$(git diff-tree --no-commit-id --name-only -r "$tracking_branch" HEAD)"
+}
+
 based_on_master_or_origin() {
   # adapted from https://stackoverflow.com/a/9753364
   local tracking_branch="$(git rev-parse --abbrev-ref --symbolic-full-name $1@{u} 2>/dev/null)"
@@ -188,6 +194,13 @@ glast() {
   do_git log -n1
 }
 
+# git - run linter on files changed on this branch (git lint changes)
+glc() {
+  # TODO support more than *.js files
+  # TODO use file_diff_on_branch to get the changed files
+  eslint --config ~/dotfiles/.eslintrc.json --plugin extra-rules --rule 'extra-rules/no-commented-out-code: warn'
+}
+
 # git - run mergetool for conflicts (git mergetool)
 gmt() {
   # TODO: different tool for Mac/Linux
@@ -219,7 +232,15 @@ gpr() {
 
 # git - create review for LI workflow (git review)
 gr() {
-  # TODO: use `expect` to automatically answer the prompts
+  # TODO: use `expect` to automatically answer the prompts, which look like this (2 prompts):
+  # + git review
+  # No ACL owners have been added, but review request creation process will continue.
+  # Recommended reviewers are: blah (Blob Loblaw)
+  # Additional reviewers (users and groups), comma-delimited [leave blank to skip]:
+  # Warning: You are missing owners needed on your review to push this change.
+  # Choose "n" to list owners per file and select them individually.
+  # Would you like to add all owners (y or n)?: y
+  # ⠏Review request #1155923 posted.
   do_git review
 }
 

@@ -173,6 +173,12 @@ gbl() {
   do_git branch --list
 }
 
+# git - list branches with RB and status (will be slow)
+gbls() {
+  # TODO the exact command I want here, with other stuff to get this working
+  do_cmd git for-each-ref --format="%(refname)" refs/heads/
+}
+
 # git - list local and remote branches (git branch list all)
 gbla() {
   do_git branch --list -a

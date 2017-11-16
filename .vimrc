@@ -7,8 +7,8 @@ set nocompatible
 " supposedly this prevents security exploits, and I don't use it anyway
 set modelines=0
 
-" default indentation: 4 spaces
-set ts=4 sts=4 sw=4 expandtab
+" default indentation: 2 spaces
+set ts=2 sts=2 sw=2 expandtab
 
 """ basic options
 

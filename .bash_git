@@ -122,6 +122,11 @@ do_git() {
   do_cmd git "$@"
 }
 
+# list all branches
+all_git_branches() {
+  echo $(git for-each-ref --format="%(refname)" refs/heads/ | sed 's|refs/heads/||')
+}
+
 # this RB stuff should probably go in a separate file...
 
 # get the API definition for review board at LinkedIn

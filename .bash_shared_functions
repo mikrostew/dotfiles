@@ -65,3 +65,12 @@ do_cmd() {
   # TODO: eventually take away the 'set -x' once I feel comfortable that I haven't screwed up any commands
   ( set -x; "$@" )
 }
+
+# trim leading and trailing double quotes
+trim_double_quotes() {
+  local string="$1"
+  string="${string#\"}"
+  string="${string%\"}"
+  echo "$string"
+}
+

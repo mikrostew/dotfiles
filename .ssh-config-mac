@@ -6,6 +6,10 @@ Host *
     AddKeysToAgent yes
     UseKeychain yes
 
+# tester account
+Host *.corp.linkedin.com
+    IdentityFile    %d/.ssh/tester_at_linkedin.com_rsa_key
+
 # personal
 Host github.com
     Hostname github.com

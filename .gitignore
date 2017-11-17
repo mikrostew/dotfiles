@@ -24,3 +24,6 @@ bin/
 
 # kitchen log files
 .kitchen/logs
+
+# for this repo
+cache/*.cache

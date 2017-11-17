@@ -131,12 +131,19 @@ all_git_branches() {
 
 # get the API definition for review board at LinkedIn
 get_li_rb_api_def() {
-  # memoize this so I am not making unnecessary network requests - this API is not going to change often
-  if [ -z "$LI_RB_API_DEF" ]; then
-    echoerr "not defined, curling..."
-    LI_RB_API_DEF="$(curl -X GET -H 'Accept: application/json' 'https://rb.corp.linkedin.com/api/' 2>/dev/null)"
+  local api_def=""
+  local cache_file="$DOTFILES_DIR/cache/li-rb-api-def.cache"
+  local cache_file_expired="$(find $cache_file -mtime +1)" # if cache file is older than 1 day
+
+  if [ -n "$cache_file_expired" ]; then
+    echoerr "not cached, requesting..."
+    api_def="$(curl -X GET -H 'Accept: application/json' 'https://rb.corp.linkedin.com/api/' 2>/dev/null)"
+    # TODO check return code for error
+    echo "$api_def" > "$cache_file"
+  else
+    api_def=$(<"$cache_file")
   fi
-  echo "$LI_RB_API_DEF"
+  echo "$api_def"
 }
 
 # get the template to use for querying the RB api
@@ -147,15 +154,15 @@ get_li_rb_uri_template() {
 
 # get RB status
 get_li_rb_status() {
-  local api_uri_template=$(get_li_rb_uri_template "review_request")
-  echo $api_uri_template
-  local request_url=${api_uri_template/\{review_request_id\}/$1}
-  echo $request_url
-  if [ -n "$request_url" ]; then
-    local status=$(curl -X GET -H 'Accept: application/json' "$request_url" 2>/dev/null | jq '.review_request.status')
-    echo "$(trim_double_quotes $status)"
-  else
-    echo ""
+  if [ -n "$1" ]; then
+    local api_uri_template=$(get_li_rb_uri_template "review_request")
+    # echo $api_uri_template
+    local request_url=${api_uri_template/\{review_request_id\}/$1}
+    # echo $request_url
+    if [ -n "$request_url" ]; then
+      local status=$(curl -X GET -H 'Accept: application/json' "$request_url" 2>/dev/null | jq '.review_request.status')
+      echo "$(trim_double_quotes $status)"
+    fi
   fi
 }
 
@@ -180,8 +187,15 @@ gbl() {
 
 # git - list branches with RB and status (will be slow)
 gbls() {
-  # TODO the exact command I want here, with other stuff to get this working
-  do_cmd git for-each-ref --format="%(refname)" refs/heads/
+  for branch in $(all_git_branches); do
+    local review_id=$(git config --get branch.$branch.reviewid)
+    local review_status=$(get_li_rb_status $review_id)
+    if [ -n "$review_id" ]; then
+      printf "${COLOR_FG_BOLD_BLUE}%-25s${COLOR_RESET} https://rb.corp.linkedin.com/r/%-10s %s\n" $branch $review_id $review_status
+    else
+      printf "%-25s\n" $branch
+    fi
+  done
 }
 
 # git - list local and remote branches (git branch list all)

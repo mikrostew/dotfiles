@@ -190,6 +190,14 @@ gbls() {
   for branch in $(all_git_branches); do
     local review_id=$(git config --get branch.$branch.reviewid)
     local review_status=$(get_li_rb_status $review_id)
+    # to make things nicer to look at
+    if [ "$review_status" == "submitted" ]; then
+      review_status="$(echo -e "${COLOR_FG_DARK_GRAY}$review_status${COLOR_RESET}")"
+    fi
+    if [ "$review_status" == "pending" ]; then
+      review_status="$(echo -e "${COLOR_FG_YELLOW}$review_status${COLOR_RESET}")"
+    fi
+
     if [ -n "$review_id" ]; then
       printf "${COLOR_FG_BOLD_BLUE}%-25s${COLOR_RESET} https://rb.corp.linkedin.com/r/%-10s %s\n" $branch $review_id $review_status
     else

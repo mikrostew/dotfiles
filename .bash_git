@@ -262,8 +262,8 @@ glast() {
 # git - run linter on files changed on this branch (git lint changes)
 glc() {
   # TODO support more than *.js files
-  # TODO use file_diff_on_branch to get the changed files
-  eslint --config ~/dotfiles/.eslintrc.json --plugin extra-rules --rule 'extra-rules/no-commented-out-code: warn'
+  local changed_files=$(file_diff_on_branch)
+  echo "$changed_files" | xargs eslint --config ~/dotfiles/.eslintrc.json --plugin extra-rules --rule 'extra-rules/no-commented-out-code: warn'
 }
 
 # git - run mergetool for conflicts (git mergetool)

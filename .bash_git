@@ -264,10 +264,14 @@ glast() {
   do_git log -n1
 }
 
+# TODO support more than *.js files
 # git - run linter on files changed on this branch (git lint changes)
 glc() {
-  # TODO support more than *.js files
   local changed_files=$(file_diff_on_branch)
+  # for eslint, have to have nvm loaded
+  if [ -z "$NVM_BIN" ]; then
+    load_nvm
+  fi
   echo "$changed_files" | xargs eslint --config ~/dotfiles/.eslintrc.json --plugin extra-rules --rule 'extra-rules/no-commented-out-code: warn'
 }
 

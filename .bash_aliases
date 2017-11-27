@@ -399,17 +399,6 @@ reset_xtrace() {
     unset BASH_XTRACEFD
 }
 
-# nvm
-# - this slows down new tab startup, and I use it infrequently
-load_nvm() {
-  export NVM_DIR="$HOME/.nvm"
-  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-  # show version, if that didn't work
-  min_version_check "node" "1.*.*" 'nvm current' 'echo $NVM_BIN'
-}
-
 # courtesy of https://stackoverflow.com/a/3352015
 trim() {
     local var="$*"

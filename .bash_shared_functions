@@ -74,3 +74,15 @@ trim_double_quotes() {
   echo "$string"
 }
 
+# nvm
+# not done automatically, because this slows down new session startup, and I use it infrequently
+load_nvm() {
+  echo_info "Loading nvm..."
+  export NVM_DIR="$HOME/.nvm"
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+  # show version, if that didn't work
+  min_version_check "node" "1.*.*" 'nvm current' 'echo $NVM_BIN'
+}
+

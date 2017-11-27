@@ -127,6 +127,11 @@ all_git_branches() {
   echo $(git for-each-ref --format="%(refname)" refs/heads/ | sed 's|refs/heads/||')
 }
 
+# undo the last merge that was done (usually because something failed)
+git_undo_merge() {
+  do_git reset --merge ORIG_HEAD && do_git checkout "$1"
+}
+
 # this RB stuff should probably go in a separate file...
 
 # get the API definition for review board at LinkedIn
@@ -540,8 +545,8 @@ gsubmit() {
     do_git review dcommit -r "$review_id"
     if [ "$?" -ne 0 ]; then
       # dcommit failed, probably missing a shipit from ACL
-      echoerr "Dang it! \"git review dcommit\" failed, undoing the merge"
-      do_git reset --merge ORIG_HEAD && do_git checkout "$branch_name"
+      echoerr "Dang it! 'git review dcommit' failed, undoing the merge"
+      git_undo_merge "$branch_name"
       return 1
     fi
 
@@ -549,25 +554,25 @@ gsubmit() {
     local repo_url="$(git_repo_url)"
     echo_info "repo URL: '$repo_url'"
     if in_git_submit_repo "$repo_url"; then
-      echo_info "git submit - OK"
+      echo_info "'git submit' - OK"
 
       # also, check product-spec.json for 'mint submit'
       if in_mint_submit_repo; then
-        echo_info "mint submit - OK"
+        echo_info "'mint submit' - OK"
         # mint submit
         do_cmd mint submit
         if [ "$?" -ne 0 ];then echoerr "Failed :("; else echoack "Success :)"; fi
         # mint submit is async, so for now undo the merge in case I have to resubmit
         echo_info "Undoing the merge so I can keep working"
-        do_git reset --merge ORIG_HEAD && do_git checkout "$branch_name"
+        git_undo_merge "$branch_name"
       else
-        echo_info "mint submit - not supported"
+        echo_info "'mint submit' - not supported"
         # git submit
         do_git submit
         if [ "$?" -ne 0 ]; then
           # submit failed, could be precommit, or ACL check, or whatever
-          echoerr "Dang it! \"git submit\" failed, undoing the merge"
-          do_git reset --merge ORIG_HEAD && do_git checkout "$branch_name"
+          echoerr "Dang it! 'git submit' failed, undoing the merge"
+          git_undo_merge "$branch_name"
           return 1
         fi
         echoack "Success! Pulling changes into master"
@@ -576,13 +581,12 @@ gsubmit() {
         # and done!
       fi
     else
-      echo_info "git submit - not supported, pushing..."
+      echo_info "'git submit' - not supported, pushing..."
       do_git push
       if [ "$?" -ne 0 ]; then
         # push failed
-        echoerr "Dang it! \"git push\" failed, undoing the merge"
-        # TODO: should have a function for this:
-        do_git reset --merge ORIG_HEAD && do_git checkout "$branch_name"
+        echoerr "Dang it! 'git push' failed, undoing the merge"
+        git_undo_merge "$branch_name"
         return 1
       fi
       echoack "Success!"

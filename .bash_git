@@ -304,18 +304,91 @@ gpr() {
   do_git pull origin $branch_name --rebase
 }
 
-# git - create review for LI workflow (git review)
+alias grc='gr'
+# git - create review for LI workflow (git review create)
 gr() {
+  # TODO: prompt for things, with defaults
+  # usage: git-review create [-h] [-r REVIEWERS] [-g GROUPS] [--acl-groups]
+  #                        [--branch BRANCH] [--parent PARENT] [--guess-desc]
+  #                        [-m DESCRIPTION] [-b BUGS] [-p] [--debug]
+  #                        [--rbt-flags RBT_FLAGS] [-o] [--release-only]
+  #                        [--owners-only] [--no-prompt] [--open]
+  #                        [--testing-done TESTING_DONE]
+  #
+  # Create a new Gerrit/Review Board request.
+  #
+  # optional arguments:
+  #   -h, --help            show this help message and exit
+  #   -r REVIEWERS, --reviewers REVIEWERS
+  #                         Comma separated list of reviewers
+  #   -g GROUPS, --groups GROUPS
+  #                         Comma separated list of review groups
+  #   --acl-groups          Add acl groups from acl files as reviewers (for
+  #                         notification purposes)
+  #   --branch BRANCH       Local branch to use. [default: master]
+  #   --parent PARENT       Commit to compare review against. Example: --parent
+  #                         HEAD~1. Example2: --parent <<commit hash>>
+  #   --guess-desc          Guess the summary & description.
+  #   -m DESCRIPTION, --description DESCRIPTION
+  #                         Description of the review.
+  #   -b BUGS, --bugs BUGS  Associated JIRA ID(s)
+  #   -p, --publish         Publish review immediately. [default: False]
+  #   --debug               Show debugging information. [default: False]
+  #   --rbt-flags RBT_FLAGS
+  #                         Additional flags to pass on to rbt. Start flags with a
+  #                         space. Example: --rbt-flags " --parent COMMIT_HASH"
+  #   -o, --owners          Add all owners of all files as reviewers, does not add
+  #                         people in acl-of-last-resort.acl or new-service.acl
+  #   --release-only        Add only the release owners as reviewers, does not add
+  #                         people in acl-of-last-resort.acl or new-service.acl
+  #   --owners-only         Add acl owners only (no release owners) of all files
+  #                         as reviewers, does not add people in acl-of-last-
+  #                         resort.acl or new-service.acl
+  #   --no-prompt           Do not prompt for additional reviewers or groups.
+  #   --open                Open your browser with the review request just
+  #                         created.
+  #   --testing-done TESTING_DONE
+  #                         Add to the testing done section.
+
   # TODO: use `expect` to automatically answer the prompts, which look like this (2 prompts):
-  # + git review
-  # No ACL owners have been added, but review request creation process will continue.
-  # Recommended reviewers are: blah (Blob Loblaw)
-  # Additional reviewers (users and groups), comma-delimited [leave blank to skip]:
-  # Warning: You are missing owners needed on your review to push this change.
-  # Choose "n" to list owners per file and select them individually.
-  # Would you like to add all owners (y or n)?: y
-  # ⠏Review request #1155923 posted.
-  do_git review
+  # expect <<EndOfGitReviewExpect
+  #   spawn do_git review create
+  #   # No ACL owners have been added, but review request creation process will continue.
+  #   # Recommended reviewers are: blah (Blob Loblaw)
+  #   expect "Additional reviewers (users and groups), comma-delimited [leave blank to skip]:"
+  #   send "flagship-productivity-reviewers\r"
+  #   # Warning: You are missing owners needed on your review to push this change.
+  #   # Choose "n" to list owners per file and select them individually.
+  #   expect "Would you like to add all owners (y or n)?:"
+  #   send "y\r"
+  #   # ⠏Review request #1155923 posted.
+  #   expect eof
+# EndOfGitReviewExpect
+  do_git review create
+}
+
+# git - apply diff from review board to repo (git review apply)
+gra() {
+  echoerr "TODO"
+  # usage: git-review apply [-h] [-a] [-c {master,review,current}] [-d DIFF]
+  #                         [-l LOCATION] [-n]
+  #                         reviewid
+  #
+  # Given a reviewboard request clean up the repo and apply the diff locally
+  #
+  # positional arguments:
+  #   reviewid              Review id to apply locally
+  #
+  # optional arguments:
+  #   -h, --help            show this help message and exit
+  #   -a, --commit          Commit the patch.
+  #   -c {master,review,current}, --commitid {master,review,current}
+  #                         Apply review diff to fresh checkout of the repo in the
+  #                         review
+  #   -d DIFF, --diff DIFF  Choose the diff to apply
+  #   -l LOCATION, --location LOCATION
+  #                         Choose destination directory.
+  #   -n, --no-new-dir      Apply review diff to the current repo
 }
 
 # git - rebase current branch against master
@@ -349,14 +422,14 @@ grd() {
   fi
 }
 
+# git - update remote tracking branch (git remote update)
+gremu() {
+  do_git remote update
+}
+
 # git - delete *.orig files, usually leftover after merge or rebase with conflicts
 grmorig() {
   ( set -x; git ls-files --others --exclude-standard | grep \.orig$ | xargs rm -v )
-}
-
-# git - update remote tracking branch (git remote update)
-gru() {
-  do_git remote update
 }
 
 # git - show status of RB - which ACLs are needed (git review status)
@@ -367,6 +440,35 @@ grs() {
 # git - update RB with new changes (git review update)
 gru() {
   do_git review update
+  # TODO: prompt for more options:
+  # usage: git-review update [-h] [-r REVIEWID] [-m DIFF_DESCRIPTION]
+  #                          [--update-desc] [--branch BRANCH] [--parent PARENT]
+  #                          [-p] [--debug] [--rbt-flags RBT_FLAGS] [--open]
+  #                          [--testing-done TESTING_DONE]
+  #
+  # Update an existing Review Board request with a new diff.
+  #
+  # optional arguments:
+  #   -h, --help            show this help message and exit
+  #   -r REVIEWID, --reviewid REVIEWID
+  #                         Review Board ID to update.
+  #   -m DIFF_DESCRIPTION, --diff-description DIFF_DESCRIPTION
+  #                         A description of what changed in this update of the
+  #                         review request. This is ignored for new review
+  #                         requests.
+  #   --update-desc         The new contents for the Description field based on
+  #                         the commit message.
+  #   --branch BRANCH       Local branch to use. [default: master]
+  #   --parent PARENT       Commit to compare review against. Example: --parent
+  #                         HEAD~1. Example2: --parent <<commit hash>>
+  #   -p, --publish         Publish review immediately. [default: False]
+  #   --debug               Show debugging information. [default: False]
+  #   --rbt-flags RBT_FLAGS
+  #                         Additional flags to pass on to rbt
+  #   --open                Open your browser with the review request just
+  #                         created.
+  #   --testing-done TESTING_DONE
+  #                         Update the testing done section.
 }
 
 # git - stash uncommitted changes (git stash)

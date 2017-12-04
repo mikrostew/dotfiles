@@ -20,6 +20,18 @@ echo_info() {
     echo -e "${COLOR_FG_BOLD_BLUE}$@${COLOR_RESET}" >&2
 }
 
+# show a glaringly obvious banner for success or failure
+echo_fail_banner() {
+  echoerr "***************";
+  echoerr "*  Failed :(  *";
+  echoerr "***************";
+}
+echo_success_banner() {
+  echoack "****************";
+  echoack "*  Success :)  *";
+  echoack "****************";
+}
+
 # check for exact number of arguments to a function, and print usage if not correct
 # argument(s)
 # - array of expected argument names
@@ -86,4 +98,3 @@ load_nvm() {
   # show version, if that didn't work
   min_version_check "node" "1.*.*" 'nvm current' 'echo $NVM_BIN'
 }
-

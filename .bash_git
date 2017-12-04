@@ -667,9 +667,13 @@ gsubmit() {
         echo_info "'mint submit' - OK"
         # mint submit
         do_cmd mint submit
-        if [ "$?" -ne 0 ];then echoerr "Failed :("; else echoack "Success :)"; fi
+        if [ "$?" -ne 0 ];then
+          echo_fail_banner
+        else
+          echo_success_banner
+        fi
         # mint submit is async, so for now undo the merge in case I have to resubmit
-        echo_info "Undoing the merge so I can keep working"
+        echo_info "Undoing the merge so I can keep working..."
         git_undo_merge "$branch_name"
       else
         echo_info "'mint submit' - not supported"
@@ -677,11 +681,13 @@ gsubmit() {
         do_git submit
         if [ "$?" -ne 0 ]; then
           # submit failed, could be precommit, or ACL check, or whatever
-          echoerr "Dang it! 'git submit' failed, undoing the merge"
+          echo_fail_banner
+          echo_info "Undoing the merge..."
           git_undo_merge "$branch_name"
           return 1
         fi
-        echoack "Success! Pulling changes into master"
+        echo_success_banner
+        echo_info "Pulling changes into master..."
         # rebase to pick up the change
         gpr
         # and done!
@@ -691,11 +697,12 @@ gsubmit() {
       do_git push
       if [ "$?" -ne 0 ]; then
         # push failed
-        echoerr "Dang it! 'git push' failed, undoing the merge"
+        echo_fail_banner
+        echo_info "Undoing the merge..."
         git_undo_merge "$branch_name"
         return 1
       fi
-      echoack "Success!"
+      echo_success_banner
     fi
   fi
 }

@@ -613,6 +613,7 @@ gsqb() {
     fi
 }
 
+# TODO - break this out into a separate script file (including helper functions) so I can more easily share it
 # git - squash commits, rebase, merge, and submit (for LI workflow)
 gsubmit() {
   arguments=( '<commit-message> [, <extra-line>]' )

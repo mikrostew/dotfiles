@@ -615,98 +615,98 @@ gsqb() {
 
 # TODO - break this out into a separate script file (including helper functions) so I can more easily share it
 # git - squash commits, rebase, merge, and submit (for LI workflow)
-gsubmit() {
-  arguments=( '<commit-message> [, <extra-line>]' )
-  if in_git_repo && not_on_git_branch 'master' && no_uncommitted_changes && num_arguments_min arguments[@] "$#"
-  then
-    local branch_name=$(current_git_branch)
-
-    # squash changes on this branch
-    gsqb "$1" "$2"
-    if [ "$?" -ne 0 ]; then
-      echoerr "Dang it! squashing failed (TODO: auto recovery here?)"
-      return 1
-    fi
-
-    local review_id="$(git_review_board_id $branch_name)"
-    echo_info "Review ID: $review_id"
-
-    # rebase against master
-    do_git pull --rebase origin master && do_git checkout master && do_git pull --rebase
-    while [ "$?" -ne 0 ]; do
-      read -p "Press any key to continue... " -n1 -s # DEBUG
-      gmt && do_git rebase --continue
-      # TODO: how to detect that I should abort?
-    done
-
-    # merge into master
-    do_git merge "$branch_name"
-    if [ "$?" -ne 0 ]; then
-      echoerr "Dang it! merge failed - good luck (TODO: auto recovery)"
-      gmt
-      read -p "Press any key to continue... " -n1 -s # DEBUG
-    fi
-
-    # apply the RB to the commit
-    # if this fails, means I don't have the necessary ACLs
-    do_git review dcommit -r "$review_id"
-    if [ "$?" -ne 0 ]; then
-      # dcommit failed, probably missing a shipit from ACL
-      echoerr "Dang it! 'git review dcommit' failed, undoing the merge"
-      git_undo_merge "$branch_name"
-      return 1
-    fi
-
-    # check if can use 'git submit' (LinkedIn), otherwise need to 'git push'
-    local repo_url="$(git_repo_url)"
-    echo_info "repo URL: '$repo_url'"
-    if in_git_submit_repo "$repo_url"; then
-      echo_info "'git submit' - OK"
-
-      # also, check product-spec.json for 'mint submit'
-      if in_mint_submit_repo; then
-        echo_info "'mint submit' - OK"
-        # mint submit
-        do_cmd mint submit
-        if [ "$?" -ne 0 ];then
-          echo_fail_banner
-        else
-          echo_success_banner
-        fi
-        # mint submit is async, so for now undo the merge in case I have to resubmit
-        echo_info "Undoing the merge so I can keep working..."
-        git_undo_merge "$branch_name"
-      else
-        echo_info "'mint submit' - not supported"
-        # git submit
-        do_git submit
-        if [ "$?" -ne 0 ]; then
-          # submit failed, could be precommit, or ACL check, or whatever
-          echo_fail_banner
-          echo_info "Undoing the merge..."
-          git_undo_merge "$branch_name"
-          return 1
-        fi
-        echo_success_banner
-        echo_info "Pulling changes into master..."
-        # rebase to pick up the change
-        gpr
-        # and done!
-      fi
-    else
-      echo_info "'git submit' - not supported, pushing..."
-      do_git push
-      if [ "$?" -ne 0 ]; then
-        # push failed
-        echo_fail_banner
-        echo_info "Undoing the merge..."
-        git_undo_merge "$branch_name"
-        return 1
-      fi
-      echo_success_banner
-    fi
-  fi
-}
+# gsubmit() {
+#   arguments=( '<commit-message> [, <extra-line>]' )
+#   if in_git_repo && not_on_git_branch 'master' && no_uncommitted_changes && num_arguments_min arguments[@] "$#"
+#   then
+#     local branch_name=$(current_git_branch)
+#
+#     # squash changes on this branch
+#     gsqb "$1" "$2"
+#     if [ "$?" -ne 0 ]; then
+#       echoerr "Dang it! squashing failed (TODO: auto recovery here?)"
+#       return 1
+#     fi
+#
+#     local review_id="$(git_review_board_id $branch_name)"
+#     echo_info "Review ID: $review_id"
+#
+#     # rebase against master
+#     do_git pull --rebase origin master && do_git checkout master && do_git pull --rebase
+#     while [ "$?" -ne 0 ]; do
+#       read -p "Press any key to continue... " -n1 -s # DEBUG
+#       gmt && do_git rebase --continue
+#       # TODO: how to detect that I should abort?
+#     done
+#
+#     # merge into master
+#     do_git merge "$branch_name"
+#     if [ "$?" -ne 0 ]; then
+#       echoerr "Dang it! merge failed - good luck (TODO: auto recovery)"
+#       gmt
+#       read -p "Press any key to continue... " -n1 -s # DEBUG
+#     fi
+#
+#     # apply the RB to the commit
+#     # if this fails, means I don't have the necessary ACLs
+#     do_git review dcommit -r "$review_id"
+#     if [ "$?" -ne 0 ]; then
+#       # dcommit failed, probably missing a shipit from ACL
+#       echoerr "Dang it! 'git review dcommit' failed, undoing the merge"
+#       git_undo_merge "$branch_name"
+#       return 1
+#     fi
+#
+#     # check if can use 'git submit' (LinkedIn), otherwise need to 'git push'
+#     local repo_url="$(git_repo_url)"
+#     echo_info "repo URL: '$repo_url'"
+#     if in_git_submit_repo "$repo_url"; then
+#       echo_info "'git submit' - OK"
+#
+#       # also, check product-spec.json for 'mint submit'
+#       if in_mint_submit_repo; then
+#         echo_info "'mint submit' - OK"
+#         # mint submit
+#         do_cmd mint submit
+#         if [ "$?" -ne 0 ];then
+#           echo_fail_banner
+#         else
+#           echo_success_banner
+#         fi
+#         # mint submit is async, so for now undo the merge in case I have to resubmit
+#         echo_info "Undoing the merge so I can keep working..."
+#         git_undo_merge "$branch_name"
+#       else
+#         echo_info "'mint submit' - not supported"
+#         # git submit
+#         do_git submit
+#         if [ "$?" -ne 0 ]; then
+#           # submit failed, could be precommit, or ACL check, or whatever
+#           echo_fail_banner
+#           echo_info "Undoing the merge..."
+#           git_undo_merge "$branch_name"
+#           return 1
+#         fi
+#         echo_success_banner
+#         echo_info "Pulling changes into master..."
+#         # rebase to pick up the change
+#         gpr
+#         # and done!
+#       fi
+#     else
+#       echo_info "'git submit' - not supported, pushing..."
+#       do_git push
+#       if [ "$?" -ne 0 ]; then
+#         # push failed
+#         echo_fail_banner
+#         echo_info "Undoing the merge..."
+#         git_undo_merge "$branch_name"
+#         return 1
+#       fi
+#       echo_success_banner
+#     fi
+#   fi
+# }
 
 # git - branch move (rename current branch)
 gbm() {

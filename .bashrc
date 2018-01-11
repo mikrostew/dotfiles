@@ -84,8 +84,8 @@ if ! shopt -oq posix; then
 fi
 
 # PATH
-# homebrew, yarn
-export PATH="/usr/local/sbin:$HOME/.yarn/bin:$PATH"
+# homebrew, yarn, scripts in this repo
+export PATH="/usr/local/sbin:$HOME/.yarn/bin:$DOTFILES_DIR/scripts:$PATH"
 
 # for bash-completion after upgrading to bash 4.x with homebrew
 [ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion

@@ -12,34 +12,6 @@ in_git_repo() {
 }
 
 # for LinkedIn workflow
-in_git_submit_repo() {
-  # get the JSON showing which repos are supported for 'git submit'
-  local allowed_repos_json="$(curl https://tools.corp.linkedin.com/apps/tools/commit-queue-manager/api/v1/allowed-repos/ 2>/dev/null)"
-  # parse that into a list of only the repo URLs
-  local allowed_repos_text="$(echo $allowed_repos_json | jq '.repos | .[] | .repo_url')"
-  [[ "$allowed_repos_text" =~ "$1" ]]
-  return
-}
-
-in_mint_submit_repo() {
-  if [ -f "$PWD/product-spec.json" ]; then
-    # test if there is something defined for 'mint submit'
-    submit_def="$(cat $PWD/product-spec.json | jq '.build.commands.submit')"
-    [ "$submit_def" != 'null' ]
-    return
-  else
-    # product-spec.json does not exist
-    return
-  fi
-}
-
-# repo url, without the 'ssh://git@' bit at the beginning
-git_repo_url() {
-  # from https://stackoverflow.com/a/16880000
-  echo "$(git ls-remote --get-url origin | sed -e 's/^ssh:\/\///' -e 's/^git@//')"
-}
-
-# for LinkedIn workflow
 git_review_board_id() {
   echo "$(git config --get branch.$1.reviewid)"
 }

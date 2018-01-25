@@ -520,7 +520,7 @@ gfs() {
     if in_git_repo && num_arguments_ok arguments[@] "$#"
     then
         local branch_name=$(current_git_branch)
-        ( set -x; git fetch upstream; git merge "upstream/$branch_name"; git push )
+        ( set -x; git fetch upstream && git merge "upstream/$branch_name" && git push )
     fi
 }
 

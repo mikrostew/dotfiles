@@ -524,6 +524,18 @@ gfs() {
     fi
 }
 
+# git - fork a repo from github and clone locally (Git Fork & Clone)
+gfc() {
+  # TODO - parse input repo URL
+  # TODO - create fork from original repo
+  # api_token="$($HOME/Dropbox/secret/get_api_token github_fork_token)"
+  # curl -X POST -u mikrostew:$api_token https://api.github.com/repos/octocat/Hello-World/forks
+  # TODO - poll to check that repo is created
+  # TODO - clone the repo locally
+  # TODO - cd into that folder
+  # TODO - set upstream to the original repo
+}
+
 # git - merge current branch into master
 gmm() {
     arguments=()

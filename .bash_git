@@ -143,12 +143,22 @@ get_li_rb_status() {
   fi
 }
 
-# TODO - parse input repo URL
+# parse input repo URL, returning user and repo separated by a space
 git_parse_repo_url() {
-  # SSH: git@github.com:octocat/Hello-World.git
-  # HTTPS: https://github.com/octocat/Hello-World.git
-  # return user and repo separated by a space
-  echo "octocat Hello-World"
+  repo_url="$1"
+  if [[ "$repo_url" =~ ^git@ ]]
+  then
+    # example: git@github.com:octocat/Hello-World.git
+    trim_front="${repo_url#git@github.com:}" # remove the initial "git@github.com:"
+    trim_back="${trim_front%.git}" # remove the trailing ".git"
+    echo "${trim_back/\// }" # replace the separating "/" with " "
+  elif [[ "$repo_url" =~ ^https ]]
+  then
+    # example: https://github.com/octocat/Hello-World.git
+    trim_front="${repo_url#https://github.com/}" # remove the initial "https://github.com/"
+    trim_back="${trim_front%.git}" # remove the trailing ".git"
+    echo "${trim_back/\// }" # replace the separating "/" with " "
+  fi
 }
 
 # functions

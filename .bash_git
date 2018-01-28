@@ -143,6 +143,13 @@ get_li_rb_status() {
   fi
 }
 
+# TODO - parse input repo URL
+git_parse_repo_url() {
+  # SSH: git@github.com:octocat/Hello-World.git
+  # HTTPS: https://github.com/octocat/Hello-World.git
+  # return user and repo separated by a space
+  echo "octocat Hello-World"
+}
 
 # functions
 
@@ -526,12 +533,17 @@ gfs() {
 
 # git - fork a repo from github and clone locally (Git Fork & Clone)
 gfc() {
-  # TODO - parse input repo URL
-  user="octocat"
-  repo="Hello-World"
+  # TODO - pass repo URL to this function (once it works...)
+  repo_info=( $(git_parse_repo_url) ) # will split into array because it's 2 strings separated by space
+  user=${repo_info[0]}
+  repo=${repo_info[1]}
+
   # create fork from original repo
-  api_token="$($HOME/Dropbox/secret/get_api_token github_fork_token)"
+  api_token="$($HOME/Dropbox/secret/get-api-token github-fork-token)"
+  echoack "(curl -X POST -u mikrostew:XXXXX 'https://api.github.com/repos/$user/$repo/forks')"
   curl -X POST -u mikrostew:$api_token "https://api.github.com/repos/$user/$repo/forks"
+  # (running that multiple times won't create multiple forks)
+
   # TODO - wait for 5 seconds?
   # TODO - poll to check that repo is created
   # TODO - clone the repo locally (use the 'ssh_url' property from the returned JSON)

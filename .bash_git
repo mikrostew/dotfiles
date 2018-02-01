@@ -418,7 +418,7 @@ gremu() {
 
 # git - delete *.orig files, usually leftover after merge or rebase with conflicts
 grmorig() {
-  ( set -x; git ls-files --others --exclude-standard | grep \.orig$ | xargs rm -v )
+  do_git ls-files --others --exclude-standard | do_cmd grep \.orig$ | do_cmd xargs rm -v
 }
 
 # git - show status of RB - which ACLs are needed (git review status)

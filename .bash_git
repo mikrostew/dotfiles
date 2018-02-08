@@ -533,12 +533,12 @@ gcurr() {
 
 # git - sync current branch to the upstream fork (Git Fork Sync)
 gfs() {
-    arguments=()
-    if in_git_repo && num_arguments_ok arguments[@] "$#"
-    then
-        local branch_name=$(current_git_branch)
-        ( set -x; git fetch upstream && git merge "upstream/$branch_name" && git push )
-    fi
+  arguments=()
+  if in_git_repo && num_arguments_ok arguments[@] "$#"
+  then
+    local branch_name=$(current_git_branch)
+    do_git fetch upstream && do_git merge "upstream/$branch_name" && do_git push
+  fi
 }
 
 # git - fork a repo from github and clone locally (Git Fork & Clone)

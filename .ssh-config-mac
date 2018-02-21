@@ -10,14 +10,6 @@ Host *
 Host *.corp.linkedin.com
     IdentityFile    %d/.ssh/tester_at_linkedin.com_rsa_key
 
-# personal
-Host github.com
-    Hostname github.com
-    User mikrostew
-    # IdentityFile    ~/.ssh/github_mikrostew
-    IdentityFile    ~/.ssh/github_rsa
-    IdentitiesOnly yes
-
 # LinkedIn
 Host *.linkedin.com
 	IdentityFile 	%d/.ssh/%u_at_linkedin.com_ssh_key
@@ -32,12 +24,18 @@ Host laptop
     User mistewar
     IdentityFile    %d/.ssh/%u_at_linkedin.com_ssh_key
 
+# personal
+Host github.com
+    Hostname github.com
+    User mikrostew
+    # IdentityFile    ~/.ssh/github_mikrostew
+    IdentityFile    ~/.ssh/github_rsa
+    IdentitiesOnly yes
+
+Host air
+    Hostname Michaels-Air.attlocal.net
+    User mikrostew
+
 Host pi
     Hostname raspberrypi
     User pi
-
-# # local VMs
-# Host 10.0.*
-#     IdentityFile ~/.ssh/aspera_rsa
-#     IdentitiesOnly yes
-

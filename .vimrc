@@ -148,3 +148,6 @@ let g:slime_target="tmux"
 " this will use the second pane of the window I am currently in
 let g:slime_default_config = {"socket_name": "default", "target_pane": ":1.2"}
 
+" don't flash the screen or do any bells, which are annoying
+set vb t_vb=
+

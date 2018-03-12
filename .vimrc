@@ -152,3 +152,13 @@ let g:slime_default_config = {"socket_name": "default", "target_pane": ":1.2"}
 " don't flash the screen or do any bells, which are annoying
 set vb t_vb=
 
+" syntastic settings
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+

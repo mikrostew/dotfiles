@@ -1,5 +1,6 @@
 " use pathogen.vim for managing plugins (https://github.com/tpope/vim-pathogen)
 execute pathogen#infect()
+syntax on
 filetype plugin indent on
 
 " don't need to be compatible with vi

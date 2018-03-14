@@ -153,6 +153,7 @@ let g:slime_default_config = {"socket_name": "default", "target_pane": ":1.2"}
 set vb t_vb=
 
 " syntastic settings
+" (from https://medium.com/@hpux/vim-and-eslint-16fa08cc580f)
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
@@ -162,5 +163,5 @@ let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 let g:syntastic_javascript_checkers = ['eslint']
-let g:syntastic_javascript_eslint_exe = 'npm run lint --'
+let g:syntastic_javascript_eslint_exe = 'yarn run eslint --'
 

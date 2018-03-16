@@ -152,6 +152,10 @@ let g:slime_default_config = {"socket_name": "default", "target_pane": ":1.2"}
 " don't flash the screen or do any bells, which are annoying
 set vb t_vb=
 
+" statusline things (from https://stackoverflow.com/a/32059626)
+" [buffer number] followed by filename:
+set statusline=[%n]\ %t
+
 " syntastic settings
 " (from https://medium.com/@hpux/vim-and-eslint-16fa08cc580f)
 set statusline+=%#warningmsg#
@@ -164,4 +168,7 @@ let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 let g:syntastic_javascript_checkers = ['eslint']
 let g:syntastic_javascript_eslint_exe = 'yarn run eslint --'
+
+" show line#:column# on the right hand side
+set statusline+=%=%l:%c
 

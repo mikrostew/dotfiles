@@ -172,3 +172,9 @@ let g:syntastic_javascript_eslint_exe = 'yarn run eslint --ignore-pattern "!node
 " show line#:column# on the right hand side
 set statusline+=%=%l:%c
 
+" font
+" (install IBM plex font from https://github.com/IBM/plex)
+if has("mac") || has("macunix")
+  set gfn=IBM\ Plex\ Mono:h14,Source\ Code\ Pro:h15,Menlo:h15
+endif
+

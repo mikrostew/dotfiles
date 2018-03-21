@@ -56,9 +56,13 @@ alias rmlf='perl -pi -e "chomp if eof"'
 # other functions
 # TODO: put these in .bash_functions or something like that
 
-# show running processes in OSX, sorted by CPU usage
+# show running processes, sorted by CPU usage
 cpu() {
+  if platform_is_mac; then
     do_cmd top -F -R -o cpu
+  else
+    do_cmd top -o +%CPU
+  fi
 }
 
 # show a desktop notification with sound after a long-running command

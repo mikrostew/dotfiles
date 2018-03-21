@@ -21,7 +21,6 @@ set showcmd                     " show partial command in the last line on the s
 set hidden                      " buffer is hidden when abandoned (instead of unloaded)
 set wildmenu                    " enhanced command line completion
 set wildmode=list:longest       " list matches, and complete to the longest common string
-set visualbell                  " use visual bell instead of beeping
 set cursorline                  " highlight the screen line of the cursor
 set ttyfast                     " indicates a fast terminal connection, should be smoother
 set ruler                       " show the line and column of the cursor position
@@ -150,7 +149,9 @@ let g:slime_target="tmux"
 let g:slime_default_config = {"socket_name": "default", "target_pane": ":1.2"}
 
 " don't flash the screen or do any bells, which are annoying
-set vb t_vb=
+" (from http://vim.wikia.com/wiki/Disable_beeping)
+set noerrorbells visualbell t_vb=
+autocmd GUIEnter * set visualbell t_vb=
 
 " statusline things (from https://stackoverflow.com/a/32059626)
 " [buffer number] followed by filename:

@@ -85,7 +85,12 @@ fi
 
 # PATH
 # homebrew, yarn, scripts in this repo
-export PATH="/usr/local/sbin:$HOME/.yarn/bin:$DOTFILES_DIR/scripts:$PATH"
+path_homebrew="/usr/local/sbin"
+path_yarn="$HOME/.yarn/bin"
+path_scripts="$DOTFILES_DIR/scripts"
+path_rust="$HOME/.cargo/bin"
+# all together now
+export PATH="$path_homebrew:$path_yarn:$path_scripts:$path_rust:$PATH"
 
 # for bash-completion after upgrading to bash 4.x with homebrew
 [ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion

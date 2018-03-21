@@ -5,6 +5,8 @@ Host *
     PubkeyAcceptedKeyTypes +ssh-dss
     AddKeysToAgent yes
     UseKeychain yes
+    # need this after upgrade to 10.13.3
+    Ciphers aes128-cbc,3des-cbc
 
 # tester account
 Host *.corp.linkedin.com

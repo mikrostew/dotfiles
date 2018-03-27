@@ -118,8 +118,9 @@ get_li_rb_api_def() {
   local cache_file_expired="$(find $cache_file -mtime +1)" # if cache file is older than 1 day
 
   if [ -n "$cache_file_expired" ]; then
-    echoerr "not cached, requesting..."
+    echoerr "RB API definitions not cached, requesting..."
     api_def="$(curl -X GET -H 'Accept: application/json' 'https://rb.corp.linkedin.com/api/' 2>/dev/null)"
+    echo_info "return code: $?"
     # TODO check return code for error
     echo "$api_def" > "$cache_file"
   else
@@ -556,11 +557,10 @@ gfc() {
     username=${repo_info[0]}
     repo_name=${repo_info[1]}
 
-    # create fork from original repo
-    # TODO - make this a separate function?
+    # create fork from original repo (TODO - make this a separate function?)
     api_token="$($HOME/Dropbox/secret/get-api-token github-fork-token)"
     # not using do_cmd here because I don't want the API token echoed to the screen
-    echoack "(curl -X POST -u mikrostew:XXXXX 'https://api.github.com/repos/$username/$repo_name/forks')"
+    echo_ack "(curl -X POST -u mikrostew:XXXXX 'https://api.github.com/repos/$username/$repo_name/forks')"
     output="$(curl -X POST -u mikrostew:$api_token "https://api.github.com/repos/$username/$repo_name/forks")"
     # (running that multiple times won't create multiple forks)
     # TODO - check output for error
@@ -577,10 +577,15 @@ gfc() {
       echo_info "Waiting 10 more seconds and retrying once..."
       sleep 10
       do_git clone "$ssh_url" "$repo_name"
+      # if it failed again then something is wrong
+      if [ "$?" -ne 0 ]; then
+        return
+      fi
     fi
 
     # cd into that folder && set upstream to the original repo
     cd "$repo_name" && do_git remote add upstream "$input_url"
+    do_git remote -v
   fi
 }
 

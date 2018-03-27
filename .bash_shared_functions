@@ -31,7 +31,7 @@ echo_info() {
 # for deprecations
 # echo to stderr with yellow text
 echo_dep() {
-  echo -e "${COLOR_FG_BOLD_YELLOW}$@${COLOR_RESET}" >&2
+  echo -e "${COLOR_FG_BOLD_YELLOW}[DEPRECATION] $@${COLOR_RESET}" >&2
 }
 
 # show a glaringly obvious banner for success or failure

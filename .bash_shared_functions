@@ -7,29 +7,43 @@ require "$DOTFILES_DIR/.bash_colors"
 
 # echo to stderr with red text
 echoerr() {
-    echo -e "${COLOR_FG_RED}$@${COLOR_RESET}" >&2
+  echo_dep "use echo_err() instead of echoerr()"
+  echo_err "$@"
+}
+echo_err() {
+  echo -e "${COLOR_FG_RED}$@${COLOR_RESET}" >&2
 }
 
 # echo to stderr with green text
 echoack() {
-    echo -e "${COLOR_FG_GREEN}$@${COLOR_RESET}" >&2
+  echo_dep "use echo_ack() instead of echoack()"
+  echo_ack "$@"
+}
+echo_ack() {
+  echo -e "${COLOR_FG_GREEN}$@${COLOR_RESET}" >&2
 }
 
 # echo to stderr with blue text
 echo_info() {
-    echo -e "${COLOR_FG_BOLD_BLUE}$@${COLOR_RESET}" >&2
+  echo -e "${COLOR_FG_BOLD_BLUE}$@${COLOR_RESET}" >&2
+}
+
+# for deprecations
+# echo to stderr with yellow text
+echo_dep() {
+  echo -e "${COLOR_FG_BOLD_YELLOW}$@${COLOR_RESET}" >&2
 }
 
 # show a glaringly obvious banner for success or failure
 echo_fail_banner() {
-  echoerr "***************";
-  echoerr "*  Failed :(  *";
-  echoerr "***************";
+  echo_err "***************";
+  echo_err "*  Failed :(  *";
+  echo_err "***************";
 }
 echo_success_banner() {
-  echoack "****************";
-  echoack "*  Success :)  *";
-  echoack "****************";
+  echo_ack "****************";
+  echo_ack "*  Success :)  *";
+  echo_ack "****************";
 }
 
 # check for exact number of arguments to a function, and print usage if not correct
@@ -43,9 +57,9 @@ num_arguments_ok() {
     if [ "$expected_num_args" -ne "$num_args" ]
     then
         # $FUNCNAME is an array of the current call stack
-        echoerr "Come on! This is how to use this:"
-        echoerr ""
-        echoerr "  ${FUNCNAME[1]} ${expected_args[*]}"
+        echo_err "Come on! This is how to use this:"
+        echo_err ""
+        echo_err "  ${FUNCNAME[1]} ${expected_args[*]}"
         return -1
     fi
     return 0
@@ -63,9 +77,9 @@ num_arguments_min() {
     if [ "$num_args" -lt "$expected_num_args" ]
     then
         # $FUNCNAME is an array of the current call stack
-        echoerr "Come on! This is how to use this:"
-        echoerr ""
-        echoerr "  ${FUNCNAME[1]} ${expected_args[*]}"
+        echo_err "Come on! This is how to use this:"
+        echo_err ""
+        echo_err "  ${FUNCNAME[1]} ${expected_args[*]}"
         return -1
     fi
     return 0
@@ -74,7 +88,7 @@ num_arguments_min() {
 # echo the input command and arguments, then run the command
 do_cmd() {
   # echo -e "${COLOR_FG_GREEN}($@)${COLOR_RESET}" >&2
-  echoack "($@)"
+  echo_ack "($@)"
   # TODO: eventually take away the 'set -x' once I feel comfortable that I haven't screwed up any commands
   ( set -x; "$@" )
 }

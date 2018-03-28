@@ -112,3 +112,15 @@ load_nvm() {
   # show version, if that didn't work
   min_version_check "node" "1.*.*" 'nvm current' 'echo $NVM_BIN'
 }
+
+# notion
+# not done automatically, because some of the shims are not yet implemented
+load_notion() {
+  echo_info "Loading notion..."
+
+  export NOTION_HOME="$HOME/.notion"
+  export PATH="${NOTION_HOME}/bin:${NOTION_HOME}/shim:$PATH"
+
+  # check version
+  min_version_check "notion" "0.1.*" 'notion --version' 'echo $NOTION_HOME'
+}

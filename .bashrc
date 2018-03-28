@@ -135,3 +135,6 @@ fi
 
 bashrc_run_time=$((bashrc_finish - bashrc_start))
 echo "~/.bashrc loaded in ${bashrc_run_time}ms"
+
+# installers like to add things to the end of this file, so prevent that stuff from running
+return 0

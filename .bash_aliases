@@ -103,10 +103,10 @@ fgn() {
   local recent_job_info="$(jobs %% 2>/dev/null)"
   if [ -n "$recent_job_info" ]; then
     local cmd="$(echo "$recent_job_info" | sed -e 's/^\[[0-9]*\].\ *[A-Za-z]*\ *//' )"
-    echoack "(fg; notify '$cmd')"
+    echo_ack "(fg; notify '$cmd')"
     fg; notify "$cmd"
   else
-    echoerr "(no background jobs running)"
+    echo_err "(no background jobs running)"
   fi
 }
 

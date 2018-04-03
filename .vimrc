@@ -168,7 +168,7 @@ let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 let g:syntastic_javascript_checkers = ['eslint']
-let g:syntastic_javascript_eslint_exe = 'yarn run eslint --ignore-pattern "!node_modules/*"'
+let g:syntastic_javascript_eslint_exe = 'yarn run lint'
 
 " show line#:column# on the right hand side
 set statusline+=%=%l:%c

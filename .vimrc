@@ -168,7 +168,10 @@ let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 let g:syntastic_javascript_checkers = ['eslint']
-let g:syntastic_javascript_eslint_exe = 'yarn run lint'
+" thanks to https://github.com/vim-syntastic/syntastic/issues/2102
+" (script in $DOTFILES/scripts/)
+let g:syntastic_javascript_eslint_exec = 'eslint-for-vim'
+let g:syntastic_javascript_eslint_exe = 'npm run lint --'
 
 " show line#:column# on the right hand side
 set statusline+=%=%l:%c

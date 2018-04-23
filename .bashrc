@@ -121,7 +121,8 @@ export TERM=xterm-256color
   min_version_check "expect" "5.*.*" "expect -version | awk '{print \$3}'";
   min_version_check "bats" "0.4.*" "bats --version | awk '{print \$2}'";
   min_version_check "curl" "7.*.*" "curl --version | head -n1 | awk '{print \$2}'";
-  # min_version_check "sublime" "3143.*.*" "sublime --version | awk '{print \$4}'";
+  # sponge doesn't give a version, so as long as it exists that's fine
+  min_version_check "sponge" "1.0.0" "which sponge >/dev/null && echo 1.0.0";
 ) & disown
 
 # TODO: verify that the links to these files haven't changed (run async)

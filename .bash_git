@@ -598,18 +598,18 @@ gmm() {
     fi
 }
 
-# git - move recent commits to a new branch (instead of master)
+# git - move recent commits from master to a new branch
 gmove() {
-    arguments=( '<new-branch-name>' )
-    if in_git_repo && on_git_branch 'master' && num_arguments_ok arguments[@] "$#"
-    then
-        local num_commits="$(commit_diff_on_branch 'master' 'origin/master')"
-        echo "${num_commits} commit(s) will be moved to branch '$1'"
-        if [ "$num_commits" != "" ] && [ "$num_commits" -gt 0 ]; then
-            # (see http://stackoverflow.com/a/22654961 for details)
-            ( set -x; git checkout -b "$1"; git branch -f master HEAD~${num_commits}; git branch -u origin/master "$1" )
-        fi
+  arguments=( '<new-branch-name>' )
+  if in_git_repo && on_git_branch 'master' && num_arguments_ok arguments[@] "$#"
+  then
+    local num_commits="$(commit_diff_on_branch 'master' 'origin/master')"
+    echo "${num_commits} commit(s) will be moved to branch '$1'"
+    if [ "$num_commits" != "" ] && [ "$num_commits" -gt 0 ]; then
+      # (see http://stackoverflow.com/a/22654961 for details)
+      do_git checkout -b "$1" && do_git branch -f master HEAD~${num_commits} && do_git branch -u origin/master "$1"
     fi
+  fi
 }
 
 # git - rebase current branch against master (using 'mint update' instead of 'git pull')
@@ -658,11 +658,11 @@ gsqb() {
 
 # git - branch move (rename current branch)
 gbm() {
-    arguments=( '<new-branch-name>' )
-    if in_git_repo && num_arguments_ok arguments[@] "$#"
-    then
-        ( set -x; git branch --move "$1" )
-    fi
+  arguments=( '<new-branch-name>' )
+  if in_git_repo && num_arguments_ok arguments[@] "$#"
+  then
+    do_git branch --move "$1"
+  fi
 }
 
 # TODO: generalize this for whatever input URL

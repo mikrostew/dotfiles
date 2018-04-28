@@ -110,7 +110,7 @@ load_nvm() {
   [ -s "$NVM_DIR/bash_completion" ] && source "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
   # show version, if that didn't work
-  min_version_check "node" "1.*.*" 'nvm current' 'echo $NVM_BIN'
+  min_version_check "node" "1.*.*" 'nvm current' 'brew install node' 'echo $NVM_BIN'
 }
 
 # notion
@@ -122,5 +122,5 @@ load_notion() {
   export PATH="${NOTION_HOME}/bin:${NOTION_HOME}/shim:$PATH"
 
   # check version
-  min_version_check "notion" "0.1.*" 'notion --version' 'echo $NOTION_HOME'
+  min_version_check "notion" "0.1.*" 'notion --version' 'TODO' 'echo $NOTION_HOME'
 }

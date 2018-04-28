@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # Create links for dotfiles
 
 # colors
@@ -34,7 +35,6 @@ links[".bundle"]=".bundle"
 links[".rubocop.yml"]=".rubocop.yml"
 
 # platform-specific
-platform=''
 uname_str=$(uname)
 if [ "$uname_str" == "Darwin" ]; then  # Mac
     # ssh

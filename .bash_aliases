@@ -166,16 +166,17 @@ remove_trailing_lf() {
 # $1 - program/command/language name
 # $2 - minimum version required
 # $3 - how to get the version of this (will be eval-ed)
-# $4 - [optional] path to where this is installed, instead of using `which` (will be eval-ed)
+# $4 - command to install this
+# $5 - [optional] path to where this is installed, instead of using `which` (will be eval-ed)
 min_version_check() {
   # 1) check if this is installed
-  if [ -n "$4" ]; then
-    install_path=$(eval "$4")
+  if [ -n "$5" ]; then
+    install_path=$(eval "$5")
   else
     install_path=$(which "$1")
   fi
   if [ -z "$install_path" ]; then
-    echo -e "$1 : ${COLOR_FG_RED}not installed (want >= $2)${COLOR_RESET}"
+    echo -e "$1 : ${COLOR_FG_RED}not installed (want >= $2), install with '${4:-(unknown command)}'${COLOR_RESET}"
     return 1
   fi
   # 2) check the minimum version

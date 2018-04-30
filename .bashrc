@@ -125,7 +125,7 @@ export TERM=xterm-256color
   min_version_check "sponge" "1.0.0" "which sponge >/dev/null && echo 1.0.0" 'brew install moreutils';
 ) & disown
 
-# TODO: verify that the links to these files haven't changed (run async)
+# TODO: verify that the links to these dotfiles haven't changed (run async)
 
 
 if platform_is_mac; then
@@ -136,6 +136,9 @@ fi
 
 bashrc_run_time=$((bashrc_finish - bashrc_start))
 echo "~/.bashrc loaded in ${bashrc_run_time}ms"
+
+# show uptime, like " 9:45  up 2 days, 17:09, 7 users, load averages: 1.63 3.29 5.36"
+echo "$(uptime)"
 
 # installers like to add things to the end of this file, so prevent that stuff from running
 return 0

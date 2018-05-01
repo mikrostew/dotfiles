@@ -254,6 +254,12 @@ gg() {
   do_git gui
 }
 
+# git - show commit log (input number of logs to show, default is 4)
+gl() {
+  num_logs="${1:-4}" # default to showing the last 4 logs
+  do_git log -n$num_logs
+}
+
 # git - show last commit info - (git last)
 glast() {
   do_git log -n1

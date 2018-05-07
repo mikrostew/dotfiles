@@ -49,13 +49,13 @@ vnoremap <tab> %
 
 """ long line handling
 
-set wrap                        " wrap long lines
-set textwidth=96                " at 96 chars I can fit 2 windows side-by-side in tmux
-set formatoptions=qrn1          " text formatting options
-" q - allows hard-wrapping comments with "gq"
-" r - automatically insert the current comment leader after <Enter> in Insert mode
-" n - recognize numbered lists
-" 1 - don't break a line after a 1-letter word
+" set wrap                        " wrap long lines
+" set textwidth=96                " at 96 chars I can fit 2 windows side-by-side in tmux
+" set formatoptions=qrn1          " text formatting options
+" " q - allows hard-wrapping comments with "gq"
+" " r - automatically insert the current comment leader after <Enter> in Insert mode
+" " n - recognize numbered lists
+" " 1 - don't break a line after a 1-letter word
 
 """ whitespace
 

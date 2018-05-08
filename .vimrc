@@ -182,3 +182,7 @@ if has("mac") || has("macunix")
   set gfn=IBM\ Plex\ Mono:h14,Source\ Code\ Pro:h15,Menlo:h15
 endif
 
+" vim-go
+" I don't use this much anymore, so I don't care about version warnings
+let g:go_version_warning = 0
+

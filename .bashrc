@@ -128,7 +128,7 @@ export TERM=xterm-256color
 # TODO: verify that the links to these dotfiles haven't changed (run async)
 
 # show uptime, like " 9:45  up 2 days, 17:09, 7 users, load averages: 1.63 3.29 5.36"
-echo -e "$COLOR_FG_BOLD_BLUE$(uptime)$COLOR_RESET"
+echo -e "uptime: $COLOR_FG_BOLD_BLUE$(uptime)$COLOR_RESET"
 
 if platform_is_mac; then
   bashrc_finish=$(gdate +%s%3N)
@@ -137,7 +137,7 @@ else
 fi
 
 bashrc_run_time=$((bashrc_finish - bashrc_start))
-echo -e "$COLOR_FG_BOLD_BLUE~/.bashrc loaded in ${bashrc_run_time}ms$COLOR_RESET"
+echo -e "~/.bashrc loaded in $COLOR_FG_BOLD_BLUE${bashrc_run_time}ms$COLOR_RESET"
 
 # installers like to add things to the end of this file, so prevent that stuff from running
 return 0

@@ -98,13 +98,6 @@ export PATH="$path_homebrew:$path_yarn:$path_scripts:$path_rust:$PATH"
 # formatting for `ri` documentation
 export RI="-T --format=ansi"
 
-# chruby
-# TODO: is this the same on mac and linux?
-if [ -f "/usr/local/share/chruby/chruby.sh" ]; then
-    require /usr/local/share/chruby/chruby.sh
-    chruby ruby-2
-fi
-
 # 256 color support
 export TERM=xterm-256color
 
@@ -115,7 +108,6 @@ export TERM=xterm-256color
 # should only run into version issues when first setting up a system
 (
   min_version_check "bash" "4.*.*" "bash --version | sed -n -E 's/[^0-9]*([0-9]+\.[0-9]+\.[0-9]+[^ ]*).*/\1/p'";
-  min_version_check "ruby" "2.2.*" 'echo $RUBY_VERSION' '(something with ruby-install)' 'echo $RUBY_ROOT';
   min_version_check "git" "2.14.*" "git --version | awk '{print \$3}'" 'brew install git';
   min_version_check "jq" "1.5.*" "jq --version | sed 's/jq-//'" 'brew install jq';
   min_version_check "expect" "5.*.*" "expect -version | awk '{print \$3}'" 'brew install expect';

@@ -124,3 +124,16 @@ load_notion() {
   # check version
   min_version_check "notion" "0.1.*" 'notion --version' 'TODO' 'echo $NOTION_HOME'
 }
+
+# chruby
+# not done automatically because I infrequently use ruby and this clutters the path
+load_chruby() {
+  echo_info "Loading chruby..."
+  # TODO: is this the same on mac and linux?
+  if [ -f "/usr/local/share/chruby/chruby.sh" ]; then
+    source /usr/local/share/chruby/chruby.sh
+    chruby ruby-2
+  fi
+
+  min_version_check "ruby" "2.2.*" 'echo $RUBY_VERSION' '(something with ruby-install)' 'echo $RUBY_ROOT';
+}

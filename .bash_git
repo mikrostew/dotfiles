@@ -302,6 +302,7 @@ gpr() {
   # so try doing the full command (https://stackoverflow.com/a/35844073)
   local branch_name=$(current_git_branch)
   do_git pull origin $branch_name --rebase
+  # TODO: should check for failure, and if so try splitting this into 2 commands a la https://stackoverflow.com/a/35844073
 }
 
 alias grc='gr'

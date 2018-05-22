@@ -119,8 +119,12 @@ updot() {
 
 # show the TODOs I have left in the code (outputs the lines in each file to /dev/tty)
 todo() {
-    local in_dir="${1:-.}" # default to current directory ('.')
-    ( set -x; grep --color=always -nrI --exclude-dir bower_components --exclude-dir node_modules --exclude-dir target "TODO" "$in_dir" | tee /dev/tty | wc -l )
+  local in_dir="${1:-.}" # default to current directory ('.')
+  grep --color=always -nrI --exclude-dir bower_components --exclude-dir node_modules --exclude-dir target --exclude-dir .git "TODO" "$in_dir"\
+    | tee /dev/tty\
+    | wc -l\
+    | tr -d '[:space:]'\
+    | echo -e "${COLOR_FG_BOLD_BLUE}total: $(cat -)${COLOR_RESET}"
 }
 
 # change directory and list

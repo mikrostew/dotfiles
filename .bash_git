@@ -262,7 +262,7 @@ gl() {
 
 # git - show last commit info - (git last)
 glast() {
-  do_git log -n1
+  do_git log -n1 --pretty=fuller
 }
 
 # git - show commit log in one-line format (git log oneline)

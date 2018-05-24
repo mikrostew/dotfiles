@@ -265,6 +265,16 @@ glast() {
   do_git log -n1
 }
 
+# git - show commit log in one-line format (git log oneline)
+glo() {
+  do_git log --pretty=format:'%Cred%h%Creset - %Cgreen%ci%Creset %C(yellow)<%an>%Creset %s'
+}
+
+# git - show commit log in one-line format, no color (git log oneline nocolor)
+glon() {
+  do_git log --pretty=format:'%h - %ci <%an> %s'
+}
+
 # TODO support more than *.js files
 # git - run linter on files changed on this branch (git lint changes)
 glc() {

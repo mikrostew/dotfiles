@@ -296,7 +296,7 @@ gp() {
   do_git push
 }
 
-# git - push current local branch to origin, and set upstream
+# git - push current local branch to origin, and set upstream (git push branch)
 gpb() {
   arguments=()
   if in_git_repo && not_on_git_branch 'master' && num_arguments_ok arguments[@] "$#"
@@ -306,13 +306,17 @@ gpb() {
   fi
 }
 
-# git - pull changes from origin, with rebase (git pull rebase)
+# git - pull changes from origin and rebase local changes (git pull rebase)
 gpr() {
-  # sometimes `git pull --rebase` fails with "fatal: Cannot rebase onto multiple branches."
-  # so try doing the full command (https://stackoverflow.com/a/35844073)
   local branch_name=$(current_git_branch)
-  do_git pull origin $branch_name --rebase
-  # TODO: should check for failure, and if so try splitting this into 2 commands a la https://stackoverflow.com/a/35844073
+  # sometimes `git pull --rebase` fails with "fatal: Cannot rebase onto multiple branches."
+  # could try doing the full command (from https://stackoverflow.com/a/35844073)
+  # do_git pull origin "$branch_name" --rebase
+  # but sometimes that also fails,
+  # so be more explicit and split it into 2 commands (adapted from https://stackoverflow.com/a/35844073)
+  # (also prunes, which is a nice benefit)
+  do_git fetch --all --prune
+  do_git rebase "origin/$branch_name"
 }
 
 alias grc='gr'

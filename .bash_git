@@ -319,68 +319,6 @@ gpr() {
   do_git rebase "origin/$branch_name"
 }
 
-alias grc='gr'
-# git - create review for LI workflow (git review create)
-gr() {
-  # TODO: prompt for things, with defaults
-  # usage: git-review create [-h] [-r REVIEWERS] [-g GROUPS] [--acl-groups]
-  #                        [--branch BRANCH] [--parent PARENT] [--guess-desc]
-  #                        [-m DESCRIPTION] [-b BUGS] [-p] [--debug]
-  #                        [--rbt-flags RBT_FLAGS] [-o] [--release-only]
-  #                        [--owners-only] [--no-prompt] [--open]
-  #                        [--testing-done TESTING_DONE]
-  #
-  # Create a new Gerrit/Review Board request.
-  #
-  # optional arguments:
-  #   -h, --help            show this help message and exit
-  #   -r REVIEWERS, --reviewers REVIEWERS
-  #                         Comma separated list of reviewers
-  #   -g GROUPS, --groups GROUPS
-  #                         Comma separated list of review groups
-  #   --acl-groups          Add acl groups from acl files as reviewers (for
-  #                         notification purposes)
-  #   --branch BRANCH       Local branch to use. [default: master]
-  #   --parent PARENT       Commit to compare review against. Example: --parent
-  #                         HEAD~1. Example2: --parent <<commit hash>>
-  #   --guess-desc          Guess the summary & description.
-  #   -m DESCRIPTION, --description DESCRIPTION
-  #                         Description of the review.
-  #   -b BUGS, --bugs BUGS  Associated JIRA ID(s)
-  #   -p, --publish         Publish review immediately. [default: False]
-  #   --debug               Show debugging information. [default: False]
-  #   --rbt-flags RBT_FLAGS
-  #                         Additional flags to pass on to rbt. Start flags with a
-  #                         space. Example: --rbt-flags " --parent COMMIT_HASH"
-  #   -o, --owners          Add all owners of all files as reviewers, does not add
-  #                         people in acl-of-last-resort.acl or new-service.acl
-  #   --release-only        Add only the release owners as reviewers, does not add
-  #                         people in acl-of-last-resort.acl or new-service.acl
-  #   --owners-only         Add acl owners only (no release owners) of all files
-  #                         as reviewers, does not add people in acl-of-last-
-  #                         resort.acl or new-service.acl
-  #   --no-prompt           Do not prompt for additional reviewers or groups.
-  #   --open                Open your browser with the review request just
-  #                         created.
-  #   --testing-done TESTING_DONE
-  #                         Add to the testing done section.
-
-  # TODO: use `expect` to automatically answer the prompts, which look like this (2 prompts):
-  # expect <<EndOfGitReviewExpect
-  #   spawn do_git review create
-  #   # No ACL owners have been added, but review request creation process will continue.
-  #   # Recommended reviewers are: blah (Blob Loblaw)
-  #   expect "Additional reviewers (users and groups), comma-delimited [leave blank to skip]:"
-  #   send "flagship-productivity-reviewers\r"
-  #   # Warning: You are missing owners needed on your review to push this change.
-  #   # Choose "n" to list owners per file and select them individually.
-  #   expect "Would you like to add all owners (y or n)?:"
-  #   send "y\r"
-  #   # ⠏Review request #1155923 posted.
-  #   expect eof
-# EndOfGitReviewExpect
-  do_git review create
-}
 
 # git - apply diff from review board to repo (git review apply)
 gra() {

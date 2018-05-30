@@ -171,13 +171,17 @@ set statusline+=%*
 
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_open = 0
 let g:syntastic_check_on_wq = 0
 let g:syntastic_javascript_checkers = ['eslint']
 " thanks to https://github.com/vim-syntastic/syntastic/issues/2102
 " (script in $DOTFILES/scripts/)
 let g:syntastic_javascript_eslint_exec = 'eslint-for-vim'
 let g:syntastic_javascript_eslint_exe = 'npm run lint --'
+" disable syntastic by default, but allow toggling this when I want it
+" (adapted from https://stackoverflow.com/a/21434697)
+let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [],'passive_filetypes': [] }
+nnoremap <leader>E :SyntasticCheck<CR> :SyntasticToggleMode<CR>
 
 " show line#:column# on the right hand side
 set statusline+=%=%l:%c

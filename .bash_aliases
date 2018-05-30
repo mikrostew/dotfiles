@@ -470,3 +470,8 @@ ssh_add_li_key() {
 EndOfSSHExpect
     echo "Added SSH key"
 }
+
+# open mvim for the local directory
+mm() {
+  do_cmd mvim .
+}

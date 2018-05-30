@@ -435,24 +435,6 @@ lines_of_code() {
     echo "No comments    : $(trim $num_lines_no_comments)"
 }
 
-# get current weather for input zip code
-# using OpenWeatherMap API - http://openweathermap.org/api
-weather() {
-  local zip=${1:-94015} # default to home zip
-  local api_key="$($HOME/Dropbox/secret/open-weather-map-key.sh)"
-  local page=$(curl "http://api.openweathermap.org/data/2.5/weather?zip=${zip},us&appid=${api_key}" 2>/dev/null)
-  local name="$(echo $page | jq -M '.name' | tr -d '"')"
-  local temp_kelvin="$(echo $page | jq -M '.main.temp')"
-  local temp_f=$(echo "(1.8 * ($temp_kelvin - 273.15)) + 32" | bc -q | xargs printf "%.0f") # convert to F, remove decimals
-  local humidity="$(echo $page | jq -M '.main.humidity')"
-  local main="$(echo $page | jq -M '.weather | .[0] | .main' | tr -d '"')"
-  local description="$(echo $page | jq -M '.weather | .[0] | .description' | tr -d '"')"
-  echo -e "Current weather for ${COLOR_FG_BOLD_BLUE}$name${COLOR_RESET}"
-  echo -e "${COLOR_FG_BOLD_BLUE}$main - $description${COLOR_RESET}"
-  echo -e "Temperature: ${COLOR_FG_BOLD_BLUE}$temp_f${COLOR_RESET}"
-  echo -e "Humidity: ${COLOR_FG_BOLD_BLUE}$humidity%${COLOR_RESET}"
-}
-
 # TODO: run this automatically on login?
 # use ssh-agent and ssh-add to setup the SSH key for accessing LI repos
 ssh_add_li_key() {

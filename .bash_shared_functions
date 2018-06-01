@@ -137,3 +137,11 @@ load_chruby() {
 
   min_version_check "ruby" "2.2.*" 'echo $RUBY_VERSION' '(something with ruby-install)' 'echo $RUBY_ROOT';
 }
+
+# latex
+# not done automatically because I infrequently use TeX/LaTeX, and it clutters the path
+load_latex() {
+  echo_info "Adding TeX/LaTeX binaries to the path..."
+  export PATH="/Library/TeX/texbin:$PATH"
+  echo "$PATH"
+}

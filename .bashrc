@@ -119,6 +119,8 @@ export TERM=xterm-256color
 
 # TODO: verify that the links to these dotfiles haven't changed (run async)
 
+HOST_NAME="$(hostname)"
+
 # show uptime, like " 9:45  up 2 days, 17:09, 7 users, load averages: 1.63 3.29 5.36"
 echo -e "uptime: $COLOR_FG_BOLD_BLUE$(uptime)$COLOR_RESET"
 
@@ -132,7 +134,7 @@ bashrc_run_time=$((bashrc_finish - bashrc_start))
 echo -e "~/.bashrc loaded in $COLOR_FG_BOLD_BLUE${bashrc_run_time}ms$COLOR_RESET"
 
 # log the startup time
-echo "$bashrc_start $bashrc_run_time" >> "$HOME/Dropbox/log/bashrc-startup-time"
+echo "$bashrc_start $bashrc_run_time" >> "$HOME/Dropbox/log/bashrc-startup-time-$HOST_NAME"
 
 # installers like to add things to the end of this file, so prevent that stuff from running
 return 0

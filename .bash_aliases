@@ -220,7 +220,7 @@ meets_version() {
         input_minor="${BASH_REMATCH[2]}"
         input_patch="${BASH_REMATCH[3]}"
     else
-        echoerr "bad input version: $1"
+        echo_err "bad input version: $1"
         return 1;
     fi
     # parse input version constraint
@@ -229,7 +229,7 @@ meets_version() {
         constraint_minor="${BASH_REMATCH[2]}"
         constraint_patch="${BASH_REMATCH[3]}"
     else
-        echoerr "bad version constraint: $2"
+        echo_err "bad version constraint: $2"
         return 1;
     fi
 

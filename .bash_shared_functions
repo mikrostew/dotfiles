@@ -6,19 +6,11 @@ require "$DOTFILES_DIR/.bash_colors"
 
 
 # echo to stderr with red text
-echoerr() {
-  echo_dep "use echo_err() instead of echoerr()"
-  echo_err "$@"
-}
 echo_err() {
   echo -e "${COLOR_FG_RED}$@${COLOR_RESET}" >&2
 }
 
 # echo to stderr with green text
-echoack() {
-  echo_dep "use echo_ack() instead of echoack()"
-  echo_ack "$@"
-}
 echo_ack() {
   echo -e "${COLOR_FG_GREEN}$@${COLOR_RESET}" >&2
 }

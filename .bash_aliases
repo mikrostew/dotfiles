@@ -55,6 +55,8 @@ alias rmlf='perl -pi -e "chomp if eof"'
 
 # other functions
 # TODO: put these in .bash_functions or something like that
+# TODO: most/all of these can be split off into scripts instead of having to parse them every time .bashrc is loaded
+# (since this file is hundreds of lines long)
 
 # show running processes, sorted by CPU usage
 cpu() {
@@ -457,3 +459,9 @@ EndOfSSHExpect
 mm() {
   do_cmd mvim .
 }
+
+# cargo things
+cb() {
+  do_cmd cargo build
+}
+

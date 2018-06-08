@@ -68,6 +68,7 @@ PS1="\n($ps_time_24h) "\
 
 # aliases and functions
 require "$DOTFILES_DIR/.bash_aliases"
+require "$DOTFILES_DIR/.bash_functions"
 
 # git aliases and functions
 require "$DOTFILES_DIR/.bash_git"

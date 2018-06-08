@@ -87,6 +87,7 @@ set_title() {
 
 # set secrets as environment vars, so I don't commit them to repos :)
 set_env() {
+  echo_dep "use get-api-token instead of set-env"
   [ -f "$HOME/Dropbox/secret/set-env.sh" ] && . "$HOME/Dropbox/secret/set-env.sh"
 }
 

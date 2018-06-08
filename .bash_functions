@@ -332,30 +332,6 @@ _bigfiles_helper() {
   fi
 }
 
-# kill the coproc, if it is running
-# optionally pass in the name of the coproc
-kill_coproc() {
-  if [ -n "$1" ]; then
-    proc_pid="${1}_PID"
-    [ -n "${!proc_pid}" ] && kill "${!proc_pid}"
-  else
-    [ -n "$COPROC_PID" ] && kill "$COPROC_PID"
-  fi
-}
-
-# show xtrace output in blue
-show_blue_xtrace() {
-  coproc XTRACE { BLUE="$(echo -e "\033[1;34m")"; RESET="$(echo -e "\033[0m")"; sed -e "s/.*/${BLUE}&${RESET}/"; } >&2
-  exec 6>&${XTRACE[1]}
-  export BASH_XTRACEFD="6"
-}
-
-# reset xtrace output to normal (stderr, default color)
-reset_xtrace() {
-  kill_coproc 'XTRACE'
-  unset BASH_XTRACEFD
-}
-
 # courtesy of https://stackoverflow.com/a/3352015
 trim() {
   local var="$*"

@@ -105,7 +105,7 @@ serve_dir() {
 
 # remove any trailing newlines from the input file
 # (from https://stackoverflow.com/a/12148703)
-remove_trailing_lf() {
+rmlf() {
   arguments=('<filename>')
   if num_arguments_ok arguments[@] "$#"
   then

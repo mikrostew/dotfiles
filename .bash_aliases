@@ -46,6 +46,3 @@ alias bejb='bundle exec jekyll build'
 alias bejs='bundle exec jekyll serve'
 alias bi='bundle install'
 
-# remove trailing newline from a file
-alias rmlf='perl -pi -e "chomp if eof"'
-

@@ -46,3 +46,9 @@ alias bejb='bundle exec jekyll build'
 alias bejs='bundle exec jekyll serve'
 alias bi='bundle install'
 
+# mvim
+alias mm='mvim .'
+
+# cargo
+alias cb='cargo build'
+

@@ -390,40 +390,6 @@ grs() {
   do_git review status
 }
 
-# git - update RB with new changes (git review update)
-gru() {
-  do_git review update
-  # TODO: prompt for more options:
-  # usage: git-review update [-h] [-r REVIEWID] [-m DIFF_DESCRIPTION]
-  #                          [--update-desc] [--branch BRANCH] [--parent PARENT]
-  #                          [-p] [--debug] [--rbt-flags RBT_FLAGS] [--open]
-  #                          [--testing-done TESTING_DONE]
-  #
-  # Update an existing Review Board request with a new diff.
-  #
-  # optional arguments:
-  #   -h, --help            show this help message and exit
-  #   -r REVIEWID, --reviewid REVIEWID
-  #                         Review Board ID to update.
-  #   -m DIFF_DESCRIPTION, --diff-description DIFF_DESCRIPTION
-  #                         A description of what changed in this update of the
-  #                         review request. This is ignored for new review
-  #                         requests.
-  #   --update-desc         The new contents for the Description field based on
-  #                         the commit message.
-  #   --branch BRANCH       Local branch to use. [default: master]
-  #   --parent PARENT       Commit to compare review against. Example: --parent
-  #                         HEAD~1. Example2: --parent <<commit hash>>
-  #   -p, --publish         Publish review immediately. [default: False]
-  #   --debug               Show debugging information. [default: False]
-  #   --rbt-flags RBT_FLAGS
-  #                         Additional flags to pass on to rbt
-  #   --open                Open your browser with the review request just
-  #                         created.
-  #   --testing-done TESTING_DONE
-  #                         Update the testing done section.
-}
-
 # git - stash uncommitted changes (git stash)
 gs() {
   do_git stash
@@ -473,6 +439,7 @@ gstat() {
 
 # git - undo the last commit (git undo)
 gundo() {
+  # TODO: also write the commit message to .git/GITGUI_MSG
   do_git reset --soft HEAD~1
 }
 

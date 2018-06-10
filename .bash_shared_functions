@@ -85,14 +85,6 @@ do_cmd() {
   ( set -x; "$@" )
 }
 
-# trim leading and trailing double quotes
-trim_double_quotes() {
-  local string="$1"
-  string="${string#\"}"
-  string="${string%\"}"
-  echo "$string"
-}
-
 # nvm
 # not done automatically, because this slows down new session startup, and I use it infrequently
 load_nvm() {

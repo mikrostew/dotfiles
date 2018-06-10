@@ -131,20 +131,20 @@ get_li_rb_api_def() {
 
 # get the template to use for querying the RB api
 get_li_rb_uri_template() {
-  local template="$(get_li_rb_api_def | jq ".uri_templates.$1")"
-  echo "$(trim_double_quotes $template)"
+  template="$(get_li_rb_api_def | jq --raw-output ".uri_templates.$1")"
+  echo "$template"
 }
 
 # get RB status
 get_li_rb_status() {
   if [ -n "$1" ]; then
-    local api_uri_template=$(get_li_rb_uri_template "review_request")
+    api_uri_template=$(get_li_rb_uri_template "review_request")
     # echo $api_uri_template
-    local request_url=${api_uri_template/\{review_request_id\}/$1}
+    request_url=${api_uri_template/\{review_request_id\}/$1}
     # echo $request_url
     if [ -n "$request_url" ]; then
-      local status=$(curl -X GET -H 'Accept: application/json' "$request_url" 2>/dev/null | jq '.review_request.status')
-      echo "$(trim_double_quotes $status)"
+      status=$(curl -X GET -H 'Accept: application/json' "$request_url" 2>/dev/null | jq --raw-output '.review_request.status')
+      echo "$status"
     fi
   fi
 }
@@ -485,7 +485,7 @@ gfc() {
     username=${repo_info[0]}
     repo_name=${repo_info[1]}
 
-    # create fork from original repo (TODO - make this a separate function?)
+    # create fork from original repo
     api_token="$($HOME/Dropbox/secret/get-api-token github-fork-token)"
     # not using do_cmd here because I don't want the API token echoed to the screen
     echo_ack "(curl -X POST -u mikrostew:XXXXX 'https://api.github.com/repos/$username/$repo_name/forks')"
@@ -497,7 +497,7 @@ gfc() {
     sleep 10
 
     # clone the repo locally (use the 'ssh_url' property from the returned JSON)
-    ssh_url="$(trim_double_quotes $(echo $output | jq '.ssh_url'))"
+    ssh_url="$(echo $output | jq --raw-output '.ssh_url')"
     do_git clone "$ssh_url" "$repo_name"
     # check for error, wait, and retry once if it failed
     if [ "$?" -ne 0 ]

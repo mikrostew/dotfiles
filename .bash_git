@@ -564,12 +564,12 @@ gfiles() {
 
 # git - squash commits in current branch into a single commit (git squash branch)
 gsqb() {
-  arguments=( '<commit-message> [, <extra-line>]' )
+  arguments=( '<commit-message>' '[extra-line]' )
   if in_git_repo && not_on_git_branch 'master' && no_uncommitted_changes && num_arguments_min arguments[@] "$#"
   then
     local branch_name=$(current_git_branch)
     local based_on=$(based_on_master_or_origin $branch_name)
-    # TODO: this may not be what I want in all situations?
+    # this may not be what I want in all situations - fix this when it becomes a problem
     local num_commits_on_branch="$(commit_diff_on_branch $branch_name $based_on)"
     echo_info "$num_commits_on_branch change(s) between '$branch_name' and '$based_on'"
     echo -n "Confirm squashing $num_commits_on_branch commits [Y/n]: "

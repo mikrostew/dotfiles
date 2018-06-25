@@ -51,4 +51,6 @@ alias mm='mvim .'
 
 # cargo
 alias cb='cargo build'
+alias ct='cargo test'
+alias cta='cargo test --all'
 

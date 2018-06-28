@@ -249,6 +249,25 @@ gcbm() {
   fi
 }
 
+# git - checkout branch from list of branches (Git Checkout from List)
+gcl() {
+  if in_git_repo
+  then
+    all_branches=( $(all_git_branches | sort) )
+    num_branches="${#all_branches[@]}"
+    for((i=0; i<$num_branches; i++))
+    do
+      echo "[$i] ${all_branches[$i]}"
+    done
+    echo -n "Branch number: "
+    read branch_index
+    if [ -n "$branch_index" ]
+    then
+      do_git checkout "${all_branches[$branch_index]}"
+    fi
+  fi
+}
+
 # git - gui (git gui)
 gg() {
   do_git gui

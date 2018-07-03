@@ -92,5 +92,5 @@ COLOR_BG_BOLD_WHITE='\033[1;107m'
 
 
 # 256 colors
-# TODO: more colors here
+# could do all of these, but that will increase bash startup time
 COLOR_FG_208='\033[38;5;208m' # orange

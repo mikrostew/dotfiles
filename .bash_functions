@@ -87,18 +87,6 @@ set_env() {
   [ -f "$HOME/Dropbox/secret/set-env.sh" ] && . "$HOME/Dropbox/secret/set-env.sh"
 }
 
-# serve the files in the current directory
-# (from https://stackoverflow.com/a/7105609)
-# argument(s)
-# - port (optional)
-serve_dir() {
-  port="${1:-8080}"
-  address="$(ifconfig | awk '/inet / && $2 != "127.0.0.1"{print $2}')"
-  echo -e "Current directory: ${COLOR_FG_BOLD_BLUE}$PWD${COLOR_RESET}"
-  echo -e "Serving at ${COLOR_FG_BOLD_BLUE}$address:$port${COLOR_RESET}"
-  ruby -run -e httpd . -p $port
-}
-
 # remove any trailing newlines from the input file
 # (from https://stackoverflow.com/a/12148703)
 rmlf() {

@@ -4,10 +4,6 @@
 require "$DOTFILES_DIR/.bash_colors"
 require "$DOTFILES_DIR/.bash_shared_functions"
 
-# TODO: get some functions from these:
-# - https://bbs.archlinux.org/viewtopic.php?id=30155
-# - https://www.intuitivestories.com/wicked/wicked-cool-shell-script-library.shtml
-
 # other functions
 # TODO: most/all of these can be split off into scripts instead of having to parse them every time .bashrc is loaded
 # (since this file is hundreds of lines long)

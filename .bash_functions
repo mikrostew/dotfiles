@@ -101,9 +101,9 @@ rmlf() {
 # Arguments:
 # $1 - program/command/language name
 # $2 - minimum version required
-# $3 - how to get the version of this (will be eval-ed)
+# $3 - how to get the version of this (NOTE: will be eval-ed)
 # $4 - command to install this
-# $5 - [optional] path to where this is installed, instead of using `which` (will be eval-ed)
+# $5 - [optional] path to where this is installed, instead of using `which` (NOTE: will be eval-ed)
 min_version_check() {
   # 1) check if this is installed
   if [ -n "$5" ]; then
@@ -130,6 +130,8 @@ min_version_check() {
   return 1 # if it hasn't already returned, it didn't meet the version
 }
 
+# TODO: use semver from NPM for these - https://github.com/npm/node-semver
+
 # convert versions to X.X.X format
 normalize_version() {
   if [[ "$1" =~ ^[0-9]+$ ]]; then
@@ -141,7 +143,6 @@ normalize_version() {
   fi
 }
 
-# TODO: use semver from NPM for this?
 # compare input semver with input constraint
 # to make this easier, both must be X.X.X format
 # $1 - version (semver)

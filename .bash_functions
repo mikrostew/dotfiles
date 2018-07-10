@@ -100,7 +100,7 @@ rmlf() {
 # check minimum version, and print out the result
 # Arguments:
 # $1 - program/command/language name
-# $2 - minimum version required
+# $2 - acceptable version range (semver)
 # $3 - how to get the version of this (NOTE: will be eval-ed)
 # $4 - command to install this
 # $5 - [optional] path to where this is installed, instead of using `which` (NOTE: will be eval-ed)
@@ -112,7 +112,7 @@ min_version_check() {
     install_path=$(which "$1")
   fi
   if [ -z "$install_path" ]; then
-    echo -e "$1 : ${COLOR_FG_RED}not installed (want >= $2), install with '${4:-(unknown command)}'${COLOR_RESET}"
+    echo -e "$1 : ${COLOR_FG_RED}not installed (want $2), install with '${4:-(unknown command)}'${COLOR_RESET}"
     return 1
   fi
   # 2) check the minimum version
@@ -122,15 +122,13 @@ min_version_check() {
       # don't print anything for this
       return
     else
-      echo -e "$1 : ${COLOR_FG_RED}found $current_version (want >= $2)${COLOR_RESET} ($install_path)"
+      echo -e "$1 : ${COLOR_FG_RED}found $current_version (want $2)${COLOR_RESET} ($install_path)"
     fi
   else
-    echo -e "$1 : ${COLOR_FG_RED}unknown version (want >= $2)${COLOR_RESET} ($install_path)"
+    echo -e "$1 : ${COLOR_FG_RED}unknown version (want $2)${COLOR_RESET} ($install_path)"
   fi
   return 1 # if it hasn't already returned, it didn't meet the version
 }
-
-# TODO: use semver from NPM for these - https://github.com/npm/node-semver
 
 # convert versions to X.X.X format
 normalize_version() {
@@ -138,61 +136,25 @@ normalize_version() {
     echo "$1.0.0"
   elif [[ "$1" =~ ^[0-9]+\.[0-9]+$ ]]; then
     echo "$1.0"
+  elif [[ "$1" =~ ^[0-9]+\.[0-9]+\.[0-9]+ ]]; then
+    # there may be some junk after the version (looking at you bash), get rid of that
+    echo "$BASH_REMATCH"
   else
     echo "$1"
   fi
 }
 
 # compare input semver with input constraint
-# to make this easier, both must be X.X.X format
-# $1 - version (semver)
-# $2 - version constraint
+# (using semver from NPM for this - https://github.com/npm/node-semver)
+# $1 - program version (semver format)
+# $2 - version range (semver format)
 meets_version() {
-  # parse input version
-  if [[ "$1" =~ ([0-9]+)\.([0-9]+)\.([0-9]+[^ ]*) ]]; then
-    input_major="${BASH_REMATCH[1]}"
-    input_minor="${BASH_REMATCH[2]}"
-    input_patch="${BASH_REMATCH[3]}"
+  # check that semver is installed
+  if [ ! $(command -v semver) ]; then
+    echo_err "'semver' is not installed - install with 'npm i -g semver'"
+    return 1
   else
-    echo_err "bad input version: $1"
-    return 1;
-  fi
-  # parse input version constraint
-  if [[ "$2" =~ ([0-9]+)\.([0-9]+|\*)\.([0-9]+|\*)$ ]]; then
-    constraint_major="${BASH_REMATCH[1]}"
-    constraint_minor="${BASH_REMATCH[2]}"
-    constraint_patch="${BASH_REMATCH[3]}"
-  else
-    echo_err "bad version constraint: $2"
-    return 1;
-  fi
-
-  # check major version
-  if [ "$input_major" -gt "$constraint_major" ]; then
-    return 0;
-  elif [ "$input_major" -lt "$constraint_major" ]; then
-    return 2;
-  else
-    # major versions are equal, check minor version
-    if [ "$constraint_minor" = "*" ]; then
-      return 0;
-    elif [ "$input_minor" -gt "$constraint_minor" ]; then
-      return 0;
-    elif [ "$input_minor" -lt "$constraint_minor" ]; then
-      return 3;
-    else
-      # major and minor equal, check patch version
-      if [ "$constraint_patch" = "*" ]; then
-        return 0;
-      elif [ "$input_patch" -gt "$constraint_patch" ]; then
-        return 0;
-      elif [ "$input_patch" -lt "$constraint_patch" ]; then
-        return 4;
-      else
-        # versions are equal
-        return 0;
-      fi
-    fi
+    semver --range "$2" "$1" >/dev/null
   fi
 }
 

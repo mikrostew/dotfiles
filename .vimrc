@@ -196,3 +196,8 @@ endif
 " I don't use this much anymore, so I don't care about version warnings
 let g:go_version_warning = 0
 
+" disable scrollbars (annoying in macvim)
+set guioptions-=r
+set guioptions-=R
+set guioptions-=l
+set guioptions-=L

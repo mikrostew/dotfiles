@@ -59,7 +59,7 @@ ps_user='\u'
 ps_host='\h'
 ps_pwd='\w'
 ps_repo_status='$(repo_status)'
-PS1="\n($ps_time_24h) "\
+PS1="${COLOR_RESET}\n($ps_time_24h) "\
 "${COLOR_FG_BOLD_BLACK}$ps_user${COLOR_RESET}"\
 "@${COLOR_FG_BOLD_BLACK}$ps_host${COLOR_RESET}"\
 ":${COLOR_FG_BOLD_BLACK}$ps_pwd/${COLOR_RESET}"\

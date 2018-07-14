@@ -6,7 +6,7 @@ Host *
     AddKeysToAgent yes
     UseKeychain yes
     # need this after upgrade to 10.13.3
-    Ciphers aes128-cbc,3des-cbc
+    Ciphers aes128-cbc,3des-cbc,aes256-ctr
 
 # tester account
 Host *.corp.linkedin.com
@@ -14,7 +14,7 @@ Host *.corp.linkedin.com
 
 # LinkedIn
 Host *.linkedin.com
-	IdentityFile 	%d/.ssh/%u_at_linkedin.com_ssh_key
+    IdentityFile 	%d/.ssh/%u_at_linkedin.com_ssh_key
 
 Host desktop
     Hostname mistewar-ld2.linkedin.biz
@@ -31,7 +31,7 @@ Host github.com
     Hostname github.com
     User mikrostew
     # IdentityFile    ~/.ssh/github_mikrostew
-    IdentityFile    ~/.ssh/github_rsa
+    IdentityFile    %d/.ssh/github_rsa
     IdentitiesOnly yes
 
 Host air
@@ -41,3 +41,8 @@ Host air
 Host pi
     Hostname raspberrypi
     User pi
+
+Host android
+    Hostname 192.168.1.65
+    Port 2222
+    IdentityFile    %d/.ssh/android_rsa

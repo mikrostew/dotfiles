@@ -201,3 +201,8 @@ set guioptions-=r
 set guioptions-=R
 set guioptions-=l
 set guioptions-=L
+
+" Open markdown files with Chrome (on OSX)
+" (adapted from https://stackoverflow.com/a/14718908 and https://stackoverflow.com/a/21187692)
+" and using Markdown Preview Plus (https://chrome.google.com/webstore/detail/markdown-preview-plus/febilkbfcbhebfnokafefeacimjdckgl)
+autocmd BufEnter *.md exe 'noremap <leader>m :!open -a "Google Chrome" %:p<CR>'

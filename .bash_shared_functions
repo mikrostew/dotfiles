@@ -112,10 +112,12 @@ load_notion() {
   echo_info "Loading notion..."
 
   export NOTION_HOME="$HOME/.notion"
-  export PATH="${NOTION_HOME}/bin:${NOTION_HOME}/shim:$PATH"
+  [ -s "$NOTION_HOME/load.sh" ] && \. "$NOTION_HOME/load.sh"
+
+  export PATH="${NOTION_HOME}/bin:$PATH"
 
   # check version
-  min_version_check "notion" "^0.1.0" 'notion --version' 'TODO' 'echo $NOTION_HOME'
+  # min_version_check "notion" "^0.1.0" 'notion --version' 'TODO' 'echo $NOTION_HOME'
 }
 
 # chruby

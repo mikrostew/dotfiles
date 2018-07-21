@@ -5,8 +5,6 @@ require "$DOTFILES_DIR/.bash_colors"
 require "$DOTFILES_DIR/.bash_shared_functions"
 
 # other functions
-# TODO: most/all of these can be split off into scripts instead of having to parse them every time .bashrc is loaded
-# (since this file is hundreds of lines long)
 
 # show running processes, sorted by CPU usage
 cpu() {
@@ -97,6 +95,7 @@ rmlf() {
   fi
 }
 
+# TODO: split this and it's associated functions to a separate file in scripts/
 # check minimum version, and print out the result
 # Arguments:
 # $1 - program/command/language name
@@ -173,7 +172,6 @@ trim() {
   echo -n "$var"
 }
 
-# TODO: run this automatically on login?
 # use ssh-agent and ssh-add to setup the SSH key for accessing LI repos
 ssh_add_li_key() {
   # start ssh-agent if it's not already running for this session

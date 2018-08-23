@@ -33,6 +33,10 @@ set number                      " show line numbers
 set title                       " show title in console title bar
 let mapleader = " "             " set the leader key to space (easier to type than backslash)
 
+" so that the vim keys are logged correctly
+" from https://vi.stackexchange.com/a/14443
+set t_RV=
+
 """ searching/moving
 
 set ignorecase                  " case insensitive search

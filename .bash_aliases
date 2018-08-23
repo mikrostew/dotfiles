@@ -47,7 +47,7 @@ alias bejs='bundle exec jekyll serve'
 alias bi='bundle install'
 
 # mvim
-alias mm='mvim .'
+alias mm="mvim -w $HOME/vim-keystrokes.log ."
 
 # cargo
 alias cb='cargo build'

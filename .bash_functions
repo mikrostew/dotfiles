@@ -30,7 +30,8 @@ notify() {
     if [ -n "$cmd_string" ]; then
       cmd="$cmd_string"
     else
-      cmd="$(history | tail -n 1 | sed -e 's/^\ *[0-9]*\ *//' -e 's/[;&|]\ *notify.*$//' )"
+      # remove line number, notify cmd, and any double quotes
+      cmd="$(history | tail -n 1 | sed -e 's/^\ *[0-9]*\ *//' -e 's/[;&|]\ *notify.*$//' -e 's/"//g' )"
     fi
     local sound_name="Glass" # see /System/Library/Sounds/ for list of sounds
     local script="display notification \"$cmd\" with title \"$title\" sound name \"$sound_name\""
@@ -39,7 +40,8 @@ notify() {
     if [ -n "$cmd_string" ]; then
       cmd="$cmd_string"
     else
-      cmd="$(history | tail -n 1 | sed -e 's/^\s*[0-9]\+\s*//' -e 's/[;&|]\s*notify.*$//' )"
+      # remove line number, notify cmd, and any double quotes
+      cmd="$(history | tail -n 1 | sed -e 's/^\s*[0-9]\+\s*//' -e 's/[;&|]\s*notify.*$//' -e 's/"//g' )"
     fi
     # because the notification body isn't shown if it contains an ampersand (see https://bugs.launchpad.net/ubuntu/+source/libnotify/+bug/1424243)
     cmd="$(echo "$cmd" | sed -e 's/[&]/&amp;/g')"

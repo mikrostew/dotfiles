@@ -257,13 +257,18 @@ gcl() {
     num_branches="${#all_branches[@]}"
     for((i=0; i<$num_branches; i++))
     do
-      echo "[$i] ${all_branches[$i]}"
+      # convert to 1-based index, which is nicer to select
+      (( index = i + 1 ))
+      echo -e "[$index] ${all_branches[$i]}"
     done
     echo -n "Branch number: "
-    read branch_index
-    if [ -n "$branch_index" ]
+    read branch_num
+    if [ -n "$branch_num" ] && (( "$branch_num" <= "$num_branches" ))
     then
+      (( branch_index = branch_num - 1 ))
       do_git checkout "${all_branches[$branch_index]}"
+    else
+      echo_info "no branch selected"
     fi
   fi
 }

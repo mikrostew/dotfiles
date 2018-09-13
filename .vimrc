@@ -99,9 +99,9 @@ set pastetoggle=<F2>
 nnoremap <leader>v V`]
 " search and replace the word under the cursor
 nnoremap <leader>s :%s/\<<C-r><C-w>\>/
-" open vertical split with | and horizontal with -
-nnoremap <leader>\| <C-w>v<C-w>l
-nnoremap <leader>- <C-w>s<C-w>j
+" open split (with '|' or '-'), then open file browser
+nnoremap <leader>\| <C-w>v<C-w>l:e.<CR>
+nnoremap <leader>- <C-w>s<C-w>j:e.<CR>
 " use ack in vim
 nnoremap <leader>a :Ack
 

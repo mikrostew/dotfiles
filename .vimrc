@@ -197,6 +197,7 @@ let g:ctrlp_cmd = 'CtrlP'
 let g:ctrlp_working_path_mode = 'ra'
 " ignore these directories
 set wildignore+=*/vendor/**
+set wildignore+=*/target/**
 
 " font
 " (install IBM plex font from https://github.com/IBM/plex)

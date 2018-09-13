@@ -189,6 +189,15 @@ nnoremap <leader>E :SyntasticCheck<CR> :SyntasticToggleMode<CR>
 " show line#:column# on the right hand side
 set statusline+=%=%l:%c
 
+" CtrlP
+" command mapping
+let g:ctrlp_map = '<C-p>'
+let g:ctrlp_cmd = 'CtrlP'
+" set the local working directory to project root
+let g:ctrlp_working_path_mode = 'ra'
+" ignore these directories
+set wildignore+=*/vendor/**
+
 " font
 " (install IBM plex font from https://github.com/IBM/plex)
 if has("mac") || has("macunix")

@@ -151,7 +151,7 @@ let NERDTreeShowHidden=1
 let g:NERDTreeHijackNetrw = 1
 " open blank initial window so that NERDTree doesn't disappear on the first file open
 " (from https://stackoverflow.com/a/36882670/)
-autocmd VimEnter NERD_tree_1 enew | execute 'NERDTree '.argv()[0]
+" autocmd VimEnter NERD_tree_1 enew | execute 'NERDTree '.argv()[0]
 
 " vim-slime with tmux
 let g:slime_target="tmux"

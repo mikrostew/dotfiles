@@ -92,6 +92,15 @@ vnoremap <F1> <ESC>
 autocmd FocusLost * :wa
 " easy toggle for pasting text without the crazy indentation
 set pastetoggle=<F2>
+" disable scrollbars (annoying in macvim)
+set guioptions-=r
+set guioptions-=R
+set guioptions-=l
+set guioptions-=L
+" don't flash the screen or do any bells, which are annoying
+" (from http://vim.wikia.com/wiki/Disable_beeping)
+set noerrorbells visualbell t_vb=
+autocmd GUIEnter * set visualbell t_vb=
 
 """ misc commands
 
@@ -153,11 +162,6 @@ let g:NERDTreeHijackNetrw = 1
 " (from https://stackoverflow.com/a/36882670/)
 " autocmd VimEnter NERD_tree_1 enew | execute 'NERDTree '.argv()[0]
 
-" don't flash the screen or do any bells, which are annoying
-" (from http://vim.wikia.com/wiki/Disable_beeping)
-set noerrorbells visualbell t_vb=
-autocmd GUIEnter * set visualbell t_vb=
-
 " statusline things (from https://stackoverflow.com/a/32059626)
 " [buffer number] followed by filename:
 set statusline=[%n]\ %t
@@ -190,12 +194,6 @@ set statusline+=%=%l:%c
 if has("mac") || has("macunix")
   set gfn=IBM\ Plex\ Mono:h14,Source\ Code\ Pro:h15,Menlo:h15
 endif
-
-" disable scrollbars (annoying in macvim)
-set guioptions-=r
-set guioptions-=R
-set guioptions-=l
-set guioptions-=L
 
 " Open markdown files with Chrome (on OSX)
 " (adapted from https://stackoverflow.com/a/14718908 and https://stackoverflow.com/a/21187692)

@@ -153,11 +153,11 @@ endfunction
 
 """ plugins
 
-" NERDTree
+" NERDTree (no longer using this)
 " show hidden files
-let NERDTreeShowHidden=1
+" let NERDTreeShowHidden=1
 " use instead of  netrw (this is the default)
-let g:NERDTreeHijackNetrw = 1
+" let g:NERDTreeHijackNetrw = 1
 " open blank initial window so that NERDTree doesn't disappear on the first file open
 " (from https://stackoverflow.com/a/36882670/)
 " autocmd VimEnter NERD_tree_1 enew | execute 'NERDTree '.argv()[0]

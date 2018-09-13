@@ -153,11 +153,6 @@ let g:NERDTreeHijackNetrw = 1
 " (from https://stackoverflow.com/a/36882670/)
 " autocmd VimEnter NERD_tree_1 enew | execute 'NERDTree '.argv()[0]
 
-" vim-slime with tmux
-let g:slime_target="tmux"
-" this will use the second pane of the window I am currently in
-let g:slime_default_config = {"socket_name": "default", "target_pane": ":1.2"}
-
 " don't flash the screen or do any bells, which are annoying
 " (from http://vim.wikia.com/wiki/Disable_beeping)
 set noerrorbells visualbell t_vb=

@@ -162,6 +162,10 @@ endfunction
 " (from https://stackoverflow.com/a/36882670/)
 " autocmd VimEnter NERD_tree_1 enew | execute 'NERDTree '.argv()[0]
 
+" netrw (built-in)
+" hide these file extensions (from https://stackoverflow.com/a/21020164/)
+let g:netrw_list_hide= '.*\.swp$,\~$,\.orig$'
+
 " statusline things (from https://stackoverflow.com/a/32059626)
 " [buffer number] followed by filename:
 set statusline=[%n]\ %t

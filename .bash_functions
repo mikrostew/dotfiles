@@ -34,6 +34,7 @@ notify() {
       cmd="$(history | tail -n 1 | sed -e 's/^\ *[0-9]*\ *//' -e 's/[;&|]\ *notify.*$//' -e 's/"//g' )"
     fi
     local sound_name="Glass" # see /System/Library/Sounds/ for list of sounds
+    # TODO: use terminal-notifier, see https://github.com/julienXX/terminal-notifier
     local script="display notification \"$cmd\" with title \"$title\" sound name \"$sound_name\""
     osascript -e "$script"
   else # Linux

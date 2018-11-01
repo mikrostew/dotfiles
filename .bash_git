@@ -69,7 +69,7 @@ based_on_master_or_origin() {
 # $1: number of commits to squash
 # $2: commit message
 # $3: extra line for message (extra info, overrides, etc.)
-squash_commits() {
+squash-commits() {
   if [ -n "$1" ] && [ "$1" -gt 0 ]; then
     if [ -n "$2" ]; then
       if [ -n "$3" ]; then
@@ -608,7 +608,7 @@ gsqb() {
     read confirm
     if [ -z "$confirm" ] || [ "$confirm" == "Y" ] || [ "$confirm" == "y" ]
     then
-      squash_commits "$num_commits_on_branch" "$1" "$2"
+      squash-commits "$num_commits_on_branch" "$1" "$2"
     else
       echo "Not squashing"
     fi

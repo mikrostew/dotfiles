@@ -134,6 +134,12 @@ load_notion() {
   # min_version_check "notion" "^0.1.0" 'notion --version' 'TODO' 'echo $NOTION_HOME'
 }
 
+# because I frequently screw up my installation
+install_notion() {
+  echo_ack "( curl -sSLf https://get.notionjs.com | bash )"
+  curl -sSLf https://get.notionjs.com | bash
+}
+
 # chruby
 # not done automatically because I infrequently use ruby and this clutters the path
 load_chruby() {

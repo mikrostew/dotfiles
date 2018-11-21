@@ -192,3 +192,7 @@ EndOfSSHExpect
 echo "Added SSH key"
 }
 
+nextoncall() {
+  # from #oneliners
+  curl -s https://oncall.prod.linkedin.com/api/v0/users/$(whoami)/upcoming | jq -r '.[]|"\(.team) \(.role) \(.start)"' | while read team role ts; do echo "$role oncall for $team at $ts"; done | e2d -f6
+}

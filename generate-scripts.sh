@@ -27,7 +27,7 @@ do
 
   # imports and generated things in the script
   import_lines=()
-  while read -r line; do
+  while IFS= read -r line; do
     # do the imports here
     if [[ "$line" =~ ^@@import\ ([A-Za-z_]*)\ from\ ([A-Za-z_\.]*)$ ]]
     then

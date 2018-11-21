@@ -330,6 +330,12 @@ gpb() {
   fi
 }
 
+# git - force-push changes (git push force)
+gpf() {
+  # using --force-with-lease in case someone else has pushed to my branch unbeknownst to me
+  do_git push --force-with-lease
+}
+
 # git - pull changes from origin and rebase local changes (git pull rebase)
 gpr() {
   local branch_name=$(current_git_branch)

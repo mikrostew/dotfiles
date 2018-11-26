@@ -4,7 +4,6 @@
 # colors
 source "$DOTFILES_DIR/.bash_colors"
 
-
 # echo to stderr with red text
 echo_err() {
   # @global COLOR_FG_RED,COLOR_RESET

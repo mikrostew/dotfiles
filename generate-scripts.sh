@@ -2,6 +2,24 @@
 # This will process the script definitions in script-gen/ and convert those
 # into executable scripts in scripts/
 
+COLOR_RESET='\033[0m'
+COLOR_FG_RED='\033[0;31m'
+
+# echo to stderr with red text
+echo_err() {
+  echo -e "${COLOR_FG_RED}$@${COLOR_RESET}" >&2
+}
+
+on_error() {
+  exit_code="$?"
+  # TODO: not all errors will come from lines in files
+  echo_err "[ERROR] $script_file: line $current_line"
+  echo_err " --> $line"
+  exit "$exit_code"
+}
+
+trap on_error ERR
+
 # create a header for the generated script file
 file_header() {
   input_file="$1"
@@ -31,35 +49,75 @@ do
   # read file contents
   file_contents=$(<"$script_file")
 
+  # variable and function imports
+  declare -A global_imports
+  declare -A global_import_sources
+  declare -A function_imports
+  declare -A function_import_sources
+
   # imports and generated things in the script
   import_lines=()
+  # other lines from the input script that are not imports
+  other_lines=()
+  # keep track of the current line number for errors
+  current_line=0
   while IFS= read -r line; do
+    current_line=$(( current_line + 1 ))
+
     if [[ "$line" =~ ^@import\ ([A-Z_]*)\ from\ ([A-Za-z_\.]*)$ ]]
     then
       # import VARIABLE from file (all caps is global var)
-      # TODO: verify that multiple imports of the same thing do not conflict
       var_name="${BASH_REMATCH[1]}"
       file_name="${BASH_REMATCH[2]}"
+      var_value="${!var_name}"
       source "$file_name"
-      import_lines+=( "$var_name='${!var_name}'" )
+      # TODO: verify that the variable is actually used in the script (as best I can tell), and show a warning if not
+
+      # verify that multiple imports of the same thing do not conflict
+      if [ -n "${global_imports[$var_name]}" ] && [ "$var_value" != "${global_imports[$var_name]}" ]
+      then
+        echo_err "[ERROR] conflicting definitions of variable '$var_name'"
+        echo_err " --> $file_name: $var_value"
+        echo_err " --> ${global_import_sources[$var_name]}: ${global_imports[$var_name]}"
+        exit 1
+      fi
+
+      # add to global imports
+      global_imports[$var_name]="$var_value"
+      global_import_sources[$var_name]="$file_name"
+
     elif [[ "$line" =~ ^@import\ ([a-z_]*)\ from\ ([A-Za-z_\.]*)$ ]]
     then
       # import function from file (lowercase is a function)
-      # TODO: also import dependencies of the function
       func_name="${BASH_REMATCH[1]}"
       file_name="${BASH_REMATCH[2]}"
       source "$file_name"
+      # TODO: also import dependencies of the function
+
       import_lines+=( "$(print_function $func_name)" )
     # TODO: option to generate help docs
     else
       # no import
-      import_lines+=( "$line" )
+      other_lines+=( "$line" )
     fi
   done <<< "$file_contents"
-  # join with newlines
-  with_imports="$( IFS=$'\n'; echo "${import_lines[*]}" )"
 
-  # strip any remaining comments and blank lines
+  # build variable and function imports
+  var_import_lines=()
+  for var_name in "${!global_imports[@]}"
+  do
+    var_import_lines+=( "$var_name='${global_imports[$var_name]}'" ) # single quotes around value
+  done
+
+  # join imports and other lines (with newlines)
+  with_imports="$(
+    IFS=$'\n';
+    echo "${var_import_lines[*]}" | sort;
+    echo "${import_lines[*]}";
+    echo "${other_lines[*]}";
+  )"
+
+  # strip any comments and blank lines
   no_comments="$(echo "$with_imports" | sed '/^[[:blank:]]*#/d;/^[[:blank:]]*$/d;')"
 
   # add a header and shebang to the beginning
@@ -69,5 +127,11 @@ do
   echo "$script_file -> $new_file_name"
   echo "$with_header" > "$new_file_name"
   chmod +x "$new_file_name"
+
+  # clear arrays
+  unset global_imports
+  unset global_import_sources
+  unset function_imports
+  unset function_import_sources
 done
 

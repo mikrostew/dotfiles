@@ -39,6 +39,90 @@ print_function() {
   # TODO: error checking, exit if not a function
 }
 
+# add variable to imports
+import_variable() {
+  # arguments:
+  local _var_name="$1"
+  local _var_value="$2"
+  local _from_file="$3"
+
+  source "$_from_file"
+
+  # verify that multiple imports of the same thing do not conflict
+  if [ -n "${var_imports[$_var_name]}" ] && [ "$_var_value" != "${var_imports[$_var_name]}" ]
+  then
+    echo_err "[ERROR] conflicting definitions of variable '$_var_name'"
+    echo_err " --> $_from_file: $_var_value"
+    echo_err " --> ${var_import_sources[$_var_name]}: ${var_imports[$_var_name]}"
+    exit 1
+  fi
+
+  # TODO: verify that the variable is actually used in the script (as best I can tell), and show a warning if not
+
+  # add to variable import arrays
+  var_imports[$_var_name]="$_var_value"
+  var_import_sources[$_var_name]="$_from_file"
+}
+
+# add function (and any dependencies) to imports
+import_function() {
+  # arguments:
+  local _func_name="$1"
+  local _from_file="$2"
+
+  source "$_from_file"
+
+  # TODO: if we've already seen the import, don't re-import it (slow)
+  # also import dependencies of the function
+  # right now this is at most 2 lines past the function declaration
+  func_dependencies="$(grep -A2 "^${func_name}()" $file_name)"
+  # whatever, just do this inline for now...
+  while IFS= read -r dep_line
+  do
+    if [[ "$dep_line" =~ \#\ @global\ ([A-Z0-9_,]*)$ ]]
+    then
+      # @global VAR1,VAR2
+      var_names="${BASH_REMATCH[1]}"
+      # split these on comma and/or space (see https://stackoverflow.com/a/10586169/)
+      IFS=', ' read -r -a var_import_names <<< "$var_names"
+      for var_name in "${var_import_names[@]}"
+      do
+        var_value="${!var_name}"
+        import_variable "$var_name" "$var_value" "$file_name"
+      done
+
+    elif [[ "$dep_line" =~ \#\ @function\ ([a-z0-9_,]*)$ ]]
+    then
+      # @function some_func,some_func_2
+      func_names="${BASH_REMATCH[1]}"
+      # split these on comma and/or space (see https://stackoverflow.com/a/10586169/)
+      IFS=', ' read -r -a func_import_names <<< "$func_names"
+      for func_name in "${func_import_names[@]}"
+      do
+        import_function "$func_name" "$file_name"
+      done
+    fi
+  done <<< "$func_dependencies"
+
+
+  # verify that multiple imports of the same thing do not conflict
+  func_value="$(print_function "$_func_name")"
+  # TODO: refactor this as well...
+  if [ -n "${func_imports[$_func_name]}" ] && [ "$func_value" != "${func_imports[$_func_name]}" ]
+  then
+    echo_err "[ERROR] conflicting definitions of function '$_func_name'"
+    echo_err " --> $_from_file: $func_value"
+    echo_err " --> ${func_import_sources[$_func_name]}: ${func_imports[$_func_name]}"
+    exit 1
+  fi
+
+  # TODO: verify that the function is actually used in the script (as best I can tell), and show a warning if not
+
+  # add to variable import arrays
+  func_imports[$_func_name]="$func_value"
+  func_import_sources[$_func_name]="$_from_file"
+}
+
 # read all the files in script-gen/
 # (assuming this is run from the base dir of this repo)
 for script_file in script-gen/*
@@ -52,12 +136,10 @@ do
   # variable and function imports
   declare -A var_imports
   declare -A var_import_sources
-  declare -A function_imports
-  declare -A function_import_sources
+  declare -A func_imports
+  declare -A func_import_sources
 
-  # imports and generated things in the script
-  import_lines=()
-  # other lines from the input script that are not imports
+  # lines from the input script that are not imports
   other_lines=()
   # keep track of the current line number for errors
   current_line=0
@@ -65,74 +147,20 @@ do
   do
     current_line=$(( current_line + 1 ))
 
-    if [[ "$line" =~ ^@import\ ([A-Z_]*)\ from\ ([A-Za-z_\.]*)$ ]]
+    if [[ "$line" =~ ^@import\ ([A-Z0-9_]*)\ from\ ([A-Za-z0-9_\.]*)$ ]]
     then
       # @import VARIABLE from file (all caps is global var)
       var_name="${BASH_REMATCH[1]}"
       file_name="${BASH_REMATCH[2]}"
       var_value="${!var_name}"
-      source "$file_name"
-
-      # verify that multiple imports of the same thing do not conflict
-      if [ -n "${var_imports[$var_name]}" ] && [ "$var_value" != "${var_imports[$var_name]}" ]
-      then
-        echo_err "[ERROR] conflicting definitions of variable '$var_name'"
-        echo_err " --> $file_name: $var_value"
-        echo_err " --> ${var_import_sources[$var_name]}: ${var_imports[$var_name]}"
-        exit 1
-      fi
-
-      # TODO: verify that the variable is actually used in the script (as best I can tell), and show a warning if not
-
-      # add to variable import arrays
-      var_imports[$var_name]="$var_value"
-      var_import_sources[$var_name]="$file_name"
-
-    elif [[ "$line" =~ ^@import\ ([a-z_]*)\ from\ ([A-Za-z_\.]*)$ ]]
+      import_variable "$var_name" "$var_value" "$file_name"
+    elif [[ "$line" =~ ^@import\ ([a-z0-9_]*)\ from\ ([A-Za-z0-9_\.]*)$ ]]
     then
       # @import function from file (lowercase is a function)
       func_name="${BASH_REMATCH[1]}"
       file_name="${BASH_REMATCH[2]}"
-      source "$file_name"
+      import_function "$func_name" "$file_name"
 
-      # also import dependencies of the function
-      # right now this is at most 2 lines past the function declaration
-      func_dependencies="$(grep -A2 "^${func_name}()" $file_name)"
-      # whatever, just do this inline for now...
-      while IFS= read -r dep_line
-      do
-        if [[ "$dep_line" =~ \#\ @global\ ([A-Z_,]*)$ ]]
-        then
-          var_names="${BASH_REMATCH[1]}"
-          # split these on comma and/or space (see https://stackoverflow.com/a/10586169/)
-          IFS=', ' read -r -a var_import_names <<< "$var_names"
-          for var_name in "${var_import_names[@]}"
-          do
-            var_value="${!var_name}"
-
-            # verify that multiple imports of the same thing do not conflict
-            if [ -n "${var_imports[$var_name]}" ] && [ "$var_value" != "${var_imports[$var_name]}" ]
-            then
-              echo_err "[ERROR] conflicting definitions of variable '$var_name'"
-              echo_err " --> $file_name: $var_value"
-              echo_err " --> ${var_import_sources[$var_name]}: ${var_imports[$var_name]}"
-              exit 1
-            fi
-
-            # add to variable import arrays
-            var_imports[$var_name]="$var_value"
-            var_import_sources[$var_name]="$file_name"
-          done
-
-        elif [[ "$dep_line" =~ ^@function\ ([a-z_,]*)$ ]]
-        then
-          # TODO: function imports
-          echo "TODO"
-        fi
-
-      done <<< "$func_dependencies"
-
-      import_lines+=( "$(print_function $func_name)" )
     # TODO: option to generate help docs
     else
       # no import
@@ -146,12 +174,17 @@ do
   do
     var_import_lines+=( "$var_name='${var_imports[$var_name]}'" ) # single quotes around value
   done
+  func_import_lines=()
+  for func_name in "${!func_imports[@]}"
+  do
+    func_import_lines+=( "${func_imports[$func_name]}" )
+  done
 
-  # join imports and other lines (with newlines)
+  # join imports and other lines (joined with newlines)
   with_imports="$(
     IFS=$'\n';
     echo "${var_import_lines[*]}" | sort;
-    echo "${import_lines[*]}";
+    echo "${func_import_lines[*]}";
     echo "${other_lines[*]}";
   )"
 
@@ -169,7 +202,7 @@ do
   # clear arrays
   unset var_imports
   unset var_import_sources
-  unset function_imports
-  unset function_import_sources
+  unset func_imports
+  unset func_import_sources
 done
 

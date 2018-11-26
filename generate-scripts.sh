@@ -50,8 +50,8 @@ do
   file_contents=$(<"$script_file")
 
   # variable and function imports
-  declare -A global_imports
-  declare -A global_import_sources
+  declare -A var_imports
+  declare -A var_import_sources
   declare -A function_imports
   declare -A function_import_sources
 
@@ -61,38 +61,76 @@ do
   other_lines=()
   # keep track of the current line number for errors
   current_line=0
-  while IFS= read -r line; do
+  while IFS= read -r line
+  do
     current_line=$(( current_line + 1 ))
 
     if [[ "$line" =~ ^@import\ ([A-Z_]*)\ from\ ([A-Za-z_\.]*)$ ]]
     then
-      # import VARIABLE from file (all caps is global var)
+      # @import VARIABLE from file (all caps is global var)
       var_name="${BASH_REMATCH[1]}"
       file_name="${BASH_REMATCH[2]}"
       var_value="${!var_name}"
       source "$file_name"
-      # TODO: verify that the variable is actually used in the script (as best I can tell), and show a warning if not
 
       # verify that multiple imports of the same thing do not conflict
-      if [ -n "${global_imports[$var_name]}" ] && [ "$var_value" != "${global_imports[$var_name]}" ]
+      if [ -n "${var_imports[$var_name]}" ] && [ "$var_value" != "${var_imports[$var_name]}" ]
       then
         echo_err "[ERROR] conflicting definitions of variable '$var_name'"
         echo_err " --> $file_name: $var_value"
-        echo_err " --> ${global_import_sources[$var_name]}: ${global_imports[$var_name]}"
+        echo_err " --> ${var_import_sources[$var_name]}: ${var_imports[$var_name]}"
         exit 1
       fi
 
-      # add to global imports
-      global_imports[$var_name]="$var_value"
-      global_import_sources[$var_name]="$file_name"
+      # TODO: verify that the variable is actually used in the script (as best I can tell), and show a warning if not
+
+      # add to variable import arrays
+      var_imports[$var_name]="$var_value"
+      var_import_sources[$var_name]="$file_name"
 
     elif [[ "$line" =~ ^@import\ ([a-z_]*)\ from\ ([A-Za-z_\.]*)$ ]]
     then
-      # import function from file (lowercase is a function)
+      # @import function from file (lowercase is a function)
       func_name="${BASH_REMATCH[1]}"
       file_name="${BASH_REMATCH[2]}"
       source "$file_name"
-      # TODO: also import dependencies of the function
+
+      # also import dependencies of the function
+      # right now this is at most 2 lines past the function declaration
+      func_dependencies="$(grep -A2 "^${func_name}()" $file_name)"
+      # whatever, just do this inline for now...
+      while IFS= read -r dep_line
+      do
+        if [[ "$dep_line" =~ \#\ @global\ ([A-Z_,]*)$ ]]
+        then
+          var_names="${BASH_REMATCH[1]}"
+          # split these on comma and/or space (see https://stackoverflow.com/a/10586169/)
+          IFS=', ' read -r -a var_import_names <<< "$var_names"
+          for var_name in "${var_import_names[@]}"
+          do
+            var_value="${!var_name}"
+
+            # verify that multiple imports of the same thing do not conflict
+            if [ -n "${var_imports[$var_name]}" ] && [ "$var_value" != "${var_imports[$var_name]}" ]
+            then
+              echo_err "[ERROR] conflicting definitions of variable '$var_name'"
+              echo_err " --> $file_name: $var_value"
+              echo_err " --> ${var_import_sources[$var_name]}: ${var_imports[$var_name]}"
+              exit 1
+            fi
+
+            # add to variable import arrays
+            var_imports[$var_name]="$var_value"
+            var_import_sources[$var_name]="$file_name"
+          done
+
+        elif [[ "$dep_line" =~ ^@function\ ([a-z_,]*)$ ]]
+        then
+          # TODO: function imports
+          echo "TODO"
+        fi
+
+      done <<< "$func_dependencies"
 
       import_lines+=( "$(print_function $func_name)" )
     # TODO: option to generate help docs
@@ -104,9 +142,9 @@ do
 
   # build variable and function imports
   var_import_lines=()
-  for var_name in "${!global_imports[@]}"
+  for var_name in "${!var_imports[@]}"
   do
-    var_import_lines+=( "$var_name='${global_imports[$var_name]}'" ) # single quotes around value
+    var_import_lines+=( "$var_name='${var_imports[$var_name]}'" ) # single quotes around value
   done
 
   # join imports and other lines (with newlines)
@@ -129,8 +167,8 @@ do
   chmod +x "$new_file_name"
 
   # clear arrays
-  unset global_imports
-  unset global_import_sources
+  unset var_imports
+  unset var_import_sources
   unset function_imports
   unset function_import_sources
 done

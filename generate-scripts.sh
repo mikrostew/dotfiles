@@ -15,6 +15,12 @@ file_header() {
   echo "$file_contents"
 }
 
+# TODO: better name for this
+print_function() {
+  type "$1" | sed -e "/^$1 is a function/d;" -e 's/[[:space:]]*$//'
+  # TODO: error checking, exit if not a function
+}
+
 # read all the files in script-gen/
 # (assuming this is run from the base dir of this repo)
 for script_file in script-gen/*
@@ -28,16 +34,23 @@ do
   # imports and generated things in the script
   import_lines=()
   while IFS= read -r line; do
-    # do the imports here
-    if [[ "$line" =~ ^@@import\ ([A-Za-z_]*)\ from\ ([A-Za-z_\.]*)$ ]]
+    if [[ "$line" =~ ^@import\ ([A-Z_]*)\ from\ ([A-Za-z_\.]*)$ ]]
     then
-      # import variable from file
+      # import VARIABLE from file (all caps is global var)
+      # TODO: verify that multiple imports of the same thing do not conflict
       var_name="${BASH_REMATCH[1]}"
       file_name="${BASH_REMATCH[2]}"
       source "$file_name"
       import_lines+=( "$var_name='${!var_name}'" )
-    # TODO: generate help docs
-    # TODO: import functions
+    elif [[ "$line" =~ ^@import\ ([a-z_]*)\ from\ ([A-Za-z_\.]*)$ ]]
+    then
+      # import function from file (lowercase is a function)
+      # TODO: also import dependencies of the function
+      func_name="${BASH_REMATCH[1]}"
+      file_name="${BASH_REMATCH[2]}"
+      source "$file_name"
+      import_lines+=( "$(print_function $func_name)" )
+    # TODO: option to generate help docs
     else
       # no import
       import_lines+=( "$line" )

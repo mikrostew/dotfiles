@@ -2,37 +2,43 @@
 # $DOTFILES_DIR/.bash_shared_functions: library of shared functions, sourced from multiple files
 
 # colors
-require "$DOTFILES_DIR/.bash_colors"
+source "$DOTFILES_DIR/.bash_colors"
 
 
 # echo to stderr with red text
 echo_err() {
+  # @global COLOR_FG_RED,COLOR_RESET
   echo -e "${COLOR_FG_RED}$@${COLOR_RESET}" >&2
 }
 
 # echo to stderr with green text
 echo_ack() {
+  # @global COLOR_FG_GREEN,COLOR_RESET
   echo -e "${COLOR_FG_GREEN}$@${COLOR_RESET}" >&2
 }
 
 # echo to stderr with blue text
 echo_info() {
+  # @global COLOR_FG_BOLD_BLUE,COLOR_RESET
   echo -e "${COLOR_FG_BOLD_BLUE}$@${COLOR_RESET}" >&2
 }
 
 # for deprecations
 # echo to stderr with yellow text
 echo_dep() {
+  # @global COLOR_FG_BOLD_YELLOW,COLOR_RESET
   echo -e "${COLOR_FG_BOLD_YELLOW}[DEPRECATION] $@${COLOR_RESET}" >&2
 }
 
 # show a glaringly obvious banner for success or failure
 echo_fail_banner() {
+  # @function echo_err
   echo_err "***************";
   echo_err "*  Failed :(  *";
   echo_err "***************";
 }
 echo_success_banner() {
+  # @function echo_ack
   echo_ack "****************";
   echo_ack "*  Success :)  *";
   echo_ack "****************";

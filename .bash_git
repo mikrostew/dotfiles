@@ -9,15 +9,18 @@ source "$DOTFILES_DIR/.bash_shared_functions"
 
 in_git_repo() {
   # @function echo_err
+  # @uses_cmds git
   git status >/dev/null && return 0 || echo_err "Not in git repo" && return 1
 }
 
 # for LinkedIn workflow
 git_review_board_id() {
+  # @uses_cmds git
   echo "$(git config --get branch.$1.reviewid)"
 }
 
 current_git_branch() {
+  # @uses_cmds git
   echo "$(git rev-parse --abbrev-ref HEAD)"
 }
 
@@ -33,17 +36,20 @@ not_on_git_branch() {
 
 # check that repo is currently on a branch (not a tag or detached or anything else)
 on_symbolic_ref() {
+  # @uses_cmds git
   git symbolic-ref HEAD
 }
 
 no_uncommitted_changes() {
   # @function echo_err
+  # @uses_cmds git
   [ "$(git status --porcelain --untracked-files=no)" != "" ] && echo_err ">_<  You have uncommitted changes" && return -1 || return 0
 }
 
 # number of changes between two input branches
 # (typically a branch and master, or master and origin/master)
 commit_diff_on_branch() {
+  # @uses_cmds git
   local git_rev_list_origin="$(git rev-list --count --left-right "$1"..."$2" 2>/dev/null)"
   if [ "$?" -eq 0 ] && [ -n "$git_rev_list_origin" ]; then
     local git_origin_arr=($git_rev_list_origin) # splits into array - it's 2 numbers separated by spaces
@@ -56,11 +62,13 @@ commit_diff_on_branch() {
 # files changed on the current branch
 file_diff_on_branch() {
   # @function based_on_master_or_origin
+  # @uses_cmds git
   local tracking_branch="$(based_on_master_or_origin)"
   echo "$(git diff-tree --no-commit-id --name-only -r "$tracking_branch" HEAD)"
 }
 
 based_on_master_or_origin() {
+  # @uses_cmds git
   # adapted from https://stackoverflow.com/a/9753364
   local tracking_branch="$(git rev-parse --abbrev-ref --symbolic-full-name $1@{u} 2>/dev/null)"
   if [ "$tracking_branch" == "origin/master" ]; then
@@ -123,11 +131,13 @@ squash_commits() {
 # run git with the input arguments
 do_git() {
   # @function do_cmd
+  # @uses_cmds git
   do_cmd git "$@"
 }
 
 # list all branches
 all_git_branches() {
+  # @uses_cmds git sed
   echo $(git for-each-ref --format="%(refname)" refs/heads/ | sed 's|refs/heads/||')
 }
 
@@ -143,6 +153,7 @@ git_undo_merge() {
 get_li_rb_api_def() {
   # @global DOTFILES_DIR
   # @function echo_err,echo_info
+  # @uses_cmds find curl
   local api_def=""
   local cache_file="$DOTFILES_DIR/cache/li-rb-api-def.cache"
   local cache_file_expired="$(find $cache_file -mtime +1)" # if cache file is older than 1 day
@@ -162,6 +173,7 @@ get_li_rb_api_def() {
 # get the template to use for querying the RB api
 get_li_rb_uri_template() {
   # @function get_li_rb_api_def
+  # @uses_cmds jq
   template="$(get_li_rb_api_def | jq --raw-output ".uri_templates.$1")"
   echo "$template"
 }
@@ -169,6 +181,7 @@ get_li_rb_uri_template() {
 # get RB status
 get_li_rb_status() {
   # @function get_li_rb_uri_template
+  # @uses_cmds jq curl
   if [ -n "$1" ]; then
     api_uri_template=$(get_li_rb_uri_template "review_request")
     # echo $api_uri_template
@@ -185,6 +198,7 @@ get_li_rb_status() {
 # argument: review ID
 get_li_rb_title() {
   # @function get_li_rb_uri_template
+  # @uses_cmds jq curl
   if [ -n "$1" ]; then
     api_uri_template=$(get_li_rb_uri_template "review_request")
     request_url=${api_uri_template/\{review_request_id\}/$1}

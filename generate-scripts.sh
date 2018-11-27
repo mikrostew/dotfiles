@@ -33,7 +33,23 @@ file_header() {
   echo "$file_contents"
 }
 
-# TODO: better name for this
+# check for required commands
+requirement_check() {
+  local cmd="$1"
+  local how_to_install="$2"
+  if [ ! $(command -v $cmd) ]; then
+    echo_err "[ERROR] Command '$cmd' is required for this script, but not installed"
+    echo_err "To install: $how_to_install"
+    return 1
+  else
+    return 0
+  fi
+}
+
+cmd_requirement_function() {
+  print_function requirement_check
+}
+
 print_function() {
   type "$1" | sed -e "/^$1 is a function/d;" -e 's/[[:space:]]*$//'
   # TODO: error checking, exit if not a function
@@ -94,11 +110,12 @@ import_function() {
   func_import_sources[$_func_name]="$_from_file"
 
   # also import dependencies of the function
-  # right now this is at most 2 lines past the function declaration
-  func_dependencies="$(grep -A2 "^${func_name}()" $file_name)"
+  # right now this is at most 3 lines past the function declaration
+  func_dependencies="$(grep -A3 "^${func_name}()" $file_name)"
   # whatever, just do this inline for now...
   while IFS= read -r dep_line
   do
+    # TODO: rename to @uses_vars
     if [[ "$dep_line" =~ \#\ @global\ ([A-Z0-9_,]*)$ ]]
     then
       # @global VAR1,VAR2
@@ -110,7 +127,7 @@ import_function() {
         var_value="${!var_name}"
         import_variable "$var_name" "$var_value" "$file_name"
       done
-
+    # TODO: rename to @uses_funcs
     elif [[ "$dep_line" =~ \#\ @function\ ([a-z0-9_,]*)$ ]]
     then
       # @function some_func,some_func_2
@@ -121,10 +138,29 @@ import_function() {
       do
         import_function "$func_name" "$file_name"
       done
+    elif [[ "$dep_line" =~ \#\ @uses_cmds\ (.*)$ ]]
+    then
+      cmd_names="${BASH_REMATCH[1]}"
+      add_cmd_requirements "$cmd_names"
     fi
   done <<< "$func_dependencies"
 
   # TODO: verify that the function is actually used in the script (as best I can tell), and show a warning if not
+}
+
+add_cmd_requirements() {
+  local cmd_names_string="$1"
+
+  # split these on comma and/or space (see https://stackoverflow.com/a/10586169/)
+  IFS=', ' read -r -a cmd_names_array <<< "$cmd_names_string"
+  for cmd_name in "${cmd_names_array[@]}"
+  do
+    # TODO: provide better help info on how to install specific things
+    # TODO: also provide platform-specific help
+    how_to_install="search 'how to install $cmd_name'"
+    # add command to requirements for the script
+    cmd_requirements[$cmd_name]="$how_to_install"
+  done
 }
 
 # read all the files in script-gen/
@@ -142,6 +178,7 @@ do
   declare -A var_import_sources
   declare -A func_imports
   declare -A func_import_sources
+  declare -A cmd_requirements
 
   # lines from the input script that are not imports
   other_lines=()
@@ -164,7 +201,10 @@ do
       func_name="${BASH_REMATCH[1]}"
       file_name="${BASH_REMATCH[2]}"
       import_function "$func_name" "$file_name"
-
+    elif [[ "$line" =~ ^@uses_cmds\ (.*)$ ]]
+    then
+      cmd_names="${BASH_REMATCH[1]}"
+      add_cmd_requirements "$cmd_names"
     # TODO: option to generate help docs
     else
       # no import
@@ -184,11 +224,28 @@ do
     func_import_lines+=( "${func_imports[$func_name]}" )
   done
 
+  # build cmd requirement checking
+  cmd_requirement_lines=()
+  if [ "${#cmd_requirements[@]}" -gt 0 ]
+  then
+    # add the function the check command requirements
+    func_import_lines+=( "$(cmd_requirement_function)" )
+    cmd_requirement_lines+=( 'combined_return=0' )
+    for cmd_name in "${!cmd_requirements[@]}"
+    do
+      how_to_install="${cmd_requirements[$cmd_name]}"
+      cmd_requirement_lines+=( "requirement_check $cmd_name \"$how_to_install\"" )
+      cmd_requirement_lines+=( 'combined_return=$(( combined_return + $? ))' )
+    done
+    cmd_requirement_lines+=( 'if [ "$combined_return" != 0 ]; then exit $combined_return; fi' )
+  fi
+
   # join imports and other lines (joined with newlines)
   with_imports="$(
     IFS=$'\n';
     echo "${var_import_lines[*]}" | sort;
     echo "${func_import_lines[*]}";
+    echo "${cmd_requirement_lines[*]}";
     echo "${other_lines[*]}";
   )"
 
@@ -208,5 +265,6 @@ do
   unset var_import_sources
   unset func_imports
   unset func_import_sources
+  unset cmd_requirements
 done
 

@@ -71,8 +71,28 @@ import_function() {
   local _from_file="$2"
 
   source "$_from_file"
+  local _func_value="$(print_function "$_func_name")"
 
-  # TODO: if we've already seen the import, don't re-import it (slow)
+  if [ -n "${func_imports[$_func_name]}" ]
+  then
+    # if we've already seen the import, and it's the same, don't re-import
+    if [ "$_func_value" == "${func_imports[$_func_name]}" ]
+    then
+      return 0
+    else
+      # but if the import is not the same, that's no good
+      # TODO: refactor this as well...
+      echo_err "[ERROR] conflicting definitions of function '$_func_name'"
+      echo_err " --> $_from_file: $_func_value"
+      echo_err " --> ${func_import_sources[$_func_name]}: ${func_imports[$_func_name]}"
+      exit 1
+    fi
+  fi
+
+  # not imported yet, so add to variable import arrays
+  func_imports[$_func_name]="$_func_value"
+  func_import_sources[$_func_name]="$_from_file"
+
   # also import dependencies of the function
   # right now this is at most 2 lines past the function declaration
   func_dependencies="$(grep -A2 "^${func_name}()" $file_name)"
@@ -104,23 +124,7 @@ import_function() {
     fi
   done <<< "$func_dependencies"
 
-
-  # verify that multiple imports of the same thing do not conflict
-  func_value="$(print_function "$_func_name")"
-  # TODO: refactor this as well...
-  if [ -n "${func_imports[$_func_name]}" ] && [ "$func_value" != "${func_imports[$_func_name]}" ]
-  then
-    echo_err "[ERROR] conflicting definitions of function '$_func_name'"
-    echo_err " --> $_from_file: $func_value"
-    echo_err " --> ${func_import_sources[$_func_name]}: ${func_imports[$_func_name]}"
-    exit 1
-  fi
-
   # TODO: verify that the function is actually used in the script (as best I can tell), and show a warning if not
-
-  # add to variable import arrays
-  func_imports[$_func_name]="$func_value"
-  func_import_sources[$_func_name]="$_from_file"
 }
 
 # read all the files in script-gen/

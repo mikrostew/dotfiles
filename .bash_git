@@ -559,11 +559,12 @@ gfun() {
 
 # git - show the current commit hash
 gcurr() {
-    arguments=()
-    if in_git_repo && num_arguments_ok arguments[@] "$#"
-    then
-        ( set -x; git rev-parse HEAD; git rev-parse --short HEAD; )
-    fi
+  arguments=()
+  if in_git_repo && num_arguments_ok arguments[@] "$#"
+  then
+    do_git rev-parse HEAD
+    do_git rev-parse --short HEAD
+  fi
 }
 
 # git - sync current branch to the upstream fork (Git Fork Sync)
@@ -629,12 +630,12 @@ gfc() {
 
 # git - merge current branch into master
 gmm() {
-    arguments=()
-    if in_git_repo && not_on_git_branch 'master' && no_uncommitted_changes && num_arguments_ok arguments[@] "$#"
-    then
-        local branch_name=$(current_git_branch)
-        ( set -x; git checkout master && git merge "$branch_name" )
-    fi
+  arguments=()
+  if in_git_repo && not_on_git_branch 'master' && no_uncommitted_changes && num_arguments_ok arguments[@] "$#"
+  then
+    local branch_name=$(current_git_branch)
+    do_git checkout master && do_git merge "$branch_name"
+  fi
 }
 
 # git - move recent commits from master to a new branch
@@ -651,25 +652,14 @@ gmove() {
   fi
 }
 
-# git - rebase current branch against master (using 'mint update' instead of 'git pull')
-mram() {
-    # TODO: use gram() and check if I'm in a MP
-    arguments=()
-    if in_git_repo && not_on_git_branch 'master' && no_uncommitted_changes && num_arguments_ok arguments[@] "$#"
-    then
-        local branch_name=$(current_git_branch)
-        ( set -x; git checkout master && mint update && git checkout "$branch_name" && git rebase master )
-    fi
-}
-
 # git - show which files are different from master branch
 gfiles() {
-    arguments=()
-    if in_git_repo && not_on_git_branch 'master' && num_arguments_ok arguments[@] "$#"
-    then
-        local branch_name=$(current_git_branch)
-        ( set -x; git diff --name-status master.."$branch_name" )
-    fi
+  arguments=()
+  if in_git_repo && not_on_git_branch 'master' && num_arguments_ok arguments[@] "$#"
+  then
+    local branch_name=$(current_git_branch)
+    do_git diff --name-status master.."$branch_name"
+  fi
 }
 
 # git - squash commits in current branch into a single commit (git squash branch)

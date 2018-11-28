@@ -78,6 +78,26 @@ import_variable() {
   var_import_sources[$_var_name]="$_from_file"
 }
 
+get_sourced_files() {
+  # TODO: convert this to absolute path if it is relative
+  local _from_file="$1"
+  local _dep_file_arr=( "$_from_file" )
+
+  sourced_files="$(grep "^source " "$_from_file" | sed 's/^source //g')"
+  if [ -n "$sourced_files" ]
+  then
+    for _file in $sourced_files
+    do
+      full_path="$(eval echo $_file)"
+      _dep_file_arr+=( "$full_path" )
+      dep_sources=( $(get_sourced_files "$full_path") )
+      _dep_file_arr+=( "${dep_sources[@]}" )
+    done
+  fi
+
+  echo "${_dep_file_arr[@]}"
+}
+
 # add function (and any dependencies) to imports
 import_function() {
   # arguments:
@@ -103,9 +123,13 @@ import_function() {
   func_imports[$_func_name]="$_func_value"
   func_import_sources[$_func_name]="$_from_file"
 
+  # get all files that are sourced from the main input file,
+  # because dependent functions may be in some other file
+  dep_files=( $(get_sourced_files "$_from_file") )
+
   # also import dependencies of the function
   # right now this is at most 3 lines past the function declaration
-  func_dependencies="$(grep -A3 "^${func_name}()" $file_name)"
+  func_dependencies="$(grep -A3 "^${func_name}()" "${dep_files[@]}")"
   # whatever, just do this inline for now...
   while IFS= read -r dep_line
   do
@@ -119,7 +143,7 @@ import_function() {
       for var_name in "${var_import_names[@]}"
       do
         var_value="${!var_name}"
-        import_variable "$var_name" "$var_value" "$file_name"
+        import_variable "$var_name" "$var_value" "$_from_file"
       done
     # TODO: rename to @uses_funcs?
     elif [[ "$dep_line" =~ \#\ @function\ ([a-z0-9_,]*)$ ]]
@@ -130,7 +154,7 @@ import_function() {
       IFS=', ' read -r -a func_import_names <<< "$func_names"
       for func_name in "${func_import_names[@]}"
       do
-        import_function "$func_name" "$file_name"
+        import_function "$func_name" "$_from_file"
       done
     elif [[ "$dep_line" =~ \#\ @uses_cmds\ (.*)$ ]]
     then

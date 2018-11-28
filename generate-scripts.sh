@@ -109,7 +109,7 @@ import_function() {
   # whatever, just do this inline for now...
   while IFS= read -r dep_line
   do
-    # TODO: rename to @uses_vars
+    # TODO: rename to @uses_vars?
     if [[ "$dep_line" =~ \#\ @global\ ([A-Z0-9_,]*)$ ]]
     then
       # @global VAR1,VAR2
@@ -121,7 +121,7 @@ import_function() {
         var_value="${!var_name}"
         import_variable "$var_name" "$var_value" "$file_name"
       done
-    # TODO: rename to @uses_funcs
+    # TODO: rename to @uses_funcs?
     elif [[ "$dep_line" =~ \#\ @function\ ([a-z0-9_,]*)$ ]]
     then
       # @function some_func,some_func_2
@@ -208,12 +208,14 @@ do
 
   # build variable and function imports
   var_import_lines=()
-  for var_name in "${!var_imports[@]}"
+  var_keys="$(for key in "${!var_imports[@]}"; do echo "$key"; done | sort | tr '\n' ' ')" # sort keys
+  for var_name in $var_keys
   do
     var_import_lines+=( "$var_name='${var_imports[$var_name]}'" ) # single quotes around value
   done
   func_import_lines=()
-  for func_name in "${!func_imports[@]}"
+  func_keys="$(for key in "${!func_imports[@]}"; do echo "$key"; done | sort | tr '\n' ' ')" # sort keys
+  for func_name in $func_keys
   do
     func_import_lines+=( "${func_imports[$func_name]}" )
   done
@@ -237,7 +239,7 @@ do
   # join imports and other lines (joined with newlines)
   with_imports="$(
     IFS=$'\n';
-    echo "${var_import_lines[*]}" | sort;
+    echo "${var_import_lines[*]}";
     echo "${func_import_lines[*]}";
     echo "${cmd_requirement_lines[*]}";
     echo "${other_lines[*]}";

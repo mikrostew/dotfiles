@@ -5,6 +5,8 @@
 COLOR_RESET='\033[0m'
 COLOR_FG_RED='\033[0;31m'
 
+declare -A sourced_files=()
+
 # echo to stderr with red text
 echo_err() {
   echo -e "${COLOR_FG_RED}$@${COLOR_RESET}" >&2
@@ -62,15 +64,11 @@ import_variable() {
   local _var_value="$2"
   local _from_file="$3"
 
-  source "$_from_file"
-
-  # verify that multiple imports of the same thing do not conflict
-  if [ -n "${var_imports[$_var_name]}" ] && [ "$_var_value" != "${var_imports[$_var_name]}" ]
+  # don't re-source files that have already been sourced
+  if [ "${sourced_files[$_from_file]}" != "yes" ]
   then
-    echo_err "[ERROR] conflicting definitions of variable '$_var_name'"
-    echo_err " --> $_from_file: $_var_value"
-    echo_err " --> ${var_import_sources[$_var_name]}: ${var_imports[$_var_name]}"
-    exit 1
+    source "$_from_file"
+    sourced_files[$_from_file]='yes'
   fi
 
   # TODO: verify that the variable is actually used in the script (as best I can tell), and show a warning if not
@@ -86,23 +84,19 @@ import_function() {
   local _func_name="$1"
   local _from_file="$2"
 
-  source "$_from_file"
+  # don't re-source files that have already been sourced
+  if [ "${sourced_files[$_from_file]}" != "yes" ]
+  then
+    source "$_from_file"
+    sourced_files[$_from_file]='yes'
+  fi
+
   local _func_value="$(print_function "$_func_name")"
 
+  # if we've already seen the import, don't re-import
   if [ -n "${func_imports[$_func_name]}" ]
   then
-    # if we've already seen the import, and it's the same, don't re-import
-    if [ "$_func_value" == "${func_imports[$_func_name]}" ]
-    then
-      return 0
-    else
-      # but if the import is not the same, that's no good
-      # TODO: refactor this as well...
-      echo_err "[ERROR] conflicting definitions of function '$_func_name'"
-      echo_err " --> $_from_file: $_func_value"
-      echo_err " --> ${func_import_sources[$_func_name]}: ${func_imports[$_func_name]}"
-      exit 1
-    fi
+    return 0
   fi
 
   # not imported yet, so add to variable import arrays

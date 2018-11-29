@@ -4,17 +4,6 @@
 require "$DOTFILES_DIR/.bash_colors"
 require "$DOTFILES_DIR/.bash_shared_functions"
 
-# other functions
-
-# show running processes, sorted by CPU usage
-cpu() {
-  if platform_is_mac; then
-    do_cmd top -F -R -o cpu
-  else
-    do_cmd top -o +%CPU
-  fi
-}
-
 # show a desktop notification with sound after a long-running command
 # Usage:
 #   sleep 10; notify

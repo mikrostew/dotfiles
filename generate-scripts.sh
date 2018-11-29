@@ -253,6 +253,14 @@ do
     then
       cmd_names="${BASH_REMATCH[1]}"
       add_cmd_requirements "$cmd_names"
+    elif [[ "$line" =~ \?PLATFORM_IS_MAC\? ]]
+    then
+      replace_test="$(echo "$line" | sed 's/\?PLATFORM_IS_MAC\?/[ "$(uname -s)" == "Darwin" ]/')"
+      other_lines+=( "$replace_test" )
+    elif [[ "$line" =~ \?PLATFORM_IS_LINUX\? ]]
+    then
+      replace_test="$(echo "$line" | sed 's/\?PLATFORM_IS_LINUX\?/[ "$(uname -s)" == "Linux" ]/')"
+      other_lines+=( "$replace_test" )
     # TODO: option to generate help docs
     else
       # no import

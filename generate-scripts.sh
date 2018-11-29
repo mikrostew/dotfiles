@@ -35,6 +35,29 @@ file_header() {
   echo "$file_contents"
 }
 
+# generate code to exit with a message if there is an error
+# NOTE: can't run this from a subshell, because it won't have access to import variables
+exit_with_message() {
+  # arguments:
+  local varname="$1"
+  local message="$2"
+  local padding="$3"
+
+  local temp=""
+
+  # make sure it has these colors
+  import_variable "COLOR_FG_RED" "$COLOR_FG_RED" ""
+  import_variable "COLOR_RESET" "$COLOR_RESET" ""
+
+  temp+="${padding}exit_code=\"\$?\"\n"
+  temp+="${padding}if [ \"\$exit_code\" -ne 0 ]\n"
+  temp+="${padding}then\n"
+  temp+="${padding}  echo -e \"\${COLOR_FG_RED}$message\${COLOR_RESET}\" >&2\n"
+  temp+="${padding}  exit \"\$exit_code\"\n"
+  temp+="${padding}fi\n"
+  printf -v "$varname" "$temp"
+}
+
 # check for required commands
 requirement_check() {
   local cmd="$1"
@@ -65,7 +88,7 @@ import_variable() {
   local _from_file="$3"
 
   # don't re-source files that have already been sourced
-  if [ "${sourced_files[$_from_file]}" != "yes" ]
+  if [ -n "$_from_file" ] && [ "${sourced_files[$_from_file]}" != "yes" ]
   then
     source "$_from_file"
     sourced_files[$_from_file]='yes'
@@ -261,6 +284,13 @@ do
     then
       replace_test="$(echo "$line" | sed 's/\?PLATFORM_IS_LINUX\?/[ "$(uname -s)" == "Linux" ]/')"
       other_lines+=( "$replace_test" )
+    elif [[ "$line" =~ ^(\ *)@EXIT_IF_CMD_ERROR\ \"(.*)\"$ ]]
+    then
+      # TODO: allow specifying functions to call before exiting
+      padding="${BASH_REMATCH[1]}"
+      exit_msg="${BASH_REMATCH[2]}"
+      exit_with_message gen_code "$exit_msg" "$padding"
+      other_lines+=( "$gen_code" )
     # TODO: option to generate help docs
     else
       # no import

@@ -66,11 +66,6 @@ cdl() {
   ll
 }
 
-# set title of terminal window
-set_title() {
-  echo -en "\033]0;$*\a"
-}
-
 # set secrets as environment vars, so I don't commit them to repos :)
 set_env() {
   echo_dep "use get-api-token instead of set-env"
@@ -181,7 +176,3 @@ EndOfSSHExpect
 echo "Added SSH key"
 }
 
-nextoncall() {
-  # from #oneliners
-  curl -s https://oncall.prod.linkedin.com/api/v0/users/$(whoami)/upcoming | jq -r '.[]|"\(.team) \(.role) \(.start)"' | while read team role ts; do echo "$role oncall for $team at $ts"; done | e2d -f6
-}

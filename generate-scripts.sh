@@ -78,6 +78,21 @@ import_variable() {
   var_import_sources[$_var_name]="$_from_file"
 }
 
+# add multiple variable to imports
+import_multiple_variables() {
+  # arguments:
+  local _var_names="$1"
+  local _from_file="$2"
+
+  # split these on comma and/or space
+  IFS=', ' read -r -a var_import_names <<< "$_var_names"
+  for var_name in "${var_import_names[@]}"
+  do
+    var_value="${!var_name}"
+    import_variable "$var_name" "$var_value" "$_from_file"
+  done
+}
+
 get_sourced_files() {
   # TODO: convert this to absolute path if it is relative
   local _from_file="$1"
@@ -134,28 +149,17 @@ import_function() {
   while IFS= read -r dep_line
   do
     # TODO: rename to @uses_vars?
-    if [[ "$dep_line" =~ \#\ @global\ ([A-Z0-9_,]*)$ ]]
+    if [[ "$dep_line" =~ \#\ @global\ (.*)$ ]]
     then
       # @global VAR1,VAR2
       var_names="${BASH_REMATCH[1]}"
-      # split these on comma and/or space (see https://stackoverflow.com/a/10586169/)
-      IFS=', ' read -r -a var_import_names <<< "$var_names"
-      for var_name in "${var_import_names[@]}"
-      do
-        var_value="${!var_name}"
-        import_variable "$var_name" "$var_value" "$_from_file"
-      done
+      import_multiple_variables "$var_names" "$_from_file"
     # TODO: rename to @uses_funcs?
-    elif [[ "$dep_line" =~ \#\ @function\ ([a-z0-9_,]*)$ ]]
+    elif [[ "$dep_line" =~ \#\ @function\ (.*)$ ]]
     then
       # @function some_func,some_func_2
       func_names="${BASH_REMATCH[1]}"
-      # split these on comma and/or space (see https://stackoverflow.com/a/10586169/)
-      IFS=', ' read -r -a func_import_names <<< "$func_names"
-      for func_name in "${func_import_names[@]}"
-      do
-        import_function "$func_name" "$_from_file"
-      done
+      import_multiple_functions "$func_names" "$_from_file"
     elif [[ "$dep_line" =~ \#\ @uses_cmds\ (.*)$ ]]
     then
       cmd_names="${BASH_REMATCH[1]}"
@@ -166,10 +170,24 @@ import_function() {
   # TODO: verify that the function is actually used in the script (as best I can tell), and show a warning if not
 }
 
+# add functions (and any dependencies) to imports
+import_multiple_functions() {
+  # arguments:
+  local _func_names="$1"
+  local _from_file="$2"
+
+  # split these on comma and/or space
+  IFS=', ' read -r -a func_import_names <<< "$_func_names"
+  for func_name in "${func_import_names[@]}"
+  do
+    import_function "$func_name" "$_from_file"
+  done
+}
+
 add_cmd_requirements() {
   local cmd_names_string="$1"
 
-  # split these on comma and/or space (see https://stackoverflow.com/a/10586169/)
+  # split these on comma and/or space
   IFS=', ' read -r -a cmd_names_array <<< "$cmd_names_string"
   for cmd_name in "${cmd_names_array[@]}"
   do
@@ -206,16 +224,28 @@ do
   do
     current_line=$(( current_line + 1 ))
 
-    if [[ "$line" =~ ^@import\ ([A-Z0-9_]*)\ from\ ([A-Za-z0-9_\.]*)$ ]]
+    if [[ "$line" =~ ^@import_var\ {\ (.*)\ }\ from\ (.*)$ ]]
     then
-      # @import VARIABLE from file (all caps is global var)
+      # @import { MULTIPLE, VARIABLES } from file
+      var_names="${BASH_REMATCH[1]}"
+      file_name="${BASH_REMATCH[2]}"
+      import_multiple_variables "$var_names" "$file_name"
+    elif [[ "$line" =~ ^@import_var\ (.*)\ from\ (.*)$ ]]
+    then
+      # @import_var VARIABLE from file
       var_name="${BASH_REMATCH[1]}"
       file_name="${BASH_REMATCH[2]}"
       var_value="${!var_name}"
       import_variable "$var_name" "$var_value" "$file_name"
-    elif [[ "$line" =~ ^@import\ ([a-z0-9_]*)\ from\ ([A-Za-z0-9_\.]*)$ ]]
+    elif [[ "$line" =~ ^@import\ {\ (.*)\ }\ from\ (.*)$ ]]
     then
-      # @import function from file (lowercase is a function)
+      # @import { multiple, functions } from file
+      func_names="${BASH_REMATCH[1]}"
+      file_name="${BASH_REMATCH[2]}"
+      import_multiple_functions "$func_names" "$file_name"
+    elif [[ "$line" =~ ^@import\ (.*)\ from\ (.*)$ ]]
+    then
+      # @import function from file
       func_name="${BASH_REMATCH[1]}"
       file_name="${BASH_REMATCH[2]}"
       import_function "$func_name" "$file_name"

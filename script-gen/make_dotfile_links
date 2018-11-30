@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 # Create links for dotfiles
 
-# colors
-source "./.bash_colors"
+@import echo_err from .bash_shared_functions
+@import_var { COLOR_FG_YELLOW, COLOR_FG_BOLD_BLUE, COLOR_FG_GREEN, COLOR_RESET } from .bash_colors
+
+@uses_cmds readlink
 
 # optionally input the directory where the repo is checked out
 checkoutdir="${1:-$HOME/dotfiles}"
@@ -34,14 +36,14 @@ links[".bundle"]=".bundle"
 links[".rubocop.yml"]=".rubocop.yml"
 
 # platform-specific
-uname_str=$(uname)
-if [ "$uname_str" == "Darwin" ]; then  # Mac
-    # ssh
-    links[".ssh/config"]=".ssh-config-mac"
-
-elif [ "$uname_str" == "Linux" ]; then  # Linux desktop and termux on Android
-    # ssh
-    links[".ssh/config"]=".ssh-config-linux"
+if ?PLATFORM_IS_MAC?
+then
+  # ssh
+  links[".ssh/config"]=".ssh-config-mac"
+elif ?PLATFORM_IS_LINUX
+then
+  # ssh
+  links[".ssh/config"]=".ssh-config-linux"
 fi
 
 # create the links
@@ -50,7 +52,7 @@ do
   echo -n "$HOME/$i => $checkoutdir/${links[$i]}"
   if [ -L "$HOME/$i" ]
   then
-    echo -e " ${COLOR_FG_RED}(symlink already exists, skipping)${COLOR_RESET}"
+    echo -e " ${COLOR_FG_YELLOW}(symlink already exists, skipping)${COLOR_RESET}"
     continue
   fi
   if [ -e "$HOME/$i" ]

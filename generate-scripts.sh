@@ -145,7 +145,6 @@ import_variable() {
   fi
 
   local var_value="${!var_name}"
-  echo "import var $var_name with value '$var_value' from file $from_file" >&2
 
   # TODO: verify that the variable is actually used in the script (as best I can tell), and show a warning if not
 
@@ -165,7 +164,6 @@ import_multiple_variables() {
   # arguments:
   local _var_names="$1"
   local _from_file="$2"
-  echo_err "import multiple vars: $_var_names"
 
   # split these on comma and/or space
   IFS=', ' read -r -a var_import_names <<< "$_var_names"

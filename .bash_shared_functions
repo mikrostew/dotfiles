@@ -67,7 +67,7 @@ num_arguments_ok() {
 # argument(s)
 # - array of expected argument names
 # - number of arguments passed to function
-# TODO: better way to handle this
+# there may be a better way to handle this, but I'll wait until I want to start verifying arguments
 num_arguments_min() {
   expected_args=( "${!1}" )
   num_args="$2"

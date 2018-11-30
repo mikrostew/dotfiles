@@ -96,9 +96,9 @@ exit_with_message() {
 
   local temp=""
 
-  # make sure it has these colors
-  import_variable "COLOR_FG_RED" "$COLOR_FG_RED" ""
-  import_variable "COLOR_RESET" "$COLOR_RESET" ""
+  # make sure it has these colors (don't import
+  add_var_to_imports "COLOR_FG_RED" "$COLOR_FG_RED"
+  add_var_to_imports "COLOR_RESET" "$COLOR_RESET"
 
   temp+="${padding}exit_code=\"\$?\"\n"
   temp+="${padding}if [ \"\$exit_code\" -ne 0 ]\n"
@@ -134,22 +134,30 @@ print_function() {
 # add variable to imports
 import_variable() {
   # arguments:
-  local _var_name="$1"
-  local _var_value="$2"
-  local _from_file="$3"
+  local var_name="$1"
+  local from_file="$2"
 
   # don't re-source files that have already been sourced
-  if [ -n "$_from_file" ] && [ "${sourced_files[$_from_file]}" != "yes" ]
+  if [ -n "$from_file" ] && [ "${sourced_files[$from_file]}" != "yes" ]
   then
-    source "$_from_file"
-    sourced_files[$_from_file]='yes'
+    source "$from_file"
+    sourced_files[$from_file]='yes'
   fi
+
+  local var_value="${!var_name}"
+  echo "import var $var_name with value '$var_value' from file $from_file" >&2
 
   # TODO: verify that the variable is actually used in the script (as best I can tell), and show a warning if not
 
   # add to variable import arrays
-  var_imports[$_var_name]="$_var_value"
-  var_import_sources[$_var_name]="$_from_file"
+  add_var_to_imports "$var_name" "$var_value"
+}
+
+add_var_to_imports() {
+  # arguments:
+  # $1 is name
+  # $2 is value
+  var_imports[$1]="$2"
 }
 
 # add multiple variable to imports
@@ -157,13 +165,13 @@ import_multiple_variables() {
   # arguments:
   local _var_names="$1"
   local _from_file="$2"
+  echo_err "import multiple vars: $_var_names"
 
   # split these on comma and/or space
   IFS=', ' read -r -a var_import_names <<< "$_var_names"
   for var_name in "${var_import_names[@]}"
   do
-    var_value="${!var_name}"
-    import_variable "$var_name" "$var_value" "$_from_file"
+    import_variable "$var_name" "$_from_file"
   done
 }
 
@@ -208,9 +216,8 @@ import_function() {
     return 0
   fi
 
-  # not imported yet, so add to variable import arrays
+  # not imported yet, so add to function imports
   func_imports[$_func_name]="$_func_value"
-  func_import_sources[$_func_name]="$_from_file"
 
   # get all files that are sourced from the main input file,
   # because dependent functions may be in some other file
@@ -287,9 +294,7 @@ do
 
     # variable and function imports
     declare -A var_imports
-    declare -A var_import_sources
     declare -A func_imports
-    declare -A func_import_sources
     declare -A cmd_requirements
 
     # lines from the input script that are not imports
@@ -311,8 +316,7 @@ do
         # @import_var VARIABLE from file
         var_name="${BASH_REMATCH[1]}"
         file_name="${BASH_REMATCH[2]}"
-        var_value="${!var_name}"
-        import_variable "$var_name" "$var_value" "$file_name"
+        import_variable "$var_name" "$file_name"
       elif [[ "$line" =~ ^@import\ {\ (.*)\ }\ from\ (.*)$ ]]
       then
         # @import { multiple, functions } from file
@@ -403,9 +407,7 @@ do
 
     # clear arrays
     unset var_imports
-    unset var_import_sources
     unset func_imports
-    unset func_import_sources
     unset cmd_requirements
   else
     # don't need to generate file

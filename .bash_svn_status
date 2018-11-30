@@ -103,7 +103,7 @@ rs_svn_local_status() {
 rs_svn=$(gs_color "$RS_COLOR_SVN" "$RS_SYM_SVN")
 rs_svn_info=$(svn info 2>&1)
 if [ "$?" -eq 0 ]; then
-    # TODO: split URI and path with something like '/'
+    # need to split URI and path with something like '/', but whatever
     if [[ "$rs_svn_info" =~ URL:\ ([^$'\n']+) ]]; then
         svn_url="${BASH_REMATCH[1]}"
         svn_protocol=$(expr "$svn_url" : '\([a-z]\+://\)') # match the svn:// or https:// from the start of the repo
@@ -119,7 +119,7 @@ if [ "$?" -eq 0 ]; then
 
     rs_status+="  $rs_svn$svn_path$svn_revision $svn_local_status"
 elif [ "$?" -eq 1 ]; then
-    # TODO: break these into an error function
+    # need to break these into an error function, but whatever
     if [[ "$rs_svn_info" =~ svn:\ E155021 ]]; then
         if [[ "$rs_svn_info" =~ \(format\ ([0-9]+)\) ]]; then
             svn_repo_format="${BASH_REMATCH[1]}"

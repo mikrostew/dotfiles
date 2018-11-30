@@ -1,5 +1,5 @@
 # shared testing code
-# TODO: probably move this back into the file
+# probably move this back into the file, but whatever for now
 
 # create test repos in tmp directories
 tmpdirname="$TMPDIR/tmp$RANDOM"

@@ -53,68 +53,6 @@ fgn() {
   fi
 }
 
-# TODO: split this and it's associated functions to a separate file in scripts/
-# check minimum version, and print out the result
-# Arguments:
-# $1 - program/command/language name
-# $2 - acceptable version range (semver)
-# $3 - how to get the version of this (NOTE: will be eval-ed)
-# $4 - command to install this
-# $5 - [optional] path to where this is installed, instead of using `which` (NOTE: will be eval-ed)
-min_version_check() {
-  # 1) check if this is installed
-  if [ -n "$5" ]; then
-    install_path=$(eval "$5")
-  else
-    install_path=$(which "$1")
-  fi
-  if [ -z "$install_path" ]; then
-    echo -e "$1 : ${COLOR_FG_RED}not installed (want $2), install with '${4:-(unknown command)}'${COLOR_RESET}"
-    return 1
-  fi
-  # 2) check the minimum version
-  current_version=$(eval "$3")
-  if [ -n "$current_version" ]; then
-    if meets_version "$(normalize_version $current_version)" "$2"; then
-      # don't print anything for this
-      return
-    else
-      echo -e "$1 : ${COLOR_FG_RED}found $current_version (want $2)${COLOR_RESET} ($install_path)"
-    fi
-  else
-    echo -e "$1 : ${COLOR_FG_RED}unknown version (want $2)${COLOR_RESET} ($install_path)"
-  fi
-  return 1 # if it hasn't already returned, it didn't meet the version
-}
-
-# convert versions to X.X.X format
-normalize_version() {
-  if [[ "$1" =~ ^[0-9]+$ ]]; then
-    echo "$1.0.0"
-  elif [[ "$1" =~ ^[0-9]+\.[0-9]+$ ]]; then
-    echo "$1.0"
-  elif [[ "$1" =~ ^[0-9]+\.[0-9]+\.[0-9]+ ]]; then
-    # there may be some junk after the version (looking at you bash), get rid of that
-    echo "$BASH_REMATCH"
-  else
-    echo "$1"
-  fi
-}
-
-# compare input semver with input constraint
-# (using semver from NPM for this - https://github.com/npm/node-semver)
-# $1 - program version (semver format)
-# $2 - version range (semver format)
-meets_version() {
-  # check that semver is installed
-  if [ ! $(command -v semver) ]; then
-    echo_err "'semver' is not installed - install with 'npm i -g semver'"
-    return 1
-  else
-    semver --range "$2" "$1" >/dev/null
-  fi
-}
-
 # show the sizes of the input dirs, sorted largest to smallest
 dir_sizes() {
   du -skx "$@" | sort --numeric-sort --reverse

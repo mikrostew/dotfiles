@@ -1,7 +1,7 @@
 # $DOTFILES_DIR/.bash_aliases: contains extra aliases, sourced from .bashrc
 
-require "$DOTFILES_DIR/.bash_colors"
-require "$DOTFILES_DIR/.bash_shared_functions"
+source "$DOTFILES_DIR/.bash_colors"
+source "$DOTFILES_DIR/.bash_shared_functions"
 
 # color support for some commands
 if platform_is_linux; then

@@ -25,9 +25,6 @@ esac
 # directory where the dotfiles repo is checked out
 export DOTFILES_DIR="$(dirname "$(readlink "$HOME/.bashrc")")"
 
-# so I can use 'require' instead of 'source'
-source "$DOTFILES_DIR/.bash_require"
-
 # don't put duplicate lines or lines starting with space in the history
 HISTCONTROL=ignoreboth
 
@@ -46,10 +43,10 @@ shopt -s checkwinsize
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
 # colors:
-require "$DOTFILES_DIR/.bash_colors"
+source "$DOTFILES_DIR/.bash_colors"
 
 # git / svn status
-require "$DOTFILES_DIR/.bash_repo_status"
+source "$DOTFILES_DIR/.bash_repo_status"
 
 # prompt string
 # see https://www.gnu.org/software/bash/manual/bash.html#Controlling-the-Prompt
@@ -67,10 +64,10 @@ PS1="${COLOR_RESET}\n($ps_time_24h) "\
 
 
 # aliases
-require "$DOTFILES_DIR/.bash_aliases"
+source "$DOTFILES_DIR/.bash_aliases"
 
 # git aliases and functions
-require "$DOTFILES_DIR/.bash_git"
+source "$DOTFILES_DIR/.bash_git"
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
@@ -102,7 +99,7 @@ export RI="-T --format=ansi"
 export TERM=xterm-256color
 
 # travis gem
-[ -f "$HOME/.travis/travis.sh" ] && require "$HOME/.travis/travis.sh"
+[ -f "$HOME/.travis/travis.sh" ] && source "$HOME/.travis/travis.sh"
 
 
 # functions to load things into the shell

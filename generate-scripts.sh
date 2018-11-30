@@ -7,6 +7,8 @@ COLOR_FG_RED='\033[0;31m'
 COLOR_FG_YELLOW='\033[0;33m'
 
 declare -A sourced_files=()
+# keep track of hashes for dependent files (and only calculate once)
+declare -A dep_file_hashes=()
 
 files_generated=0
 files_skipped=0
@@ -18,7 +20,7 @@ echo_err() {
 
 on_error() {
   exit_code="$?"
-  # TODO: not all errors will come from lines in files
+  # not all errors will come from lines in files, fix that if it becomes an issue
   echo_err "[ERROR] $script_file: line $current_line"
   echo_err " --> $line"
   exit "$exit_code"
@@ -33,10 +35,7 @@ need_to_generate() {
   local generated_script="$2"
 
   # if the generated file doesn't exist, then of course it should be generated
-  if [ ! -f "$generated_script" ]
-  then
-    return 0
-  fi
+  if [ ! -f "$generated_script" ]; then return 0; fi
 
   # get hashfrom last file generation
   readarray -t -s5 -n1 hash_lines < "$generated_script"
@@ -44,7 +43,8 @@ need_to_generate() {
   local prev_hash="${hash_lines[0]#\#}"
 
   # for the generated script, skip the header (which contains the calculated hash) and is currently 7 lines long
-  local combined_hash="$(hash_for_scripts "$src_script" "$(tail -n +8 $generated_script)")"
+  local combined_hash
+  hash_for_scripts combined_hash "$src_script" "$(tail -n +8 $generated_script)"
 
   # if hash matches, no need to regenerate
   if [ "$combined_hash" == "$prev_hash" ]
@@ -56,34 +56,89 @@ need_to_generate() {
   return 0
 }
 
+dependency_hashes() {
+  # arguments:
+  local varname="$1"
+  local for_script="$2"
+
+  # read script contents
+  local contents=$(<"$for_script")
+
+  local import_hashes=""
+
+  # variable and function imports
+  unset script_dependencies
+  declare -A script_dependencies
+
+  while IFS= read -r line
+  do
+    if [[ "$line" =~ ^@import\ .*\ from\ (.*)$ ]]
+    then
+      depends_on_file="${BASH_REMATCH[1]}"
+      script_dependencies[$depends_on_file]='file'
+    elif [[ "$line" =~ ^@import_var\ .*\ from\ (.*)$ ]]
+    then
+      depends_on_file="${BASH_REMATCH[1]}"
+      script_dependencies[$depends_on_file]='var'
+    fi
+  done <<< "$contents"
+
+  # get hashes for dependencies
+  for dep in "${!script_dependencies[@]}"
+  do
+    local already_hashed="${dep_file_hashes[$dep]:-noexist}"
+    if [ "$already_hashed" == "noexist" ]
+    then
+      # haven't hashed dep yet
+      local dep_hash="$(md5 -q $dep)"
+      dep_file_hashes[$dep]="$dep_hash"
+      import_hashes+="$dep_hash"
+    else
+      import_hashes+="$already_hashed"
+    fi
+  done
+
+  printf -v "$varname" "$import_hashes"
+}
+
 # calculate the hash of the src and dest scripts
 hash_for_scripts() {
   # arguments:
-  local src_file="$1"
-  local generated_contents="$2"
+  local varname="$1"
+  local src_file="$2"
+  local generated_contents="$3"
 
-  # combine files and calculate the hash (instead of doing 2 separate hashes)
+  # get hashes of dependencies
+  local dep_hashes
+  dependency_hashes dep_hashes "$src_file"
+
+  # combine everything and calculate the hash
   # - using md5 because I want this to be fast and I'm not worried about collisions
-  echo "$generated_contents" | cat "$src_file" - | md5 -q
+  local full_hash="$(echo "${generated_contents}${dep_hashes}" | cat "$src_file" - | md5 -q)"
+  printf -v "$varname" "$full_hash"
 }
 
 # create a header for the generated script file
 file_header() {
   # arguments:
-  local input_file="$1"
-  local file_contents="$2"
+  local varname="$1"
+  local input_file="$2"
+  local file_contents="$3"
 
   # calculate the hash
-  local combined_hash="$(hash_for_scripts "$input_file" "$file_contents")"
+  local combined_hash
+  hash_for_scripts combined_hash "$input_file" "$file_contents"
 
-  echo "#!/usr/bin/env bash"
-  echo "###########################################################################"
-  echo "# DO NOT EDIT! This script was auto-generated. To update this script, edit"
-  echo "# the file $input_file, and run './generate-scripts.sh'"
-  echo "###########################################################################"
-  echo "#$combined_hash"
-  echo ""
-  echo "$file_contents"
+  local header_contents=""
+  header_contents+="#!/usr/bin/env bash\n"
+  header_contents+="###########################################################################\n"
+  header_contents+="# DO NOT EDIT! This script was auto-generated. To update this script, edit\n"
+  header_contents+="# the file $input_file, and run './generate-scripts.sh'\n"
+  header_contents+="###########################################################################\n"
+  header_contents+="#$combined_hash\n"
+  header_contents+="\n"
+
+  printf -v "$varname" "${header_contents}%s" "$file_contents"
 }
 
 # generate code to exit with a message if there is an error
@@ -396,7 +451,8 @@ do
     no_comments="$(echo "$with_imports" | sed '/^[[:blank:]]*#/d;/^[[:blank:]]*$/d;')"
 
     # add a header and shebang to the beginning
-    with_header="$(file_header "$script_file" "$no_comments")"
+    with_header=""
+    file_header with_header "$script_file" "$no_comments"
 
     # write the new file
     echo "$script_file -> $new_file_name"

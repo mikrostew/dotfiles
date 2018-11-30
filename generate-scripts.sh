@@ -326,7 +326,6 @@ add_cmd_requirements() {
   for cmd_name in "${cmd_names_array[@]}"
   do
     # TODO: provide better help info on how to install specific things
-    # TODO: also provide platform-specific help
     how_to_install="search 'how to install $cmd_name'"
     # add command to requirements for the script
     cmd_requirements[$cmd_name]="$how_to_install"
@@ -432,8 +431,24 @@ do
       for cmd_name in "${!cmd_requirements[@]}"
       do
         how_to_install="${cmd_requirements[$cmd_name]}"
-        cmd_requirement_lines+=( "requirement_check $cmd_name \"$how_to_install\"" )
-        cmd_requirement_lines+=( 'combined_return=$(( combined_return + $? ))' )
+        # platform-specific commands
+        if [ "$cmd_name" == "open" ]
+        then
+          cmd_requirement_lines+=( 'if [ "$(uname -s)" == "Darwin" ]; then' )
+          cmd_requirement_lines+=( "  requirement_check $cmd_name \"$how_to_install\"" )
+          cmd_requirement_lines+=( '  combined_return=$(( combined_return + $? ))' )
+          cmd_requirement_lines+=( 'fi' )
+        elif [ "$cmd_name" == "xdg-open" ]
+        then
+          cmd_requirement_lines+=( 'if [ "$(uname -s)" == "Linux" ]; then' )
+          cmd_requirement_lines+=( "  requirement_check $cmd_name \"$how_to_install\"" )
+          cmd_requirement_lines+=( '  combined_return=$(( combined_return + $? ))' )
+          cmd_requirement_lines+=( 'fi' )
+        else
+          # platform-agnostic
+          cmd_requirement_lines+=( "requirement_check $cmd_name \"$how_to_install\"" )
+          cmd_requirement_lines+=( 'combined_return=$(( combined_return + $? ))' )
+        fi
       done
       cmd_requirement_lines+=( 'if [ "$combined_return" != 0 ]; then exit $combined_return; fi' )
     fi

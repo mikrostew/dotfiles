@@ -48,18 +48,19 @@ echo_success_banner() {
 # - array of expected argument names
 # - number of arguments passed to function
 num_arguments_ok() {
-    local expected_args=( "${!1}" )
-    local num_args="$2"
-    local expected_num_args="${#expected_args[@]}"
-    if [ "$expected_num_args" -ne "$num_args" ]
-    then
-        # $FUNCNAME is an array of the current call stack
-        echo_err "Come on! This is how to use this:"
-        echo_err ""
-        echo_err "  ${FUNCNAME[1]} ${expected_args[*]}"
-        return -1
-    fi
-    return 0
+  # @function echo_err
+  local expected_args=( "${!1}" )
+  local num_args="$2"
+  local expected_num_args="${#expected_args[@]}"
+  if [ "$expected_num_args" -ne "$num_args" ]
+  then
+    # $FUNCNAME is an array of the current call stack
+    echo_err "Come on! This is how to use this:"
+    echo_err ""
+    echo_err "  ${FUNCNAME[1]} ${expected_args[*]}"
+    return -1
+  fi
+  return 0
 }
 
 # check for minimum number of arguments to a function, and print usage if not correct

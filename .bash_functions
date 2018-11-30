@@ -53,35 +53,6 @@ fgn() {
   fi
 }
 
-# update the dotfiles repo and source .bashrc
-updot() {
-  ( set +e; set -x; pushd "$DOTFILES_DIR"; git pull --rebase; popd; )
-  unalias -a
-  source "$HOME/.bashrc"
-}
-
-# change directory and list
-cdl() {
-  cd "$1"
-  ll
-}
-
-# set secrets as environment vars, so I don't commit them to repos :)
-set_env() {
-  echo_dep "use get-api-token instead of set-env"
-  [ -f "$HOME/Dropbox/secret/set-env.sh" ] && . "$HOME/Dropbox/secret/set-env.sh"
-}
-
-# remove any trailing newlines from the input file
-# (from https://stackoverflow.com/a/12148703)
-rmlf() {
-  arguments=('<filename>')
-  if num_arguments_ok arguments[@] "$#"
-  then
-    printf %s "$(< $1)" > $1
-  fi
-}
-
 # TODO: split this and it's associated functions to a separate file in scripts/
 # check minimum version, and print out the result
 # Arguments:
@@ -147,16 +118,6 @@ meets_version() {
 # show the sizes of the input dirs, sorted largest to smallest
 dir_sizes() {
   du -skx "$@" | sort --numeric-sort --reverse
-}
-
-# courtesy of https://stackoverflow.com/a/3352015
-trim() {
-  local var="$*"
-  # remove leading whitespace characters
-  var="${var#"${var%%[![:space:]]*}"}"
-  # remove trailing whitespace characters
-  var="${var%"${var##*[![:space:]]}"}"
-  echo -n "$var"
 }
 
 # use ssh-agent and ssh-add to setup the SSH key for accessing LI repos

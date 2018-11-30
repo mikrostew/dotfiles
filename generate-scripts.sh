@@ -182,8 +182,23 @@ cmd_requirement_function() {
 }
 
 print_function() {
-  type "$1" | sed -e "/^$1 is a function/d;" -e 's/[[:space:]]*$//'
-  # TODO: error checking, exit if not a function
+  local func_text="$(type "$1")"
+  exit_code="$?"
+  if [ "$exit_code" -ne 0 ]
+  then
+    echo_err "Error when trying to print function '$1'"
+    exit $exit_code
+  fi
+
+  # check that this is a function
+  if [[ "$func_text" =~ $1\ is\ a\ function ]]
+  then
+    echo "$func_text" | sed -e "/^$1 is a function/d;" -e 's/[[:space:]]*$//'
+  else
+    echo_err "'$1' is not a function"
+    exit 1
+  fi
+
 }
 
 # add variable to imports

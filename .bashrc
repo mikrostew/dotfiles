@@ -111,9 +111,6 @@ load_nvm() {
   export NVM_DIR="$HOME/.nvm"
   [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"  # This loads nvm
   [ -s "$NVM_DIR/bash_completion" ] && source "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-  # show version, if that didn't work
-  min_version_check "node" "^1.0.0" 'nvm current' 'brew install node' 'echo $NVM_BIN'
 }
 
 # notion
@@ -125,9 +122,6 @@ load_notion() {
   [ -s "$NOTION_HOME/load.sh" ] && \. "$NOTION_HOME/load.sh"
 
   export PATH="${NOTION_HOME}/bin:$PATH"
-
-  # check version
-  # min_version_check "notion" "^0.1.0" 'notion --version' 'TODO' 'echo $NOTION_HOME'
 }
 
 # because I frequently screw up my installation
@@ -146,8 +140,6 @@ load_chruby() {
     chruby ruby-2
     ruby -v
   fi
-
-  min_version_check "ruby" "^2.2.0" 'echo $RUBY_VERSION' '(something with ruby-install)' 'echo $RUBY_ROOT';
 }
 
 # latex
@@ -180,9 +172,11 @@ notify() {
       cmd="$(history | tail -n 1 | sed -e 's/^\ *[0-9]*\ *//' -e 's/[;&|]\ *notify.*$//' -e 's/"//g' )"
     fi
     local sound_name="Glass" # see /System/Library/Sounds/ for list of sounds
-    # TODO: use terminal-notifier, see https://github.com/julienXX/terminal-notifier
-    local script="display notification \"$cmd\" with title \"$title\" sound name \"$sound_name\""
-    osascript -e "$script"
+    # use terminal-notifier instead of osascript (see https://github.com/julienXX/terminal-notifier)
+    # so that it will activate the terminal when clicked, and I don't have to re-quote everything
+    terminal-notifier -message "$cmd" -title "$title" -activate 'com.googlecode.iterm2' -sound "$sound_name"
+    # local script="display notification \"$cmd\" with title \"$title\" sound name \"$sound_name\""
+    # osascript -e "$script"
   else # Linux
     if [ -n "$cmd_string" ]; then
       cmd="$cmd_string"
@@ -222,6 +216,7 @@ fgn() {
   min_version_check "curl" "^7.0.0" "curl --version | head -n1 | awk '{print \$2}'" 'brew install curl';
   # sponge doesn't give a version, so as long as it exists that's fine
   min_version_check "sponge" "1.0.0" "which sponge >/dev/null && echo 1.0.0" 'brew install moreutils';
+  min_version_check "terminal-notifier" "^2.0.0" "terminal-notifier -version | sed -e 's/terminal-notifier //' -e 's/\.$//'" 'brew install terminal-notifier';
   # TODO: also verify that the links to these dotfiles haven't changed
 ) & disown
 

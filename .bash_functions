@@ -52,26 +52,3 @@ fgn() {
     echo_err "(no background jobs running)"
   fi
 }
-
-# show the sizes of the input dirs, sorted largest to smallest
-dir_sizes() {
-  du -skx "$@" | sort --numeric-sort --reverse
-}
-
-# use ssh-agent and ssh-add to setup the SSH key for accessing LI repos
-ssh_add_li_key() {
-  # start ssh-agent if it's not already running for this session
-  if [ -z "$SSH_AUTH_SOCK" ] ; then
-    eval $(ssh-agent)
-  fi
-  expect <<EndOfSSHExpect
-        # add the SSH key using ssh-add with expect
-        spawn ssh-add $HOME/.ssh/mistewar_at_linkedin.com_ssh_key
-        expect "Enter passphrase for $HOME/.ssh/mistewar_at_linkedin.com_ssh_key:"
-        # SSH key has no password
-        send "\r"
-        expect eof
-EndOfSSHExpect
-echo "Added SSH key"
-}
-

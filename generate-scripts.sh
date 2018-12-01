@@ -35,7 +35,6 @@ trap on_error ERR
 
 # compare hashes to check if the file needs to be generated
 need_to_generate() {
-  return 0
   # arguments:
   local src_script="$1"
   local generated_script="$2"
@@ -253,19 +252,28 @@ import_multiple_variables() {
   done
 }
 
+full_file_path() {
+  if [[ $1 == /* ]] # absolute path
+  then
+    echo "$1"
+  else
+    echo "$PWD/$1" # may need readlink here
+  fi
+}
+
+
 get_sourced_files() {
-  # TODO: convert this to absolute path if it is relative
   local _from_file="$1"
-  local _dep_file_arr=( "$_from_file" )
+  local _dep_file_arr=()
 
   sourced_files="$(grep "^source " "$_from_file" | sed 's/^source //g')"
   if [ -n "$sourced_files" ]
   then
     for _file in $sourced_files
     do
-      full_path="$(eval echo $_file)"
-      _dep_file_arr+=( "$full_path" )
-      dep_sources=( $(get_sourced_files "$full_path") )
+      local full_dep_path="$(eval echo $_file)"
+      _dep_file_arr+=( "$full_dep_path" )
+      dep_sources=( $(get_sourced_files "$full_dep_path") )
       _dep_file_arr+=( "${dep_sources[@]}" )
     done
   fi
@@ -277,7 +285,7 @@ get_sourced_files() {
 import_function() {
   # arguments:
   local _func_name="$1"
-  local _from_file="$2"
+  local _from_file="$(full_file_path "$2")"
   local type="$3" # explicit imports will set this to 'explicit'
 
   # don't re-source files that have already been sourced
@@ -305,7 +313,7 @@ import_function() {
 
   # get all files that are sourced from the main input file,
   # because dependent functions may be in some other file
-  dep_files=( $(get_sourced_files "$_from_file") )
+  dep_files=( "$_from_file" $(get_sourced_files "$_from_file") )
 
   # also import dependencies of the function
   # right now this is at most 3 lines past the function declaration
@@ -366,6 +374,8 @@ for script_file in script-gen/*
 do
   # this is where the file will be output
   new_file_name="${script_file/script-gen/scripts}"
+
+  echo -n "$script_file -> $new_file_name "
 
   if need_to_generate "$script_file" "$new_file_name"
   then
@@ -534,7 +544,7 @@ do
 
     # write the new file
     echo "$with_header" > "$new_file_name"
-    echo -e "$script_file -> $new_file_name [${COLOR_FG_GREEN}OK${COLOR_RESET}]"
+    echo -e "[${COLOR_FG_GREEN}OK${COLOR_RESET}]"
     files_generated=$(( files_generated+1 ))
 
     # clear arrays
@@ -544,7 +554,7 @@ do
     unset explicit_imports
   else
     # don't need to generate file
-    echo -e "$script_file -> $new_file_name [${COLOR_FG_BOLD_YELLOW}skip${COLOR_RESET}]"
+    echo -e "[${COLOR_FG_BOLD_YELLOW}skip${COLOR_RESET}]"
     files_skipped=$(( files_skipped+1 ))
   fi
 

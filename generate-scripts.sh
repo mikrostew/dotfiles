@@ -3,12 +3,13 @@
 # into executable scripts in scripts/
 
 COLOR_RESET='\033[0m'
+COLOR_FG_BOLD_YELLOW='\033[1;33m'
+COLOR_FG_GREEN='\033[0;32m'
 COLOR_FG_RED='\033[0;31m'
-COLOR_FG_YELLOW='\033[0;33m'
 
-declare -A sourced_files=()
+declare -A sourced_files
 # keep track of hashes for dependent files (and only calculate once)
-declare -A dep_file_hashes=()
+declare -A dep_file_hashes
 
 files_generated=0
 files_skipped=0
@@ -16,6 +17,10 @@ files_skipped=0
 # echo to stderr with red text
 echo_err() {
   echo -e "${COLOR_FG_RED}$@${COLOR_RESET}" >&2
+}
+# echo warning to stderr with yellow text
+echo_warn() {
+  echo -e "${COLOR_FG_BOLD_YELLOW}Warning: $@${COLOR_RESET}" >&2
 }
 
 on_error() {
@@ -30,6 +35,7 @@ trap on_error ERR
 
 # compare hashes to check if the file needs to be generated
 need_to_generate() {
+  return 0
   # arguments:
   local src_script="$1"
   local generated_script="$2"
@@ -206,6 +212,7 @@ import_variable() {
   # arguments:
   local var_name="$1"
   local from_file="$2"
+  local type="$3" # explicit imports will set this to 'explicit'
 
   # don't re-source files that have already been sourced
   if [ -n "$from_file" ] && [ "${sourced_files[$from_file]}" != "yes" ]
@@ -216,10 +223,12 @@ import_variable() {
 
   local var_value="${!var_name}"
 
-  # TODO: verify that the variable is actually used in the script (as best I can tell), and show a warning if not
-
   # add to variable import arrays
   add_var_to_imports "$var_name" "$var_value"
+  if [ "$type" == "explicit" ]
+  then
+    explicit_imports[$var_name]='var'
+  fi
 }
 
 add_var_to_imports() {
@@ -234,12 +243,13 @@ import_multiple_variables() {
   # arguments:
   local _var_names="$1"
   local _from_file="$2"
+  # if this is an explicit import = $3 - just pass this thru
 
   # split these on comma and/or space
   IFS=', ' read -r -a var_import_names <<< "$_var_names"
   for var_name in "${var_import_names[@]}"
   do
-    import_variable "$var_name" "$_from_file"
+    import_variable "$var_name" "$_from_file" "$3"
   done
 }
 
@@ -268,12 +278,18 @@ import_function() {
   # arguments:
   local _func_name="$1"
   local _from_file="$2"
+  local type="$3" # explicit imports will set this to 'explicit'
 
   # don't re-source files that have already been sourced
   if [ "${sourced_files[$_from_file]}" != "yes" ]
   then
     source "$_from_file"
     sourced_files[$_from_file]='yes'
+  fi
+
+  if [ "$type" == "explicit" ]
+  then
+    explicit_imports[$_func_name]='func'
   fi
 
   local _func_value="$(print_function "$_func_name")"
@@ -315,8 +331,6 @@ import_function() {
       add_cmd_requirements "$cmd_names"
     fi
   done <<< "$func_dependencies"
-
-  # TODO: verify that the function is actually used in the script (as best I can tell), and show a warning if not
 }
 
 # add functions (and any dependencies) to imports
@@ -324,12 +338,13 @@ import_multiple_functions() {
   # arguments:
   local _func_names="$1"
   local _from_file="$2"
+  # if this is an explicit import = $3 - just pass this thru
 
   # split these on comma and/or space
   IFS=', ' read -r -a func_import_names <<< "$_func_names"
   for func_name in "${func_import_names[@]}"
   do
-    import_function "$func_name" "$_from_file"
+    import_function "$func_name" "$_from_file" "$3"
   done
 }
 
@@ -363,6 +378,8 @@ do
     declare -A var_imports
     declare -A func_imports
     declare -A cmd_requirements
+    # keep track of explicit imports to track if they are used
+    declare -A explicit_imports
 
     # lines from the input script that are not imports
     other_lines=()
@@ -374,28 +391,28 @@ do
 
       if [[ "$line" =~ ^@import_var\ {\ (.*)\ }\ from\ (.*)$ ]]
       then
-        # @import { MULTIPLE, VARIABLES } from file
+        # @import_var { MULTIPLE, VARIABLES } from file
         var_names="${BASH_REMATCH[1]}"
         file_name="${BASH_REMATCH[2]}"
-        import_multiple_variables "$var_names" "$file_name"
+        import_multiple_variables "$var_names" "$file_name" "explicit"
       elif [[ "$line" =~ ^@import_var\ (.*)\ from\ (.*)$ ]]
       then
         # @import_var VARIABLE from file
         var_name="${BASH_REMATCH[1]}"
         file_name="${BASH_REMATCH[2]}"
-        import_variable "$var_name" "$file_name"
+        import_variable "$var_name" "$file_name" "explicit"
       elif [[ "$line" =~ ^@import\ {\ (.*)\ }\ from\ (.*)$ ]]
       then
         # @import { multiple, functions } from file
         func_names="${BASH_REMATCH[1]}"
         file_name="${BASH_REMATCH[2]}"
-        import_multiple_functions "$func_names" "$file_name"
+        import_multiple_functions "$func_names" "$file_name" "explicit"
       elif [[ "$line" =~ ^@import\ (.*)\ from\ (.*)$ ]]
       then
         # @import function from file
         func_name="${BASH_REMATCH[1]}"
         file_name="${BASH_REMATCH[2]}"
-        import_function "$func_name" "$file_name"
+        import_function "$func_name" "$file_name" "explicit"
       elif [[ "$line" =~ ^@uses_cmds\ (.*)$ ]]
       then
         cmd_names="${BASH_REMATCH[1]}"
@@ -421,6 +438,38 @@ do
         other_lines+=( "$line" )
       fi
     done <<< "$file_contents"
+
+    # verify that the function & variable imports are actually used in the script (as best I can tell)
+    for import_name in "${!explicit_imports[@]}"
+    do
+      found_import='false'
+      for orig_line in "${other_lines[@]}"
+      do
+        if [ -n "$orig_line" ] && [[ ! "$orig_line" =~ ^\ *\# ]]
+        then
+          # this is not a comment or blank line
+          if [ "${explicit_imports[$import_name]}" == "var" ]
+          then
+            if [[ "$orig_line" =~ \$$import_name ]] || [[ "$orig_line" =~ \${$import_name} ]]
+            then
+              found_import='true'
+              break
+            fi
+          elif [ "${explicit_imports[$import_name]}" == "func" ]
+          then
+            if [[ "$orig_line" =~ $import_name ]] # just check that the function name appears somewhere
+            then
+              found_import='true'
+              break
+            fi
+          fi
+        fi
+      done
+      if [ "$found_import" == "false" ]
+      then
+        echo_warn "Unused import '$import_name'"
+      fi
+    done
 
     # build variable and function imports
     var_import_lines=()
@@ -478,6 +527,7 @@ do
     )"
 
     # strip any comments and blank lines
+    # (I may not wont to do this eventually - to add comments for readability)
     no_comments="$(echo "$with_imports" | sed '/^[[:blank:]]*#/d;/^[[:blank:]]*$/d;')"
 
     # add a header and shebang to the beginning
@@ -485,18 +535,19 @@ do
     file_header with_header "$script_file" "$no_comments"
 
     # write the new file
-    echo "$script_file -> $new_file_name"
     echo "$with_header" > "$new_file_name"
-    files_generated=$((files_generated+1))
+    echo -e "$script_file -> $new_file_name [${COLOR_FG_GREEN}OK${COLOR_RESET}]"
+    files_generated=$(( files_generated+1 ))
 
     # clear arrays
     unset var_imports
     unset func_imports
     unset cmd_requirements
+    unset explicit_imports
   else
     # don't need to generate file
-    echo -e "${COLOR_FG_YELLOW}$script_file -> $new_file_name (skipped)${COLOR_RESET}"
-    files_skipped=$((files_skipped+1))
+    echo -e "$script_file -> $new_file_name [${COLOR_FG_BOLD_YELLOW}skip${COLOR_RESET}]"
+    files_skipped=$(( files_skipped+1 ))
   fi
 
   # make sure the generated script is executable
@@ -504,5 +555,5 @@ do
 done
 
 echo ""
-echo "generated $files_generated, skipped $files_skipped"
+echo "generated $files_generated, skip $files_skipped"
 

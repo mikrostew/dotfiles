@@ -313,16 +313,14 @@ import_function() {
   # whatever, just do this inline for now...
   while IFS= read -r dep_line
   do
-    # TODO: rename to @uses_vars?
-    if [[ "$dep_line" =~ \#\ @global\ (.*)$ ]]
+    if [[ "$dep_line" =~ \#\ @uses_vars\ (.*)$ ]]
     then
-      # @global VAR1,VAR2
+      # @uses_vars VAR1,VAR2
       var_names="${BASH_REMATCH[1]}"
       import_multiple_variables "$var_names" "$_from_file"
-    # TODO: rename to @uses_funcs?
-    elif [[ "$dep_line" =~ \#\ @function\ (.*)$ ]]
+    elif [[ "$dep_line" =~ \#\ @uses_funcs\ (.*)$ ]]
     then
-      # @function some_func,some_func_2
+      # @uses_funcs some_func,some_func_2
       func_names="${BASH_REMATCH[1]}"
       import_multiple_functions "$func_names" "$_from_file"
     elif [[ "$dep_line" =~ \#\ @uses_cmds\ (.*)$ ]]

@@ -488,18 +488,25 @@ do
       do
         how_to_install="${cmd_requirements[$cmd_name]}"
         # platform-specific commands
-        if [ "$cmd_name" == "open" ] || [ "$cmd_name" == "sysctl" ]
+        if [[ "$cmd_name" =~ (.*)/(.*) ]]
         then
-          cmd_requirement_lines+=( 'if [ "$(uname -s)" == "Darwin" ]; then' )
-          cmd_requirement_lines+=( "  requirement_check $cmd_name \"$how_to_install\"" )
-          cmd_requirement_lines+=( '  combined_return=$(( combined_return + $? ))' )
-          cmd_requirement_lines+=( 'fi' )
-        elif [ "$cmd_name" == "xdg-open" ] || [ "$cmd_name" == "lscpu" ]
-        then
-          cmd_requirement_lines+=( 'if [ "$(uname -s)" == "Linux" ]; then' )
-          cmd_requirement_lines+=( "  requirement_check $cmd_name \"$how_to_install\"" )
-          cmd_requirement_lines+=( '  combined_return=$(( combined_return + $? ))' )
-          cmd_requirement_lines+=( 'fi' )
+          actual_command="${BASH_REMATCH[1]}"
+          os_for_cmd="${BASH_REMATCH[2]}"
+          if [ "$os_for_cmd" == "OSX" ]
+          then
+            # TODO: combine multiple of these under one check
+            cmd_requirement_lines+=( 'if [ "$(uname -s)" == "Darwin" ]; then' )
+            cmd_requirement_lines+=( "  requirement_check $actual_command \"$how_to_install\"" )
+            cmd_requirement_lines+=( '  combined_return=$(( combined_return + $? ))' )
+            cmd_requirement_lines+=( 'fi' )
+          elif [ "$os_for_cmd" == "Linux" ]
+          then
+            # TODO: combine multiple of these under one check
+            cmd_requirement_lines+=( 'if [ "$(uname -s)" == "Linux" ]; then' )
+            cmd_requirement_lines+=( "  requirement_check $actual_command \"$how_to_install\"" )
+            cmd_requirement_lines+=( '  combined_return=$(( combined_return + $? ))' )
+            cmd_requirement_lines+=( 'fi' )
+          fi
         else
           # platform-agnostic
           cmd_requirement_lines+=( "requirement_check $cmd_name \"$how_to_install\"" )

@@ -16,11 +16,11 @@ files_skipped=0
 
 # echo to stderr with red text
 echo_err() {
-  echo -e "${COLOR_FG_RED}$@${COLOR_RESET}" >&2
+  echo -en "\n${COLOR_FG_RED}$@${COLOR_RESET} " >&2
 }
 # echo warning to stderr with yellow text
 echo_warn() {
-  echo -e "${COLOR_FG_BOLD_YELLOW}Warning: $@${COLOR_RESET}" >&2
+  echo -en "\n${COLOR_FG_BOLD_YELLOW}Warning: $@${COLOR_RESET} " >&2
 }
 
 on_error() {
@@ -360,7 +360,7 @@ do
   # this is where the file will be output
   new_file_name="${script_file/script-gen/scripts}"
 
-  echo -n "$script_file -> $new_file_name "
+  echo -n "$script_file -> $new_file_name..."
 
   if need_to_generate "$script_file" "$new_file_name"
   then

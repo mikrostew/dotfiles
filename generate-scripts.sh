@@ -366,6 +366,8 @@ add_cmd_requirements() {
     # add command to requirements for the script
     cmd_requirements[$cmd_name]="$how_to_install"
   done
+  # and include functions needed for requirement checking
+  import_function "echo_err" ".bash_shared_functions" ""
 }
 
 # read all the files in script-gen/
@@ -504,13 +506,13 @@ do
       do
         how_to_install="${cmd_requirements[$cmd_name]}"
         # platform-specific commands
-        if [ "$cmd_name" == "open" ]
+        if [ "$cmd_name" == "open" ] || [ "$cmd_name" == "sysctl" ]
         then
           cmd_requirement_lines+=( 'if [ "$(uname -s)" == "Darwin" ]; then' )
           cmd_requirement_lines+=( "  requirement_check $cmd_name \"$how_to_install\"" )
           cmd_requirement_lines+=( '  combined_return=$(( combined_return + $? ))' )
           cmd_requirement_lines+=( 'fi' )
-        elif [ "$cmd_name" == "xdg-open" ]
+        elif [ "$cmd_name" == "xdg-open" ] || [ "$cmd_name" == "lscpu" ]
         then
           cmd_requirement_lines+=( 'if [ "$(uname -s)" == "Linux" ]; then' )
           cmd_requirement_lines+=( "  requirement_check $cmd_name \"$how_to_install\"" )

@@ -169,23 +169,6 @@ exit_with_message() {
   printf -v "$varname" "$temp"
 }
 
-# check for required commands
-requirement_check() {
-  local cmd="$1"
-  local how_to_install="$2"
-  if [ ! $(command -v $cmd) ]; then
-    echo_err "[ERROR] Command '$cmd' is required for this script, but not installed"
-    echo_err "To install: $how_to_install"
-    return 1
-  else
-    return 0
-  fi
-}
-
-cmd_requirement_function() {
-  print_function requirement_check
-}
-
 print_function() {
   local func_text="$(type "$1")"
   exit_code="$?"
@@ -317,7 +300,7 @@ import_function() {
 
   # also import dependencies of the function
   # right now this is at most 3 lines past the function declaration
-  func_dependencies="$(grep -A3 "^${func_name}()" "${dep_files[@]}")"
+  func_dependencies="$(grep -A3 "^${_func_name}()" "${dep_files[@]}")"
   # whatever, just do this inline for now...
   while IFS= read -r dep_line
   do
@@ -367,7 +350,7 @@ add_cmd_requirements() {
     cmd_requirements[$cmd_name]="$how_to_install"
   done
   # and include functions needed for requirement checking
-  import_function "echo_err" ".bash_shared_functions" ""
+  import_function "requirement_check" "$PWD/.bash_shared_functions" ""
 }
 
 # read all the files in script-gen/
@@ -499,8 +482,7 @@ do
     cmd_requirement_lines=()
     if [ "${#cmd_requirements[@]}" -gt 0 ]
     then
-      # add the function the check command requirements
-      func_import_lines+=( "$(cmd_requirement_function)" )
+      # add the checks for command requirements
       cmd_requirement_lines+=( 'combined_return=0' )
       for cmd_name in "${!cmd_requirements[@]}"
       do

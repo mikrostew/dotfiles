@@ -93,6 +93,23 @@ num_arguments_min() {
   return 0
 }
 
+# check for required commands
+requirement_check() {
+  # @uses_funcs echo_err
+
+  # arguments:
+  local cmd="$1"
+  local how_to_install="$2"
+
+  if [ ! $(command -v $cmd) ]; then
+    echo_err "[ERROR] Command '$cmd' is required for this script, but not installed"
+    echo_err "To install: $how_to_install"
+    return 1
+  else
+    return 0
+  fi
+}
+
 # echo the input command and arguments in green, then run the command
 # (for commands that change state)
 do_cmd() {

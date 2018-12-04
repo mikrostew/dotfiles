@@ -353,6 +353,81 @@ add_cmd_requirements() {
   import_function "requirement_check" "$PWD/.bash_shared_functions" ""
 }
 
+add_argument() {
+  # arguments:
+  local arg_type="$1" # optional|required
+  local arg_info_string="$2"
+
+  # split up the strings, preserving spaces inside the quotes (see https://superuser.com/a/1066541)
+  local argument_options="$(eval "for arg in $arg_info_string; do echo \$arg; done")"
+
+  readarray -t argument_options <<< "$argument_options"
+
+  local num_arg_options="${#argument_options[@]}"
+  if [ "$num_arg_options" -eq 3 ]
+  then
+    add_flag_arg "${argument_options[0]}" "${argument_options[1]}" "${argument_options[2]}" "$arg_type"
+  elif [ "$num_arg_options" -eq 2 ]
+  then
+    add_noflag_arg "${argument_options[0]}" "${argument_options[1]}" "$arg_type"
+  else
+    echo_err "Error: Wrong number of arguments"
+    on_error
+  fi
+}
+
+# add an argument that uses a flag
+add_flag_arg() {
+  # arguments:
+  local arg_flag="$1"
+  local arg_var_name="$2"
+  local arg_help_text="$3"
+  local arg_type="$4" # optional|required
+
+  echo_err "add_flag_arg: TODO for now..."
+
+  # TODO: add to help_text_args[]
+
+  if [ "${#arg_flag}" -eq 1 ]
+  then
+    # true/false flag
+    pre_getopt_lines+=( "$arg_var_name='false'" )
+    getopts_lines+=( )
+    getopts_lines+=( "    $arg_flag)" )
+    getopts_lines+=( "      $arg_var_name='true'" )
+    getopts_lines+=( "      ;;" )
+  elif [ "${#arg_flag}" -eq 2 ] && [ "${arg_flag:1:2}" == ":" ]
+  then
+    # arg with parameter
+    getopts_lines+=( )
+    getopts_lines+=( "    ${arg_flag:0:1})" ) # just the flag char, not including the ':'
+    getopts_lines+=( "      $arg_var_name=\"\$OPTARG\"" )
+    getopts_lines+=( "      ;;" )
+  else
+    echo_err "Error: Bad flag format '$arg_flag'"
+    on_error
+  fi
+  getopts_argstring+="$arg_flag"
+
+  # and include functions needed for getopts stuff
+  import_function "echo_err" "$PWD/.bash_shared_functions" ""
+}
+
+# add an argument that does not use a flag
+add_noflag_arg() {
+  # arguments:
+  local arg_var_name="$1"
+  local arg_help_text="$2"
+  local arg_type="$3" # optional|required
+
+  echo_err "add_noflag_arg: TODO for now..."
+
+  # TODO: add to help_text_args[]
+
+  (( num_remaining_args++ ))
+  remaining_arg_lines+=( "$arg_var_name=\"\${$num_remaining_args:?Missing argument '$arg_var_name'}\"" )
+}
+
 # read all the files in script-gen/
 # (assuming this is run from the base dir of this repo)
 for script_file in script-gen/*
@@ -378,6 +453,17 @@ do
     other_lines=()
     # keep track of the current line number for errors
     current_line=0
+    # keep track of help text description
+    help_text_args=()
+
+    # keep track of arg things for parsing with getopts and such
+    getopts_setup_lines=()
+    getopts_lines=()
+    getopts_argstring=":" # start with colon to disable auto-erroring from getopts
+    # and the rest of the arguments
+    num_remaining_args=0
+    remaining_arg_lines=()
+
     while IFS= read -r line
     do
       current_line=$(( current_line + 1 ))
@@ -410,6 +496,14 @@ do
       then
         cmd_names="${BASH_REMATCH[1]}"
         add_cmd_requirements "$cmd_names"
+      elif [[ "$line" =~ ^@arg\ (.*)$ ]]
+      then
+        arg_info="${BASH_REMATCH[1]}"
+        add_argument 'required' "$arg_info"
+      elif [[ "$line" =~ ^@arg_optional\ (.*)$ ]]
+      then
+        optional_arg_info="${BASH_REMATCH[1]}"
+        add_argument 'optional' "$optional_arg_info"
       elif [[ "$line" =~ \?PLATFORM_IS_MAC\? ]]
       then
         replace_test="$(echo "$line" | sed 's/\?PLATFORM_IS_MAC\?/[ "$(uname -s)" == "Darwin" ]/')"
@@ -516,12 +610,50 @@ do
       cmd_requirement_lines+=( 'if [ "$combined_return" != 0 ]; then exit $combined_return; fi' )
     fi
 
+    # build getopts parsing
+    # TODO: if no getopts required, don't do this
+
+    # before the args that were added
+    getopts_setup_lines+=( "while getopts \"$getopts_argstring\" opt" )
+    getopts_setup_lines+=( 'do' )
+    getopts_setup_lines+=( '  case $opt in' )
+
+    # after the other args that were added
+    # TODO: also need this when generating the help text
+    # getopts_lines+=( '    h)' )
+    # getopts_lines+=( '      show_help_msg' )
+    # getopts_lines+=( '      exit 0' )
+    getopts_lines+=( '    \?)' )
+    getopts_lines+=( "      echo_err \"\$0: Invalid option '-\$OPTARG'\"" )
+    getopts_lines+=( '      exit 1' )
+    getopts_lines+=( '      ;;' )
+    getopts_lines+=( '    :)' )
+    getopts_lines+=( "      echo_err \"\$0: Option '-\$OPTARG' requires an argument\"" )
+    getopts_lines+=( '      exit 1' )
+    getopts_lines+=( '      ;;' )
+    getopts_lines+=( '  esac' )
+    getopts_lines+=( 'done' )
+    # get rid of any positional params
+    getopts_lines+=( 'shift $((OPTIND-1))' )
+
+
+    # TODO: generate some help text like so
+    # Usage:
+    #  spinner [-m spin_msg] cmd_pid
+    # and some help docs
+    # show_help_msg() {
+    #   echo 'blah blah'
+    # }
+
     # join imports and other lines (joined with newlines)
     with_imports="$(
       IFS=$'\n';
       echo "${var_import_lines[*]}";
       echo "${func_import_lines[*]}";
+      echo "${getopts_setup_lines[*]}";
+      echo "${getopts_lines[*]}";
       echo "${cmd_requirement_lines[*]}";
+      echo "${remaining_arg_lines[*]}";
       echo "${other_lines[*]}";
     )"
 

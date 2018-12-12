@@ -38,6 +38,7 @@ need_to_generate() {
   # arguments:
   local src_script="$1"
   local generated_script="$2"
+  if [ "$src_script" == "script-gen/spinner" ]; then return 0; fi
 
   # if the generated file doesn't exist, then of course it should be generated
   if [ ! -f "$generated_script" ]; then return 0; fi
@@ -526,6 +527,13 @@ do
       fi
     done <<< "$file_contents"
 
+    # TODO: after I have this working well
+    if [ "$script_file" == "script-gen/spinner" ]
+    then
+      # because getopts parsing is always done now
+      import_function "echo_err" "$PWD/.bash_shared_functions" ""
+    fi
+
     # verify that the function & variable imports are actually used in the script (as best I can tell)
     for import_name in "${!explicit_imports[@]}"
     do
@@ -613,37 +621,42 @@ do
     # build getopts parsing
     # TODO: if no getopts required, don't do this
 
-    # before the args that were added
-    getopts_setup_lines+=( "while getopts \"$getopts_argstring\" opt" )
-    getopts_setup_lines+=( 'do' )
-    getopts_setup_lines+=( '  case $opt in' )
+    # TODO: after I have this working well
+    if [ "$script_file" == "script-gen/spinner" ]
+    then
+      # before the args that were added
+      getopts_setup_lines+=( "while getopts \"$getopts_argstring\" opt" )
+      getopts_setup_lines+=( 'do' )
+      getopts_setup_lines+=( '  case $opt in' )
 
-    # after the other args that were added
-    # TODO: also need this when generating the help text
-    # getopts_lines+=( '    h)' )
-    # getopts_lines+=( '      show_help_msg' )
-    # getopts_lines+=( '      exit 0' )
-    getopts_lines+=( '    \?)' )
-    getopts_lines+=( "      echo_err \"\$0: Invalid option '-\$OPTARG'\"" )
-    getopts_lines+=( '      exit 1' )
-    getopts_lines+=( '      ;;' )
-    getopts_lines+=( '    :)' )
-    getopts_lines+=( "      echo_err \"\$0: Option '-\$OPTARG' requires an argument\"" )
-    getopts_lines+=( '      exit 1' )
-    getopts_lines+=( '      ;;' )
-    getopts_lines+=( '  esac' )
-    getopts_lines+=( 'done' )
-    # get rid of any positional params
-    getopts_lines+=( 'shift $((OPTIND-1))' )
+      # after the other args that were added
+      # TODO: also need this when generating the help text
+      # getopts_lines+=( '    h)' )
+      # getopts_lines+=( '      show_help_msg' )
+      # getopts_lines+=( '      exit 0' )
+      getopts_lines+=( '    \?)' )
+      getopts_lines+=( "      echo_err \"\$0: Invalid option '-\$OPTARG'\"" )
+      # TODO: show usage?
+      getopts_lines+=( '      exit 1' )
+      getopts_lines+=( '      ;;' )
+      getopts_lines+=( '    :)' )
+      getopts_lines+=( "      echo_err \"\$0: Option '-\$OPTARG' requires an argument\"" )
+      getopts_lines+=( '      exit 1' )
+      getopts_lines+=( '      ;;' )
+      getopts_lines+=( '  esac' )
+      getopts_lines+=( 'done' )
+      # get rid of any positional params
+      getopts_lines+=( 'shift $((OPTIND-1))' )
 
 
-    # TODO: generate some help text like so
-    # Usage:
-    #  spinner [-m spin_msg] cmd_pid
-    # and some help docs
-    # show_help_msg() {
-    #   echo 'blah blah'
-    # }
+      # TODO: generate some help text like so
+      # Usage:
+      #  spinner [-m spin_msg] cmd_pid
+      # and some help docs
+      # show_help_msg() {
+      #   echo 'blah blah'
+      # }
+    fi
 
     # join imports and other lines (joined with newlines)
     with_imports="$(

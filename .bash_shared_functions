@@ -114,21 +114,21 @@ requirement_check() {
 # (for commands that change state)
 do_cmd() {
   # @uses_vars COLOR_FG_GREEN,COLOR_RESET
-  echo -en "${COLOR_FG_GREEN}( " >&2
+  local cmd_args=""
   for arg in "$@"
   do
-    # double quotes around any arguments that contain spaces
+    # add double quotes around any arguments that contain spaces
     # (adapted from https://stackoverflow.com/a/1474056/)
     case "$arg" in
       *\ * )
-        echo -n "\"$arg\" "
+        cmd_args="$cmd_args \"$arg\""
         ;;
       *)
-        echo -n "$arg "
+        cmd_args="$cmd_args $arg"
         ;;
     esac
   done
-  echo -e ")${COLOR_RESET}" >&2
+  echo -e "${COLOR_FG_GREEN}($cmd_args )${COLOR_RESET}" >&2
   command "$@"
 }
 

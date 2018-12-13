@@ -38,7 +38,9 @@ need_to_generate() {
   # arguments:
   local src_script="$1"
   local generated_script="$2"
-  if [ "$src_script" == "script-gen/spinner" ]; then return 0; fi
+
+  # TODO: add a -f flag to force regenerating everything (instead of doing this)
+  return 0
 
   # if the generated file doesn't exist, then of course it should be generated
   if [ ! -f "$generated_script" ]; then return 0; fi
@@ -405,7 +407,7 @@ add_flag_arg() {
   else
     # required arg - order is positional
     help_text_usage="$help_text_usage $arg_var_name_or_code"
-    help_text_req_args["$arg_var_name_or_code"]="$arg_help_text"
+    help_text_args["$arg_var_name_or_code"]="$arg_help_text"
     help_text_has_req_args='true'
   fi
 
@@ -442,14 +444,14 @@ add_noflag_arg() {
   if [ "$arg_type" == "optional" ]
   then
     # optional arg
-    help_text_opt_args["$arg_var_name"]="$arg_help_text"
-    help_text_has_opt_args='true'
+    help_text_usage="$help_text_usage [$arg_var_name]"
+    help_text_args["$arg_var_name"]="(optional) $arg_help_text"
   else
-    # required arg - order is positional
+    # required arg
     help_text_usage="$help_text_usage $arg_var_name"
-    help_text_req_args["$arg_var_name"]="$arg_help_text"
-    help_text_has_req_args='true'
+    help_text_args["$arg_var_name"]="$arg_help_text"
   fi
+  help_text_has_req_args='true'
 
   (( num_remaining_args++ ))
   if [ "$arg_type" == "required" ]
@@ -492,7 +494,7 @@ do
 
     # keep track of help text description
     declare -A help_text_opt_args
-    declare -A help_text_req_args
+    declare -A help_text_args
     help_text_usage=""
     help_text_has_opt_args='false'
     help_text_has_req_args='false'
@@ -514,7 +516,7 @@ do
       # use the line right after the shebang as the help description
       if [ "$current_line" -eq 2 ]
       then
-        help_description="${line/\#/-}"
+        help_description="$(echo "$line" | sed -e 's/^#/-/' -e 's/"/\\"/')"
       fi
 
       if [[ "$line" =~ ^@import_var\ {\ (.*)\ }\ from\ (.*)$ ]]
@@ -574,12 +576,8 @@ do
       fi
     done <<< "$file_contents"
 
-    # TODO: after I have this working well
-    if [ "$script_file" == "script-gen/spinner" ]
-    then
-      # because getopts parsing is always done now
-      import_function "echo_err" "$PWD/.bash_shared_functions" ""
-    fi
+    # because getopts parsing is always done now
+    import_function "echo_err" "$PWD/.bash_shared_functions" ""
 
     # verify that the function & variable imports are actually used in the script (as best I can tell)
     for import_name in "${!explicit_imports[@]}"
@@ -665,88 +663,77 @@ do
       cmd_requirement_lines+=( 'if [ "$combined_return" != 0 ]; then exit $combined_return; fi' )
     fi
 
+    # generate some help text
 
-    # TODO: after I have this working well
-    if [ "$script_file" == "script-gen/spinner" ]
+    # everything gets optional help flag
+    add_flag_arg "h" "show_help_msg && exit 0" "Show this help message" "optional"
+
+    help_options="$(if [ "$help_text_has_opt_args" == 'true' ]; then echo ' [options]'; else echo ''; fi )"
+    script_name="${script_file/script-gen\//}"
+
+    help_func_lines+=( 'show_help_msg() {' )
+    help_func_lines+=( "  echo \"$script_name $help_description\"" )
+    help_func_lines+=( "  echo 'Usage: $script_name$help_options$help_text_usage'" )
+
+    # figure out the width needed to format the options and arguments
+    # (start with a minimum width of 16, which I find looks nice)
+    help_width=16
+    for fmt_arg in "${!help_text_opt_args[@]}"
+    do
+      arg_len="$(( ${#fmt_arg} + 2 ))" # plus 2 for padding
+      if [ "$arg_len" -gt "$help_width" ]; then help_width="$arg_len"; fi
+    done
+    for fmt_arg in "${!help_text_args[@]}"
+    do
+      arg_len="$(( ${#fmt_arg} + 2 ))" # plus 2 for padding
+      if [ "$arg_len" -gt "$help_width" ]; then help_width="$arg_len"; fi
+    done
+
+    if [ "$help_text_has_opt_args" == 'true' ]
     then
-      # generate some help text
+      help_func_lines+=( "  echo ''" )
+      help_func_lines+=( "  echo 'Options:'" )
 
-      # everything gets optional help flag
-      add_flag_arg "h" "show_help_msg && exit 0" "Show this help message" "optional"
-
-      help_options="$(if [ "$help_text_has_opt_args" == 'true' ]; then echo ' [options]'; else echo ''; fi )"
-      script_name="${script_file/script-gen\//}"
-
-      help_func_lines+=( 'show_help_msg() {' )
-      help_func_lines+=( "  echo '$script_name $help_description'" )
-      help_func_lines+=( "  echo 'Usage: $script_name$help_options$help_text_usage'" )
-
-      # figure out the width needed to format the options and arguments
-      # (start with a minimum width of 16, which I find looks nice)
-      help_width=16
-      for fmt_arg in "${!help_text_opt_args[@]}"
+      readarray -t opt_arg_keys <<< "$(for key in "${!help_text_opt_args[@]}"; do echo "$key"; done | sort)" # sort keys
+      for opt_arg in "${opt_arg_keys[@]}"
       do
-        arg_len="$(( ${#fmt_arg} + 2 ))" # plus 2 for padding
-        if [ "$arg_len" -gt "$help_width" ]; then help_width="$arg_len"; fi
+        formatted_line=$(printf "  echo '  %-${help_width}s %s'" "$opt_arg" "${help_text_opt_args[$opt_arg]}" )
+        help_func_lines+=( "$formatted_line" )
       done
-      for fmt_arg in "${!help_text_req_args[@]}"
-      do
-        arg_len="$(( ${#fmt_arg} + 2 ))" # plus 2 for padding
-        if [ "$arg_len" -gt "$help_width" ]; then help_width="$arg_len"; fi
-      done
-
-      if [ "$help_text_has_opt_args" ]
-      then
-        help_func_lines+=( "  echo ''" )
-        help_func_lines+=( "  echo 'Options:'" )
-
-        readarray -t opt_arg_keys <<< "$(for key in "${!help_text_opt_args[@]}"; do echo "$key"; done | sort)" # sort keys
-        for opt_arg in "${opt_arg_keys[@]}"
-        do
-          formatted_line=$(printf "  echo '  %-${help_width}s %s'" "$opt_arg" "${help_text_opt_args[$opt_arg]}" )
-          help_func_lines+=( "$formatted_line" )
-        done
-      fi
-      if [ "$help_text_has_req_args" ]
-      then
-        help_func_lines+=( "  echo ''" )
-        help_func_lines+=( "  echo 'Arguments:'" )
-
-        for req_arg in "${!help_text_req_args[@]}"
-        do
-          formatted_line=$(printf "  echo '  %-${help_width}s %s'" "$req_arg" "${help_text_req_args[$req_arg]}" )
-          help_func_lines+=( "$formatted_line" )
-        done
-      fi
-      help_func_lines+=( '}' )
-
-
-      # build getopts parsing
-
-      # before the args that were added
-      getopts_setup_lines+=( "while getopts \"$getopts_argstring\" opt" )
-      getopts_setup_lines+=( 'do' )
-      getopts_setup_lines+=( '  case $opt in' )
-
-      # after the other args that were added
-      # getopts_lines+=( '    h)' )
-      # getopts_lines+=( '      show_help_msg' )
-      # getopts_lines+=( '      exit 0' )
-      # getopts_lines+=( '      ;;' )
-      getopts_lines+=( '    \?)' )
-      getopts_lines+=( "      echo_err \"\$0: invalid option '-\$OPTARG'\"" )
-      getopts_lines+=( '      exit 1' )
-      getopts_lines+=( '      ;;' )
-      getopts_lines+=( '    :)' )
-      getopts_lines+=( "      echo_err \"\$0: option '-\$OPTARG' requires an argument\"" )
-      getopts_lines+=( '      exit 1' )
-      getopts_lines+=( '      ;;' )
-      getopts_lines+=( '  esac' )
-      getopts_lines+=( 'done' )
-      # get rid of any positional params
-      getopts_lines+=( 'shift $((OPTIND-1))' )
-
     fi
+    if [ "$help_text_has_req_args" == 'true' ]
+    then
+      help_func_lines+=( "  echo ''" )
+      help_func_lines+=( "  echo 'Arguments:'" )
+
+      for req_arg in "${!help_text_args[@]}"
+      do
+        formatted_line=$(printf "  echo '  %-${help_width}s %s'" "$req_arg" "${help_text_args[$req_arg]}" )
+        help_func_lines+=( "$formatted_line" )
+      done
+    fi
+    help_func_lines+=( '}' )
+
+    # build getopts parsing
+
+    # before the args that were added
+    getopts_setup_lines+=( "while getopts \"$getopts_argstring\" opt" )
+    getopts_setup_lines+=( 'do' )
+    getopts_setup_lines+=( '  case $opt in' )
+
+    # after the other args that were added
+    getopts_lines+=( '    \?)' )
+    getopts_lines+=( "      echo_err \"\$0: invalid option '-\$OPTARG'\"" )
+    getopts_lines+=( '      exit 1' )
+    getopts_lines+=( '      ;;' )
+    getopts_lines+=( '    :)' )
+    getopts_lines+=( "      echo_err \"\$0: option '-\$OPTARG' requires an argument\"" )
+    getopts_lines+=( '      exit 1' )
+    getopts_lines+=( '      ;;' )
+    getopts_lines+=( '  esac' )
+    getopts_lines+=( 'done' )
+    # get rid of any positional params
+    getopts_lines+=( 'shift $((OPTIND-1))' )
 
     # join imports and other lines (joined with newlines)
     with_imports="$(
@@ -780,7 +767,7 @@ do
     unset cmd_requirements
     unset explicit_imports
     unset help_text_opt_args
-    unset help_text_req_args
+    unset help_text_args
   else
     # don't need to generate file
     echo -e "[${COLOR_FG_BOLD_YELLOW}skip${COLOR_RESET}]"

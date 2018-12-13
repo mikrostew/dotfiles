@@ -39,8 +39,7 @@ need_to_generate() {
   local src_script="$1"
   local generated_script="$2"
 
-  # TODO: add a -f flag to force regenerating everything (instead of doing this)
-  return 0
+  # TODO: add a '-f' flag to force regenerating everything
 
   # if the generated file doesn't exist, then of course it should be generated
   if [ ! -f "$generated_script" ]; then return 0; fi
@@ -368,7 +367,15 @@ add_argument() {
   local num_arg_options="${#argument_options[@]}"
   if [ "$num_arg_options" -eq 3 ]
   then
-    add_flag_arg "${argument_options[0]}" "${argument_options[1]}" "${argument_options[2]}" "$arg_type"
+    # check if this is a flag or optional argument
+    if [ "${#argument_options[0]}" -le 2 ]
+    then
+      # flag with arg
+      add_flag_arg "${argument_options[0]}" "${argument_options[1]}" "${argument_options[2]}" "$arg_type"
+    else
+      # optional arg with default value
+      add_noflag_arg "${argument_options[0]}" "${argument_options[1]}" "$arg_type" "${argument_options[2]}"
+    fi
   elif [ "$num_arg_options" -eq 2 ]
   then
     # check if this is a flag or argument
@@ -408,7 +415,7 @@ add_flag_arg() {
     # required arg - order is positional
     help_text_usage="$help_text_usage $arg_var_name_or_code"
     help_text_args["$arg_var_name_or_code"]="$arg_help_text"
-    help_text_has_req_args='true'
+    help_text_has_args='true'
   fi
 
   if [ "${#arg_flag}" -eq 1 ]
@@ -440,25 +447,26 @@ add_noflag_arg() {
   local arg_var_name="$1"
   local arg_help_text="$2"
   local arg_type="$3" # optional|required
+  local default_value="$4" # (optional)
 
   if [ "$arg_type" == "optional" ]
   then
     # optional arg
     help_text_usage="$help_text_usage [$arg_var_name]"
-    help_text_args["$arg_var_name"]="(optional) $arg_help_text"
+    help_text_args["$arg_var_name"]="(optional) $arg_help_text (defaults to \"$default_value\")"
   else
     # required arg
     help_text_usage="$help_text_usage $arg_var_name"
     help_text_args["$arg_var_name"]="$arg_help_text"
   fi
-  help_text_has_req_args='true'
+  help_text_has_args='true'
 
   (( num_remaining_args++ ))
   if [ "$arg_type" == "required" ]
   then
     remaining_arg_lines+=( "$arg_var_name=\"\${$num_remaining_args:?Missing argument '$arg_var_name'}\"" )
   else
-    remaining_arg_lines+=( "$arg_var_name=\"\${$num_remaining_args}\"" )
+    remaining_arg_lines+=( "$arg_var_name=\"\${$num_remaining_args:-$default_value}\"" )
   fi
 }
 
@@ -497,7 +505,7 @@ do
     declare -A help_text_args
     help_text_usage=""
     help_text_has_opt_args='false'
-    help_text_has_req_args='false'
+    help_text_has_args='false'
     help_func_lines=()
     help_description=""
 
@@ -701,7 +709,7 @@ do
         help_func_lines+=( "$formatted_line" )
       done
     fi
-    if [ "$help_text_has_req_args" == 'true' ]
+    if [ "$help_text_has_args" == 'true' ]
     then
       help_func_lines+=( "  echo ''" )
       help_func_lines+=( "  echo 'Arguments:'" )

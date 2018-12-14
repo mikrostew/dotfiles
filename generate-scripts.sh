@@ -13,6 +13,7 @@ declare -A dep_file_hashes
 
 files_generated=0
 files_skipped=0
+force_regen='false'
 
 # echo to stderr with red text
 echo_err() {
@@ -39,7 +40,8 @@ need_to_generate() {
   local src_script="$1"
   local generated_script="$2"
 
-  # TODO: add a '-f' flag to force regenerating everything
+  # use -f flag to force regeneration of all files
+  if [ "$force_regen" == "true" ]; then return 0; fi
 
   # if the generated file doesn't exist, then of course it should be generated
   if [ ! -f "$generated_script" ]; then return 0; fi
@@ -486,9 +488,36 @@ add_noflag_arg() {
   fi
 }
 
-generate_help_function() {
-  echo "TODO"
+show_help_msg() {
+  echo "generate-scripts.sh - Generate bash scripts from dotfiles/script-gen/"
+  echo 'Usage: ./generate-scripts.sh [options]'
+  echo ''
+  echo 'Options:'
+  echo '  -f               Force regeneration of all script files'
+  echo '  -h               Show this help message'
 }
+
+# handle arguments
+while getopts ":fh" opt
+do
+  case $opt in
+    f)
+      force_regen='true'
+      ;;
+    h)
+      show_help_msg && exit 0
+      ;;
+    \?)
+      echo_err "$0: invalid option '-$OPTARG'"
+      exit 1
+      ;;
+    :)
+      echo_err "$0: option '-$OPTARG' requires an argument"
+      exit 1
+      ;;
+  esac
+done
+shift $((OPTIND-1))
 
 # read all the files in script-gen/
 # (assuming this is run from the base dir of this repo)

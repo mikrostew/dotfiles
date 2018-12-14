@@ -152,10 +152,15 @@ file_header() {
 exit_with_message() {
   # arguments:
   local varname="$1"
-  local message="$2"
-  local padding="$3"
+  local padding="$2"
+  local exit_info_string="$3"
 
   local temp=""
+
+  # split up the strings, preserving spaces inside the quotes (see https://superuser.com/a/1066541)
+  local exit_options="$(eval "for arg in $exit_info_string; do echo \$arg; done")"
+  readarray -t exit_options <<< "$exit_options"
+  local num_exit_options="${#exit_options[@]}"
 
   # make sure it has these colors (don't import
   add_var_to_imports "COLOR_FG_RED" "$COLOR_FG_RED"
@@ -164,9 +169,21 @@ exit_with_message() {
   temp+="${padding}exit_code=\"\$?\"\n"
   temp+="${padding}if [ \"\$exit_code\" -ne 0 ]\n"
   temp+="${padding}then\n"
-  temp+="${padding}  echo -e \"\${COLOR_FG_RED}$message\${COLOR_RESET}\" >&2\n"
+  temp+="${padding}  echo -e \"\${COLOR_FG_RED}${exit_options[0]}\${COLOR_RESET}\" >&2\n"
+
+  if [ "$num_exit_options" -eq 2 ]
+  then
+    # run some code before exiting
+    temp+="${padding}  ${exit_options[1]}\n"
+  elif [ "$num_exit_options" -ne 1 ]
+  then
+    echo_err "\n[ERROR] Wrong number of arguments to @EXIT_IF_CMD_ERROR"
+    on_error
+  fi
+
   temp+="${padding}  exit \"\$exit_code\"\n"
   temp+="${padding}fi\n"
+
   printf -v "$varname" "$temp"
 }
 
@@ -361,7 +378,6 @@ add_argument() {
 
   # split up the strings, preserving spaces inside the quotes (see https://superuser.com/a/1066541)
   local argument_options="$(eval "for arg in $arg_info_string; do echo \$arg; done")"
-
   readarray -t argument_options <<< "$argument_options"
 
   local num_arg_options="${#argument_options[@]}"
@@ -571,12 +587,11 @@ do
       then
         replace_test="$(echo "$line" | sed 's/\?PLATFORM_IS_LINUX\?/[ "$(uname -s)" == "Linux" ]/')"
         other_lines+=( "$replace_test" )
-      elif [[ "$line" =~ ^(\ *)@EXIT_IF_CMD_ERROR\ \"(.*)\"$ ]]
+      elif [[ "$line" =~ ^(\ *)@EXIT_IF_CMD_ERROR\ (.*)$ ]]
       then
-        # TODO: allow specifying functions to call before exiting
         padding="${BASH_REMATCH[1]}"
-        exit_msg="${BASH_REMATCH[2]}"
-        exit_with_message gen_code "$exit_msg" "$padding"
+        exit_info_str="${BASH_REMATCH[2]}"
+        exit_with_message gen_code "$padding" "$exit_info_str"
         other_lines+=( "$gen_code" )
       else
         # no import

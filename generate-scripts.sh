@@ -13,7 +13,10 @@ declare -A dep_file_hashes
 
 files_generated=0
 files_skipped=0
+
+# optional args
 force_regen='false'
+regen_single_file=""
 
 # echo to stderr with red text
 echo_err() {
@@ -42,6 +45,13 @@ need_to_generate() {
 
   # use -f flag to force regeneration of all files
   if [ "$force_regen" == "true" ]; then return 0; fi
+
+  # option to regen a single file
+  if [ -n "$regen_single_file" ]
+  then
+    # only generate the specified file, skip everything else
+    if [[ "$src_script" =~ "$regen_single_file" ]]; then return 0; else return 1; fi
+  fi
 
   # if the generated file doesn't exist, then of course it should be generated
   if [ ! -f "$generated_script" ]; then return 0; fi
@@ -164,9 +174,9 @@ exit_with_message() {
   readarray -t exit_options <<< "$exit_options"
   local num_exit_options="${#exit_options[@]}"
 
-  # make sure it has these colors (don't import
-  add_var_to_imports "COLOR_FG_RED" "$COLOR_FG_RED"
-  add_var_to_imports "COLOR_RESET" "$COLOR_RESET"
+  # make sure it has these colors (don't import)
+  add_var_to_imports "COLOR_FG_RED" "'$COLOR_FG_RED'"
+  add_var_to_imports "COLOR_RESET" "'$COLOR_RESET'"
 
   temp+="${padding}exit_code=\"\$?\"\n"
   temp+="${padding}if [ \"\$exit_code\" -ne 0 ]\n"
@@ -212,7 +222,7 @@ print_function() {
 # add variable to imports
 import_variable() {
   # arguments:
-  local var_name="$1"
+  local var_info="$1" # this can be the name, or the name with a modifier
   local from_file="$2"
   local type="$3" # explicit imports will set this to 'explicit'
 
@@ -223,10 +233,22 @@ import_variable() {
     sourced_files[$from_file]='yes'
   fi
 
-  local var_value="${!var_name}"
+  # handle modifiers for the variable, like 'DOTFILES_DIR:s|$HOME|\$HOME|'
+  if [[ "$var_info" =~ (.*):(.*) ]]
+  then
+    local var_name="${BASH_REMATCH[1]}"
+    local var_mod="$(eval "echo \"${BASH_REMATCH[2]}\"")"
+    local var_value="$(echo "${!var_name}" | sed -e "$var_mod")"
+    # add var surrounded with double quotes, so it will be expanded correctly
+    add_var_to_imports "$var_name" "\"$var_value\""
+  else
+    # it's just the var name, no modifiers
+    local var_name="$var_info"
+    local var_value="${!var_name}"
+    # add var surrounded with single quotes, because it doesn't need expansion
+    add_var_to_imports "$var_name" "'$var_value'"
+  fi
 
-  # add to variable import arrays
-  add_var_to_imports "$var_name" "$var_value"
   if [ "$type" == "explicit" ]
   then
     explicit_imports[$var_name]='var'
@@ -495,14 +517,18 @@ show_help_msg() {
   echo 'Options:'
   echo '  -f               Force regeneration of all script files'
   echo '  -h               Show this help message'
+  echo '  -s file_name     Only generate this single file'
 }
 
 # handle arguments
-while getopts ":fh" opt
+while getopts ":fhs:" opt
 do
   case $opt in
     f)
       force_regen='true'
+      ;;
+    s)
+      regen_single_file="$OPTARG"
       ;;
     h)
       show_help_msg && exit 0
@@ -668,7 +694,7 @@ do
     readarray -t var_keys <<< "$(for key in "${!var_imports[@]}"; do echo "$key"; done | sort)" # sort keys
     for var_name in ${var_keys[@]}
     do
-      var_import_lines+=( "$var_name='${var_imports[$var_name]}'" ) # single quotes around value
+      var_import_lines+=( "$var_name=${var_imports[$var_name]}" )
     done
     func_import_lines=()
     readarray -t func_keys <<< "$(for key in "${!func_imports[@]}"; do echo "$key"; done | sort)" # sort keys

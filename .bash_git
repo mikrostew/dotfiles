@@ -151,7 +151,7 @@ git_undo_merge() {
 
 # get the API definition for review board at LinkedIn
 get_li_rb_api_def() {
-  # @uses_vars DOTFILES_DIR
+  # @uses_vars DOTFILES_DIR:s|$HOME|\$HOME|
   # @uses_funcs echo_err,echo_info
   # @uses_cmds find curl
   local api_def=""

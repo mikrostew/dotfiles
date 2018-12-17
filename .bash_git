@@ -98,6 +98,7 @@ squash_branch() {
   fi
 }
 
+# TODO: extract this next
 # squash the input number of commits on the current branch
 # $1: number of commits to squash
 # $2: commit message
@@ -358,11 +359,6 @@ gmt() {
   do_git mergetool --tool=opendiff
 }
 
-# git - push changes (git push)
-gp() {
-  do_git push
-}
-
 # git - push current local branch to origin, and set upstream (git push branch)
 gpb() {
   arguments=()
@@ -372,27 +368,6 @@ gpb() {
     do_git push -u origin "$branch_name"
   fi
 }
-
-# git - force-push changes (git push force)
-gpf() {
-  # using --force-with-lease in case someone else has pushed to my branch unbeknownst to me
-  do_git push --force-with-lease
-}
-
-# git - pull changes from origin and rebase local changes (git pull rebase)
-gpr() {
-  # @uses_funcs current_git_branch,do_git
-  local branch_name=$(current_git_branch)
-  # sometimes `git pull --rebase` fails with "fatal: Cannot rebase onto multiple branches."
-  # could try doing the full command (from https://stackoverflow.com/a/35844073)
-  # do_git pull origin "$branch_name" --rebase
-  # but sometimes that also fails,
-  # so be more explicit and split it into 2 commands (adapted from https://stackoverflow.com/a/35844073)
-  # (also prunes, which is a nice benefit)
-  do_git fetch --all --prune
-  do_git rebase "origin/$branch_name"
-}
-
 
 # git - apply diff from review board to repo (git review apply)
 gra() {

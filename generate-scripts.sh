@@ -648,6 +648,7 @@ do
         exit_info_str="${BASH_REMATCH[2]}"
         exit_with_message gen_code "$padding" "$exit_info_str"
         other_lines+=( "$gen_code" )
+      # TODO: directive like @SCRIPT_NAME, so the script can use it's own name
       else
         # no import
         other_lines+=( "$line" )

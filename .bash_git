@@ -465,15 +465,6 @@ gstat() {
   do_git status
 }
 
-# git - undo the last commit (git undo)
-gundo() {
-  # also writes the previous commit message to .git/GITGUI_MSG
-  last_commit="$(git log -1 --pretty=%B)"
-  git_dir="$(git rev-parse --show-toplevel)/.git"
-  do_git reset --soft HEAD~1
-  echo "$last_commit" > "$git_dir/GITGUI_MSG"
-}
-
 # git - (meta) show git functions from this file
 gfun() {
   printf "\nFunctions:\n"
@@ -482,26 +473,6 @@ gfun() {
   while read -r func text; do
     printf "%10s - %s\n" "$func" "$text"
   done <<< "$git_functions"
-}
-
-# git - show the current commit hash
-gcurr() {
-  arguments=()
-  if in_git_repo && num_arguments_ok arguments[@] "$#"
-  then
-    do_git rev-parse HEAD
-    do_git rev-parse --short HEAD
-  fi
-}
-
-# git - sync current branch to the upstream fork (Git Fork Sync)
-gfs() {
-  arguments=()
-  if in_git_repo && on_symbolic_ref && num_arguments_ok arguments[@] "$#"
-  then
-    local branch_name=$(current_git_branch)
-    do_git fetch upstream && do_git merge "upstream/$branch_name" && do_git push
-  fi
 }
 
 # git - fork a repo from github and clone locally (Git Fork & Clone)

@@ -2,6 +2,12 @@
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 
+# if not interactive, return (if flags do not contain "i")
+case $- in
+    *i*) ;;
+      *) return;;
+esac
+
 # for platform-specific things
 platform_is_mac() {
     [ "$(uname)" == "Darwin" ] # OSX
@@ -16,11 +22,13 @@ else
   bashrc_start=$(date +%s%3N)
 fi
 
-# if not interactive, return (if flags do not contain "i")
-case $- in
-    *i*) ;;
-      *) return;;
-esac
+# determine if this is a local or remote session
+# (adapted from https://unix.stackexchange.com/a/9607)
+SESSION_TYPE=local
+if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ] || [[ "$(ps -o comm= -p $PPID)" =~ sshd ]]
+then
+  SESSION_TYPE=remote/ssh
+fi
 
 # directory where the dotfiles repo is checked out
 export DOTFILES_DIR="$(dirname "$(readlink "$HOME/.bashrc")")"
@@ -237,6 +245,15 @@ echo -e "~/.bashrc loaded in $COLOR_FG_BOLD_BLUE${bashrc_run_time}ms$COLOR_RESET
 
 # log the startup time
 echo "$bashrc_start $bashrc_run_time" >> "$HOME/Dropbox/log/bashrc-startup-time-$HOST_NAME"
+
+# resize the terminal window if this is a local session
+# (see https://apple.stackexchange.com/a/47841)
+if [ "$SESSION_TYPE" == "local" ]
+then
+  # see http://invisible-island.net/xterm/ctlseqs/ctlseqs.html, search "window manipulation"
+  printf '\e[3;50;50t'    # move window to upper left but not all the way in the corner
+  printf '\033[8;48;192t' # 192W x 48H chars
+fi
 
 # installers like to add things to the end of this file, so prevent that stuff from running
 return 0

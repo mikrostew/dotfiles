@@ -78,27 +78,6 @@ based_on_master_or_origin() {
   fi
 }
 
-# squash commits in current branch into a single commit
-# arguments: <commit-message> [, <extra-line>]
-squash_branch() {
-  # @uses_funcs current_git_branch,based_on_master_or_origin,commit_diff_on_branch
-  # @uses_cmds squash-commits
-  local branch_name=$(current_git_branch)
-  local based_on=$(based_on_master_or_origin $branch_name)
-  # this may not be what I want in all situations - fix this when it becomes a problem
-  local num_commits_on_branch="$(commit_diff_on_branch $branch_name $based_on)"
-  echo_info "$num_commits_on_branch change(s) between '$branch_name' and '$based_on'"
-  echo -n "Confirm squashing $num_commits_on_branch commits [Y/n]: "
-  read confirm
-  if [ -z "$confirm" ] || [ "$confirm" == "Y" ] || [ "$confirm" == "y" ]
-  then
-    squash-commits "$num_commits_on_branch" "$1" "$2"
-  else
-    echo "Not squashing"
-    return -1;
-  fi
-}
-
 # run git with the input arguments
 do_git() {
   # @uses_funcs do_cmd
@@ -205,6 +184,7 @@ git_parse_repo_url() {
 }
 
 # functions
+# TODO: extract all of these to separate scripts
 
 # git - apply a patch to a new branch, named after the input .patch file (from gbpatch)
 gbapply() {
@@ -464,7 +444,7 @@ gsqb() {
   arguments=( '<commit-message>' '[extra-line]' )
   if in_git_repo && not_on_git_branch 'master' && no_uncommitted_changes && num_arguments_min arguments[@] "$#"
   then
-    squash_branch "$1" "$2"
+    squash-branch "$1" "$2"
   else
     return -1;
   fi

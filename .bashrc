@@ -216,7 +216,7 @@ fgn() {
 # run version checks async to speed up load time
 # should only run into version issues when first setting up a system
 (
-  min_version_check "bash" "^4.0.0" "bash --version | sed -n -E 's/[^0-9]*([0-9]+\.[0-9]+\.[0-9]+[^ ]*).*/\1/p'";
+  min_version_check "bash" "^4.0.0" "bash --version | sed -n -E 's/[^0-9]*([0-9]+\.[0-9]+\.[0-9]+[^ ]*).*/\1/ p'";
   min_version_check "git" "^2.14.0" "git --version | awk '{print \$3}'" 'brew install git';
   min_version_check "jq" "^1.5.0" "jq --version | sed 's/jq-//'" 'brew install jq';
   min_version_check "expect" "^5.0.0" "expect -version | awk '{print \$3}'" 'brew install expect';

@@ -530,16 +530,6 @@ gbm() {
   fi
 }
 
-# TODO: generalize this for whatever input URL
-# git - wait on github to be pingable (pings every 60 seconds)
-wait_github() {
-    until ping -i 60 -o github.com
-    do
-        sleep 60
-    done
-    echo_ack "github available"
-}
-
 # release npm project
 #  - update version in package.json
 #  - commit with version in commit message

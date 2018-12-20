@@ -251,7 +251,7 @@ echo "$bashrc_start $bashrc_run_time" >> "$HOME/Dropbox/log/bashrc-startup-time-
 if [ "$SESSION_TYPE" == "local" ]
 then
   # see http://invisible-island.net/xterm/ctlseqs/ctlseqs.html, search "window manipulation"
-  printf '\e[3;50;50t'    # move window to upper left but not all the way in the corner
+  printf '\e[3;10;10t'    # move window to upper left but not all the way in the corner
   printf '\033[8;48;192t' # 192W x 48H chars
 fi
 

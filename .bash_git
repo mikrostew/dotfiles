@@ -359,16 +359,6 @@ gmt() {
   do_git mergetool --tool=opendiff
 }
 
-# git - push current local branch to origin, and set upstream (git push branch)
-gpb() {
-  arguments=()
-  if in_git_repo && not_on_git_branch 'master' && num_arguments_ok arguments[@] "$#"
-  then
-    local branch_name=$(current_git_branch)
-    do_git push -u origin "$branch_name"
-  fi
-}
-
 # git - apply diff from review board to repo (git review apply)
 gra() {
   echo_err "TODO"

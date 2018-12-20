@@ -81,52 +81,22 @@ based_on_master_or_origin() {
 # squash commits in current branch into a single commit
 # arguments: <commit-message> [, <extra-line>]
 squash_branch() {
-  # @uses_funcs current_git_branch,based_on_master_or_origin,commit_diff_on_branch,squash_commits
+  # @uses_funcs current_git_branch,based_on_master_or_origin,commit_diff_on_branch
+  # @uses_cmds squash-commits
   local branch_name=$(current_git_branch)
   local based_on=$(based_on_master_or_origin $branch_name)
-  # TODO: this may not be what I want in all situations - fix this when it becomes a problem
+  # this may not be what I want in all situations - fix this when it becomes a problem
   local num_commits_on_branch="$(commit_diff_on_branch $branch_name $based_on)"
   echo_info "$num_commits_on_branch change(s) between '$branch_name' and '$based_on'"
   echo -n "Confirm squashing $num_commits_on_branch commits [Y/n]: "
   read confirm
   if [ -z "$confirm" ] || [ "$confirm" == "Y" ] || [ "$confirm" == "y" ]
   then
-    squash_commits "$num_commits_on_branch" "$1" "$2"
+    squash-commits "$num_commits_on_branch" "$1" "$2"
   else
     echo "Not squashing"
     return -1;
   fi
-}
-
-# TODO: extract this next
-# squash the input number of commits on the current branch
-# $1: number of commits to squash
-# $2: commit message
-# $3: extra line for message (extra info, overrides, etc.)
-squash_commits() {
-  # @uses_funcs do_git,echo_err
-  if [ -n "$1" ] && [ "$1" -gt 0 ]; then
-    if [ -n "$2" ]; then
-      if [ -n "$3" ]; then
-        # multiple lines of commit messages
-        do_git reset --soft HEAD~${1} && do_git commit -m "$2" -m "$3"
-      else
-        # "squash" commits by combining all into a single commit (from SO)
-        do_git reset --soft HEAD~${1} && do_git commit -m "$2"
-      fi
-      if [ "$?" -ne 0 ]; then
-        echo_err "Dang it! Squashing commits failed somehow"
-        return 1;
-      fi
-    else
-      echo_err "Come on! You gotta have a commit message"
-      return 1;
-    fi
-  else
-    echo_err "-_- No changes to squash"
-    return 1;
-  fi
-  return 0;
 }
 
 # run git with the input arguments

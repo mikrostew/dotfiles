@@ -277,11 +277,6 @@ gl() {
   do_git log -n$num_logs
 }
 
-# git - show last commit info - (git last)
-glast() {
-  do_git log -n1 --pretty=fuller
-}
-
 # git - show commit log in one-line format (git log oneline)
 glo() {
   do_git log --pretty=format:'%Cred%h%Creset - %Cgreen%ci%Creset %C(yellow)<%an>%Creset %s'
@@ -413,20 +408,6 @@ gfun() {
   while read -r func text; do
     printf "%10s - %s\n" "$func" "$text"
   done <<< "$git_functions"
-}
-
-# git - move recent commits from master to a new branch
-gmove() {
-  arguments=( '<new-branch-name>' )
-  if in_git_repo && on_git_branch 'master' && num_arguments_ok arguments[@] "$#"
-  then
-    local num_commits="$(commit_diff_on_branch 'master' 'origin/master')"
-    echo "${num_commits} commit(s) will be moved to branch '$1'"
-    if [ "$num_commits" != "" ] && [ "$num_commits" -gt 0 ]; then
-      # (see http://stackoverflow.com/a/22654961 for details)
-      do_git checkout -b "$1" && do_git branch -f master HEAD~${num_commits} && do_git branch -u origin/master "$1"
-    fi
-  fi
 }
 
 # git - show which files are different from master branch

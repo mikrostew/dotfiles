@@ -35,7 +35,7 @@ Host github.com
     IdentitiesOnly yes
 
 Host air
-    Hostname Michaels-Air.attlocal.net
+    Hostname Michaels-Air.lan
     User mikrostew
 
 Host pi
@@ -43,7 +43,7 @@ Host pi
     User pi
 
 Host android
-    Hostname 192.168.86.30
+    Hostname 192.168.86.35
     Port 2222
     IdentityFile    %d/.ssh/android_rsa
 

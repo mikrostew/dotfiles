@@ -106,9 +106,6 @@ export RI="-T --format=ansi"
 # 256 color support
 export TERM=xterm-256color
 
-# travis gem
-[ -f "$HOME/.travis/travis.sh" ] && source "$HOME/.travis/travis.sh"
-
 
 # functions to load things into the shell
 

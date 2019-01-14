@@ -217,7 +217,7 @@ fgn() {
   min-version-check "git" "^2.14.0" "git --version | awk '{print \$3}'" 'brew install git';
   min-version-check "jq" "^1.5.0" "jq --version | sed 's/jq-//'" 'brew install jq';
   min-version-check "expect" "^5.0.0" "expect -version | awk '{print \$3}'" 'brew install expect';
-  min-version-check "bats" "^0.4.0" "bats --version | awk '{print \$2}'" 'brew install bats';
+  min-version-check "bats-core" "^1.0.0" "bats --version | awk '{print \$2}'" 'brew install bats-core' 'which bats';
   min-version-check "curl" "^7.0.0" "curl --version | head -n1 | awk '{print \$2}'" 'brew install curl';
   # sponge doesn't give a version, so as long as it exists that's fine
   min-version-check "sponge" "1.0.0" "which sponge >/dev/null && echo 1.0.0" 'brew install moreutils';

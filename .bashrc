@@ -231,30 +231,41 @@ HOST_NAME="$(hostname)"
 # show uptime, like " 9:45  up 2 days, 17:09, 7 users, load averages: 1.63 3.29 5.36"
 echo -e "uptime: $COLOR_FG_BOLD_BLUE$(uptime)$COLOR_RESET"
 
-if platform_is_mac; then
-  bashrc_finish=$(gdate +%s%3N)
-else
-  bashrc_finish=$(date +%s%3N)
-fi
-
-bashrc_run_time=$((bashrc_finish - bashrc_start))
-echo -e "~/.bashrc loaded in $COLOR_FG_BOLD_BLUE${bashrc_run_time}ms$COLOR_RESET"
-
-# log the startup time
-echo "$bashrc_start $bashrc_run_time" >> "$HOME/Dropbox/log/bashrc-startup-time-$HOST_NAME"
-
 # resize the terminal window if this is a local session
 # (see https://apple.stackexchange.com/a/47841)
 if [ "$SESSION_TYPE" == "local" ]
 then
-  # if this has already been resized, don't resize it again (e.g. opening a new tab)
-  if [ "$LINES" -ne 48 ] || [ "$COLUMNS" -ne 192 ]
+  # get the tab number of this session
+  # NOTE: this is not bulletproof - if I close tab 0, then open a new tab, it will be tab 0
+  if [ -n "$ITERM_SESSION_ID" ] && [[ "$ITERM_SESSION_ID" =~ ^w[0-9]*t([0-9]*)p[0-9]*: ]]
+  then
+    tab_number="${BASH_REMATCH[1]}"
+  elif [ -n "$TERM_SESSION_ID" ] && [[ "$TERM_SESSION_ID" =~ ^w[0-9]*t([0-9]*)p[0-9]*: ]]
+  then
+    tab_number="${BASH_REMATCH[1]}"
+  else
+    tab_number="?"
+  fi
+
+  # if this is the first tab in this session, resize it
+  if [ -z "$tab_number" ] || [ "$tab_number" == "0" ]
   then
     # see http://invisible-island.net/xterm/ctlseqs/ctlseqs.html, search "window manipulation"
     printf '\e[3;10;10t'    # move window to upper left but not all the way in the corner
     printf '\033[8;48;192t' # 192W x 48H chars
   fi
 fi
+
+if platform_is_mac; then
+  bashrc_finish=$(gdate +%s%3N)
+else
+  bashrc_finish=$(date +%s%3N)
+fi
+bashrc_run_time=$((bashrc_finish - bashrc_start))
+
+# log the startup time
+echo "$bashrc_start $bashrc_run_time" >> "$HOME/Dropbox/log/bashrc-startup-time-$HOST_NAME"
+echo -e ".bashrc loaded in $COLOR_FG_BOLD_BLUE${bashrc_run_time}ms$COLOR_RESET ($SESSION_TYPE session, tab #$tab_number)"
 
 # installers like to add things to the end of this file, so prevent that stuff from running
 return 0

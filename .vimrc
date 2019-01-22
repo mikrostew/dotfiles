@@ -166,9 +166,9 @@ endfunction
 " hide these file extensions (from https://stackoverflow.com/a/21020164/)
 let g:netrw_list_hide= '.*\.swp$,\~$,\.orig$'
 
-" statusline things (from https://stackoverflow.com/a/32059626)
-" [buffer number] followed by filename:
-set statusline=[%n]\ %t
+" statusline things (from https://stackoverflow.com/a/32059626 and https://stackoverflow.com/a/45244610)
+" [buffer number] followed by relative path to file:
+set statusline=[%n]\ %{expand('%:~:.')}
 
 " syntastic settings
 " (from https://medium.com/@hpux/vim-and-eslint-16fa08cc580f)

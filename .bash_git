@@ -269,9 +269,8 @@ gcbm() {
 # git - gui (git gui)
 gg() {
   # use this in citool mode, to make a commit and exit
-  do_git gui citool
   # then show what was committed
-  git log -n1
+  do_git gui citool && git log -n1
 }
 
 # git - show commit log (input number of logs to show, default is 4)

@@ -25,7 +25,7 @@ set cursorline                  " highlight the screen line of the cursor
 set ttyfast                     " indicates a fast terminal connection, should be smoother
 set ruler                       " show the line and column of the cursor position
 set backspace=indent,eol,start  " allow backspacing over these options in Insert mode
-set laststatus=2                " always show the status line
+set laststatus=2                " always show the status line, and one line below
 " if exists('&relativenumber')
 "   set relativenumber            " show line number relative to cursor line
 " endif
@@ -166,16 +166,11 @@ endfunction
 " hide these file extensions (from https://stackoverflow.com/a/21020164/)
 let g:netrw_list_hide= '.*\.swp$,\~$,\.orig$'
 
-" statusline things (from https://stackoverflow.com/a/32059626 and https://stackoverflow.com/a/45244610)
-" [buffer number] followed by relative path to file:
-set statusline=[%n]\ %{expand('%:~:.')}
+" airline (https://github.com/vim-airline/vim-airline)
+let g:airline_section_b = ''  " normally this is git branch info
+let g:airline_section_y = ''  " normally this file encoding
 
 " syntastic settings
-" (from https://medium.com/@hpux/vim-and-eslint-16fa08cc580f)
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 0
@@ -189,9 +184,6 @@ let g:syntastic_javascript_eslint_exe = 'npm run lint --'
 " (adapted from https://stackoverflow.com/a/21434697)
 let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [],'passive_filetypes': [] }
 nnoremap <leader>E :SyntasticCheck<CR> :SyntasticToggleMode<CR>
-
-" show line#:column# and percent on the right hand side
-set statusline+=%=%l:%c\ (%P)
 
 " CtrlP
 " command mapping

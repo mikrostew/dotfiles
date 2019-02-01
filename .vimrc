@@ -190,8 +190,8 @@ let g:syntastic_javascript_eslint_exe = 'npm run lint --'
 let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [],'passive_filetypes': [] }
 nnoremap <leader>E :SyntasticCheck<CR> :SyntasticToggleMode<CR>
 
-" show line#:column# on the right hand side
-set statusline+=%=%l:%c
+" show line#:column# and percent on the right hand side
+set statusline+=%=%l:%c\ (%P)
 
 " CtrlP
 " command mapping

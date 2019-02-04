@@ -69,7 +69,6 @@ set listchars=tab:▸\ ,eol:¬     " use the same symbols as TextMate for tabsto
 autocmd BufWritePre * :call StripTrailingWhitespace()
 
 """ do the right thing - no arrow keys (also disables mouse scrolling)
-
 nnoremap <up> <nop>
 nnoremap <down> <nop>
 nnoremap <left> <nop>
@@ -78,6 +77,7 @@ inoremap <up> <nop>
 inoremap <down> <nop>
 inoremap <left> <nop>
 inoremap <right> <nop>
+
 " move by screen line instead of file line
 nnoremap j gj
 nnoremap k gk

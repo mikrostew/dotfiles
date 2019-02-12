@@ -53,7 +53,7 @@ alias bi='bundle install'
 alias mm="mvim ."
 
 # cargo
-alias cb='cargo build'
-alias ct='cargo test'
-alias cta='cargo test --all'
+alias cb='do_cmd cargo build'
+alias ct='do_cmd cargo test'
+alias cta='do_cmd cargo test --all'
 

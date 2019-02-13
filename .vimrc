@@ -195,6 +195,11 @@ let g:ctrlp_working_path_mode = 'ra'
 set wildignore+=*/vendor/**
 set wildignore+=*/target/**
 
+" limelight.vim
+let g:limelight_default_coefficient = 0.7
+" can load this by default, but I'm not sure I want that
+"autocmd VimEnter * Limelight
+
 " font
 " (install IBM plex font from https://github.com/IBM/plex)
 if has("mac") || has("macunix")

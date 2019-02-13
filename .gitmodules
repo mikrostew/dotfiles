@@ -31,3 +31,6 @@
 [submodule ".vim/bundle/vim-airline"]
 	path = .vim/bundle/vim-airline
 	url = https://github.com/vim-airline/vim-airline
+[submodule ".vim/bundle/limelight.vim"]
+	path = .vim/bundle/limelight.vim
+	url = git@github.com:junegunn/limelight.vim.git

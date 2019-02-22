@@ -24,8 +24,3 @@ Host pi
     Hostname raspberrypi
     User pi
 
-# # local VMs
-# Host 10.0.*
-#     IdentityFile ~/.ssh/aspera_rsa
-#     IdentitiesOnly yes
-

@@ -43,11 +43,6 @@ Host pi
     User pi
 
 Host android
-    Hostname 192.168.86.35
-    Port 2222
-    IdentityFile    %d/.ssh/android_rsa
-
-Host android-tether
-    Hostname 192.168.43.1
+    Hostname galaxy_s9+.local
     Port 2222
     IdentityFile    %d/.ssh/android_rsa

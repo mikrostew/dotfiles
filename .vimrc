@@ -112,7 +112,7 @@ nnoremap <leader>s :%s/\<<C-r><C-w>\>/
 nnoremap <leader>\| <C-w>v<C-w>l:e.<CR>
 nnoremap <leader>- <C-w>s<C-w>j:e.<CR>
 " use ack in vim
-nnoremap <leader>a :Ack
+"nnoremap <leader>a :Ack
 
 """ edit my vimrc
 
@@ -183,7 +183,7 @@ let g:syntastic_javascript_eslint_exe = 'npm run lint --'
 " disable syntastic by default, but allow toggling this when I want it
 " (adapted from https://stackoverflow.com/a/21434697)
 let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [],'passive_filetypes': [] }
-nnoremap <leader>E :SyntasticCheck<CR> :SyntasticToggleMode<CR>
+nnoremap <leader>S :SyntasticCheck<CR> :SyntasticToggleMode<CR>
 
 " CtrlP
 " command mapping
@@ -199,6 +199,10 @@ set wildignore+=*/target/**
 let g:limelight_default_coefficient = 0.7
 " can load this by default, but I'm not sure I want that
 "autocmd VimEnter * Limelight
+
+" rust.vim
+" automatically format when saving a buffer
+let g:rustfmt_autosave = 1
 
 " font
 " (install IBM plex font from https://github.com/IBM/plex)

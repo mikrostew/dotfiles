@@ -27,3 +27,6 @@ bin/
 
 # for this repo
 cache/*.cache
+
+# saved vim views (from rust.vim plugin)
+.vim/view

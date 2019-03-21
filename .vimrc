@@ -166,6 +166,10 @@ endfunction
 " hide these file extensions (from https://stackoverflow.com/a/21020164/)
 let g:netrw_list_hide= '.*\.swp$,\~$,\.orig$'
 
+" vim-illuminate (https://github.com/RRethy/vim-illuminate)
+" use an underline to highlight instead of the cursor color
+hi illuminatedWord cterm=underline gui=underline
+
 " airline (https://github.com/vim-airline/vim-airline)
 let g:airline_section_b = ''  " normally this is git branch info
 let g:airline_section_y = ''  " normally this file encoding

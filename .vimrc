@@ -89,7 +89,7 @@ inoremap <F1> <ESC>
 nnoremap <F1> <ESC>
 vnoremap <F1> <ESC>
 " save when focus is lost
-autocmd FocusLost * :wa
+"autocmd FocusLost * :wa
 " easy toggle for pasting text without the crazy indentation
 set pastetoggle=<F2>
 " disable scrollbars (annoying in macvim)

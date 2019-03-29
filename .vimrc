@@ -101,6 +101,8 @@ set guioptions-=L
 " (from http://vim.wikia.com/wiki/Disable_beeping)
 set noerrorbells visualbell t_vb=
 autocmd GUIEnter * set visualbell t_vb=
+" include dashes in autocomplete
+set iskeyword+=\-
 
 """ misc commands
 

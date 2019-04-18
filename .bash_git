@@ -85,10 +85,10 @@ do_git() {
   do_cmd git "$@"
 }
 
-# list all branches
+# list all branches, separated by newlines
 all_git_branches() {
   # @uses_cmds git sed
-  echo $(git for-each-ref --format="%(refname)" refs/heads/ | sed 's|refs/heads/||')
+  git for-each-ref --format="%(refname)" refs/heads/ | sed 's|refs/heads/||'
 }
 
 # undo the last merge that was done (usually because something failed)

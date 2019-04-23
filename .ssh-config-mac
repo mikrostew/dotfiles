@@ -43,6 +43,6 @@ Host pi
     User pi
 
 Host android
-    Hostname galaxy_s9+.local
+    Hostname 10.0.0.171
     Port 2222
     IdentityFile    %d/.ssh/android_rsa

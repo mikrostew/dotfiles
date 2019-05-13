@@ -107,7 +107,12 @@ export RI="-T --format=ansi"
 export TERM=xterm-256color
 
 
-# functions to load things into the shell
+# loading things into the shell
+
+# volta - stable and fast enough to always load this
+export VOLTA_HOME="$HOME/.volta"
+[ -s "$VOLTA_HOME/load.sh" ] && . "$VOLTA_HOME/load.sh"
+export PATH="$VOLTA_HOME/bin:$PATH"
 
 # nvm
 # not done automatically, because this slows down new session startup, and I use it infrequently

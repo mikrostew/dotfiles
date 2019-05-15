@@ -272,5 +272,5 @@ bashrc_run_time=$((bashrc_finish - bashrc_start))
 echo "$bashrc_start $bashrc_run_time" >> "$HOME/Dropbox/log/bashrc-startup-time-$HOST_NAME"
 echo -e ".bashrc loaded in $COLOR_FG_BOLD_BLUE${bashrc_run_time}ms$COLOR_RESET ($SESSION_TYPE session, tab #$tab_number)"
 
-# installers like to add things to the end of this file, so prevent that stuff from running
+# some installers like to add things to this file, so prevent that stuff from running
 return 0

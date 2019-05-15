@@ -3,5 +3,5 @@
 # if running bash, include .bashrc if it exists
 [ -n "$BASH_VERSION" ] && [ -f "$HOME/.bashrc" ] && . "$HOME/.bashrc"
 
-# prevent installers from running things from this file
+# some installers like to add things to this file, so prevent that stuff from running
 return 0

@@ -57,3 +57,6 @@ alias cb='do_cmd cargo build'
 alias ct='do_cmd cargo test'
 alias cta='do_cmd cargo test --all'
 
+# volta
+alias ⚡️='volta'
+

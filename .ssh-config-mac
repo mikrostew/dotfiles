@@ -8,6 +8,16 @@ Host *
     # need this after upgrade to 10.13.3
     Ciphers aes128-cbc,3des-cbc,aes256-ctr
 
+# proxy thru eng-portal
+Host *prod *prod.linkedin.com *stg *stg.linkedin.com *.grid.linkedin.com
+    ProxyCommand ssh -A -T eng-portal.corp.linkedin.com nc %h %p 2> /dev/null
+
+Host eng-portal*
+    ForwardAgent yes
+    ControlPath ~/.ssh/%r@%h:%p
+    ControlMaster auto
+    ControlPersist 8h
+
 # tester account
 Host *.corp.linkedin.com
     IdentityFile    %d/.ssh/tester_at_linkedin.com_rsa_key

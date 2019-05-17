@@ -23,7 +23,7 @@ alias la='ls -A'
 alias l='ls -CF'
 
 # disk usage - use ncdu to have a nice file browser
-alias du='ncdu -x -rr --color dark'
+alias ncdu='ncdu -x -rr --color dark'
 
 # because I type this so much
 alias x='exit'

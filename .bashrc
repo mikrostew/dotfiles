@@ -217,6 +217,8 @@ fgn() {
 
 # run version checks async to speed up load time
 # should only run into version issues when first setting up a system
+# TODO: combine all this into a single line somehow (maybe dotfile links separately?), and display in red on the top line of the console
+# TODO: using this: https://stackoverflow.com/a/18773677/
 (
   min-version-check "bash" "^4.0.0" "bash --version | sed -n -E 's/[^0-9]*([0-9]+\.[0-9]+\.[0-9]+[^ ]*).*/\1/ p'" 'brew install bash';
   min-version-check "git" "^2.14.0" "git --version | awk '{print \$3}'" 'brew install git';
@@ -230,6 +232,11 @@ fgn() {
   # also verify that the links to these dotfiles haven't changed
   verify_dotfile_links
 ) & disown
+
+# TODO: put a clock in the top right corner
+# https://www.commandlinefu.com/commands/view/7916/put-a-console-clock-in-top-right-corner
+# while sleep 1;do tput sc;tput cup 0 $(($(tput cols)-29));date;tput rc;done &
+# (can probably save the output of `tput sc` and `tput rc`, and use `echo -e`, but otherwise looks good)
 
 HOST_NAME="$(hostname)"
 

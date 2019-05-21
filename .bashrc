@@ -233,10 +233,22 @@ fgn() {
   verify_dotfile_links
 ) & disown
 
-# TODO: put a clock in the top right corner
-# https://www.commandlinefu.com/commands/view/7916/put-a-console-clock-in-top-right-corner
-# while sleep 1;do tput sc;tput cup 0 $(($(tput cols)-29));date;tput rc;done &
-# (can probably save the output of `tput sc` and `tput rc`, and use `echo -e`, but otherwise looks good)
+# put a clock in the top right corner
+# (adapted from https://www.commandlinefu.com/commands/view/7916/put-a-console-clock-in-top-right-corner and https://stackoverflow.com/a/18773677/)
+# this updates the time every minute (since it only shows minute precision)
+save_cursor='\e[s'
+restore_cursor='\e[u'
+move_cursor_str='\e[1;%dH' # placeholder for offset
+while sleep 60
+do
+  # need to do these calculations dynamically
+  col_offset="$(( $(tput cols)-22 ))"
+  curr_datetime="$(date +'%a %b %d, %H:%M %Z')" # formatted like "Mon May 20, 14:36 PDT"
+  move_cursor="$(printf "$move_cursor_str" "$col_offset")"
+  # do the positioning and output all in one go, outputting to stderr
+  # (with a space in front of the date for readability)
+  echo -en "${save_cursor}${move_cursor} ${curr_datetime}${restore_cursor}" >&2
+done &
 
 HOST_NAME="$(hostname)"
 

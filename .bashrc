@@ -59,12 +59,11 @@ source "$DOTFILES_DIR/.bash_repo_status"
 # prompt string
 # see https://www.gnu.org/software/bash/manual/bash.html#Controlling-the-Prompt
 # single quotes so these are included as-is, and evaluated for every prompt
-ps_time_24h='\t'
 ps_user='\u'
 ps_host='\h'
 ps_pwd='\w'
 ps_repo_status='$(repo_status)'
-PS1="${COLOR_RESET}\n($ps_time_24h) "\
+PS1="${COLOR_RESET}\n"\
 "${COLOR_FG_BOLD_BLACK}$ps_user${COLOR_RESET}"\
 "@${COLOR_FG_BOLD_BLACK}$ps_host${COLOR_RESET}"\
 ":${COLOR_FG_BOLD_BLACK}$ps_pwd/${COLOR_RESET}"\
@@ -234,22 +233,71 @@ fgn() {
 ) & disown
 
 # put a clock in the top right corner
+# TODO: split this off into it's own repo
 # (adapted from https://www.commandlinefu.com/commands/view/7916/put-a-console-clock-in-top-right-corner and https://stackoverflow.com/a/18773677/)
-# this updates the time every minute (since it only shows minute precision)
-save_cursor='\e[s'
-restore_cursor='\e[u'
-move_cursor_str='\e[1;%dH' # placeholder for offset
-while sleep 60
-do
-  # need to do these calculations dynamically
-  col_offset="$(( $(tput cols)-22 ))"
-  curr_datetime="$(date +'%a %b %d, %H:%M %Z')" # formatted like "Mon May 20, 14:36 PDT"
-  move_cursor="$(printf "$move_cursor_str" "$col_offset")"
-  # do the positioning and output all in one go, outputting to stderr
-  # (with a space in front of the date for readability)
-  echo -en "${save_cursor}${move_cursor} ${curr_datetime}${restore_cursor}" >&2
-done &
+# this updates the time every 5 seconds (since it only shows minute precision)
+terminal_clock() {
+  # this will ignore SIGINT (Ctrl-C) here, so sending that to the parent shell does not close this
+  trap '' SIGINT
 
+  shell_pid="$$"
+  echo "shell PID: $shell_pid"
+  save_cursor='\e[s'
+  restore_cursor='\e[u'
+  move_cursor_str='\e[1;%dH' # placeholder for offset
+  # update every 5 seconds (knowing the time all the time is not that important)
+  # TODO: make this value configurable
+  while sleep 5
+  do
+    # if there is a foreground process running, don't update the clock
+    # (adapted from https://unix.stackexchange.com/a/273785)
+    #  state shows the state, where '+' means running in the foreground
+    #  ppid shows the parent PID (to grep for the pid of the shell)
+    #  comm shows the command (but not the arguments, so this doesn't match the grep)
+    # this greps for the shell PID, filters out the bash process running the clock, and looks for any FG process
+    fg_proc="$(ps -e -o state= -o ppid= -o comm= | grep -Fw $shell_pid | grep -v "bash" | grep -F '+')"
+    if [ -z "$fg_proc" ]
+    then
+      # need to do these calculations every time
+      # TODO: calculate the length of the curr_datetime string, and use that here instead of a magic number
+      col_offset="$(( $(tput cols)-22 ))"
+      curr_datetime="$(date +'%a %b %d, %H:%M %Z')" # formatted like "Mon May 20, 14:36 PDT"
+      move_cursor="$(printf "$move_cursor_str" "$col_offset")"
+      # do the positioning and output all in one go, outputting to stderr
+      # (with a space before and after the date for readability)
+      echo -en "${save_cursor}${move_cursor} ${curr_datetime} ${restore_cursor}" >&2
+    fi
+  done
+}
+
+terminal_clock & # disown
+# using `disown` so that this does not show up in the job list for the shell (but that doesn't matter...)
+# (https://www.gnu.org/software/bash/manual/html_node/Job-Control-Builtins.html)
+
+clock_pid="$!"
+# echo "clock PID: $clock_pid"
+# this bg process will stay up when the session exits, because it has open terminal file handles (see https://stackoverflow.com/a/8123399/)
+#
+# $ ps -e -o ppid= -o pid= -o user= -o command= | grep "sleep 1"
+# 44171 20066 mistewar         sleep 1
+# 45203 20068 mistewar         sleep 1
+# 89572 20069 mistewar         sleep 1
+# 47244 20071 mistewar         sleep 1
+# 86790 20072 mistewar         sleep 1
+# 48661 20083 mistewar         sleep 1
+# 63464 20084 mistewar         sleep 1
+# 85330 20090 mistewar         sleep 1
+#  5968 20109 mistewar         sleep 1
+# 13536 20110 mistewar         sleep 1
+# 14535 20111 mistewar         sleep 1
+# 92865 20122 mistewar         sleep 1
+# 84829 20123 mistewar         sleep 1
+# 84788 20125 mistewar         grep --color=auto sleep 1
+#
+# so kill this process when the session exits
+trap "kill $clock_pid" EXIT
+
+# to log the startup time later
 HOST_NAME="$(hostname)"
 
 # show uptime, like " 9:45  up 2 days, 17:09, 7 users, load averages: 1.63 3.29 5.36"

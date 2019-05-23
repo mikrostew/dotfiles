@@ -122,23 +122,6 @@ load_nvm() {
   [ -s "$NVM_DIR/bash_completion" ] && source "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 }
 
-# notion
-# not done automatically, because some of the shims are not yet implemented
-load_notion() {
-  echo_info "Loading notion..."
-
-  export NOTION_HOME="$HOME/.notion"
-  [ -s "$NOTION_HOME/load.sh" ] && \. "$NOTION_HOME/load.sh"
-
-  export PATH="${NOTION_HOME}/bin:$PATH"
-}
-
-# because I frequently screw up my installation
-install_notion() {
-  echo_ack "( curl -sSLf https://get.notionjs.com | bash )"
-  curl -sSLf https://get.notionjs.com | bash
-}
-
 # chruby
 # not done automatically because I infrequently use ruby and this clutters the path
 load_chruby() {

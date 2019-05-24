@@ -215,6 +215,19 @@ fgn() {
   verify_dotfile_links
 ) & disown
 
+# see https://www.iterm2.com/documentation-scripting.html
+active_iterm_tab_id() {
+  if platform_is_mac; then
+    osascript <<EOF
+    tell application "iTerm2"
+      tell current session of current window
+        id
+      end tell
+    end tell
+EOF
+  fi
+}
+
 # put a clock in the top right corner
 # TODO: split this off into it's own repo
 # (adapted from https://www.commandlinefu.com/commands/view/7916/put-a-console-clock-in-top-right-corner and https://stackoverflow.com/a/18773677/)
@@ -222,6 +235,13 @@ fgn() {
 terminal_clock() {
   # this will ignore SIGINT (Ctrl-C) here, so sending that to the parent shell does not close this
   trap '' SIGINT
+
+  # TODO: calculate this and pass to the script as an argument
+  if [ -n "$ITERM_SESSION_ID" ] && [[ "$ITERM_SESSION_ID" =~ :([0-9A-F-]*) ]]
+  then
+    iterm_id="${BASH_REMATCH[1]}"
+  fi
+  echo "iTerm ID: $iterm_id"
 
   shell_pid="$$"
   echo "shell PID: $shell_pid"
@@ -239,7 +259,10 @@ terminal_clock() {
     #  comm shows the command (but not the arguments, so this doesn't match the grep)
     # this greps for the shell PID, filters out the bash process running the clock, and looks for any FG process
     fg_proc="$(ps -e -o state= -o ppid= -o comm= | grep -Fw $shell_pid | grep -v "bash" | grep -F '+')"
-    if [ -z "$fg_proc" ]
+
+    # and only update the clock if this iTerm tab is the active one
+
+    if [ -z "$fg_proc" ] && [[ -z "$iterm_id" || "$iterm_id" == "$(active_iterm_tab_id)" ]]
     then
       # need to do these calculations every time
       # TODO: calculate the length of the curr_datetime string, and use that here instead of a magic number

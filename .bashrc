@@ -113,6 +113,9 @@ export VOLTA_HOME="$HOME/.volta"
 [ -s "$VOLTA_HOME/load.sh" ] && . "$VOLTA_HOME/load.sh"
 export PATH="$VOLTA_HOME/bin:$PATH"
 
+# need this for v-web, until we migrate to Node 12?
+export NODE_OPTIONS="--max-old-space-size=8192"
+
 # nvm
 # not done automatically, because this slows down new session startup, and I use it infrequently
 load_nvm() {

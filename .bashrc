@@ -146,6 +146,24 @@ load_latex() {
 }
 
 
+# ssh key stuff for RHEL at linkedin
+if [ -x /usr/bin/keychain ]
+then
+  MY_NAME=$(whoami)
+  MY_HOST=$(hostname)
+  MY_KEY="${HOME}/.ssh/${MY_NAME}_at_linkedin.com_ssh_key"
+  MY_KEYCHAIN_ENV="${HOME}/.keychain/${MY_HOST}-sh"
+
+  if [ -f "$MY_KEY" ]
+  then
+    # starts ssh-agent, adds the key(s), and creates the env file
+    /usr/bin/keychain "$MY_KEY"
+    # has env vars for SSH agent stuff (PIDs, etc.)
+    source "$MY_KEYCHAIN_ENV"
+  fi
+fi
+
+
 # functions to notify me about things
 
 # show a desktop notification with sound after a long-running command

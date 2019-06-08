@@ -223,15 +223,15 @@ fgn() {
 # TODO: combine all this into a single line somehow (maybe dotfile links separately?), and display in red on the top line of the console
 # TODO: using this: https://stackoverflow.com/a/18773677/
 (
-  min-version-check "bash" "^4.0.0" "bash --version | sed -n -E 's/[^0-9]*([0-9]+\.[0-9]+\.[0-9]+[^ ]*).*/\1/ p'" 'brew install bash';
-  min-version-check "git" "^2.14.0" "git --version | awk '{print \$3}'" 'brew install git';
-  min-version-check "jq" "^1.5.0" "jq --version | sed 's/jq-//'" 'brew install jq';
-  min-version-check "expect" "^5.0.0" "expect -version | awk '{print \$3}'" 'brew install expect';
-  min-version-check "bats-core" "^1.0.0" "bats --version | awk '{print \$2}'" 'brew install bats-core' 'which bats';
-  min-version-check "curl" "^7.0.0" "curl --version | head -n1 | awk '{print \$2}'" 'brew install curl';
+  min-version-check "bash" ">=4" "bash --version | sed -n -E 's/[^0-9]*([0-9]+\.[0-9]+\.[0-9]+[^ ]*).*/\1/ p'" 'brew install bash';
+  min-version-check "git" "^2.14" "git --version | awk '{print \$3}'" 'brew install git';
+  min-version-check "jq" "^1.5" "jq --version | sed 's/jq-//'" 'brew install jq';
+  min-version-check "expect" "^5.0" "expect -version | awk '{print \$3}'" 'brew install expect';
+  min-version-check "bats-core" "^1.0" "bats --version | awk '{print \$2}'" 'brew install bats-core' 'which bats';
+  min-version-check "curl" "^7.0" "curl --version | head -n1 | awk '{print \$2}'" 'brew install curl';
   # sponge doesn't give a version, so as long as it exists that's fine
   min-version-check "sponge" "1.0.0" "which sponge >/dev/null && echo 1.0.0" 'brew install moreutils';
-  min-version-check "terminal-notifier" "^2.0.0" "terminal-notifier -version | sed -e 's/terminal-notifier //' -e 's/\.$//'" 'brew install terminal-notifier';
+  min-version-check "terminal-notifier" "^2.0" "terminal-notifier -version | sed -e 's/terminal-notifier //' -e 's/\.$//'" 'brew install terminal-notifier';
   # also verify that the links to these dotfiles haven't changed
   verify_dotfile_links
 ) & disown

@@ -53,21 +53,17 @@ shopt -s checkwinsize
 # colors:
 source "$DOTFILES_DIR/.bash_colors"
 
-# git / svn status
-source "$DOTFILES_DIR/.bash_repo_status"
-
 # prompt string
 # see https://www.gnu.org/software/bash/manual/bash.html#Controlling-the-Prompt
 # single quotes so these are included as-is, and evaluated for every prompt
 ps_user='\u'
 ps_host='\h'
 ps_pwd='\w'
-ps_repo_status='$(repo_status)'
 PS1="${COLOR_RESET}\n"\
 "${COLOR_FG_BOLD_BLACK}$ps_user${COLOR_RESET}"\
 "@${COLOR_FG_BOLD_BLACK}$ps_host${COLOR_RESET}"\
 ":${COLOR_FG_BOLD_BLACK}$ps_pwd/${COLOR_RESET}"\
-"  $ps_repo_status\n\$ "
+"\n\$ "
 
 
 # aliases

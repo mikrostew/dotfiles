@@ -233,7 +233,7 @@ fgn() {
 ) & disown
 
 # show a clock in the top right corner of the terminal, formatted like "Mon May 20, 14:36 PDT"
-"$HOME/src/term-clock/term-clock.sh" "$$" --format "%a %b %d, %H:%M %Z" &
+#"$HOME/src/term-clock/term-clock.sh" "$$" --format "%a %b %d, %H:%M %Z" &
 
 # to log the startup time later
 HOST_NAME="$(hostname)"

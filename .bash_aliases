@@ -31,6 +31,7 @@ alias x='exit'
 # tmux
 alias tl='tmux ls'
 alias ta='tmux at'
+# TODO: make this a function that takes an optional session name?
 alias tn='tmux new'
 
 # so that tmux will display 256 colors correctly

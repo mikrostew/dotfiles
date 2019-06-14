@@ -217,7 +217,8 @@ fgn() {
 # run version checks async to speed up load time
 # should only run into version issues when first setting up a system
 # TODO: combine all this into a single line somehow (maybe dotfile links separately?), and display in red on the top line of the console
-# TODO: using this: https://stackoverflow.com/a/18773677/
+# TODO: somehow showing this in the tmux status line as an error
+# TODO: I can move all this into a config file, and have a single command to read that, do the version checks, and combine the status
 (
   min-version-check "bash" ">=4" "bash --version | sed -n -E 's/[^0-9]*([0-9]+\.[0-9]+\.[0-9]+[^ ]*).*/\1/ p'" 'brew install bash';
   min-version-check "git" "^2.14" "git --version | awk '{print \$3}'" 'brew install git';

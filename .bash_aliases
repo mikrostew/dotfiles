@@ -57,6 +57,8 @@ alias mm="mvim ."
 alias cb='do_cmd cargo build'
 alias ct='do_cmd cargo test'
 alias cta='do_cmd cargo test --all'
+alias cwb='do_cmd cargo watch -x build'
+alias cwt='do_cmd cargo watch -x test'
 
 # volta
 alias ⚡️='volta'

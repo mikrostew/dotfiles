@@ -116,7 +116,7 @@ export PATH="$VOLTA_HOME/bin:$PATH"
 export NODE_OPTIONS="--max-old-space-size=8192"
 
 # nvm
-# not done automatically, because this slows down new session startup, and I use it infrequently
+# not done automatically, because this slows down new session startup, and I use Volta now
 load_nvm() {
   echo_info "Loading nvm..."
   export NVM_DIR="$HOME/.nvm"
@@ -124,17 +124,13 @@ load_nvm() {
   [ -s "$NVM_DIR/bash_completion" ] && source "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 }
 
-# chruby
-# not done automatically because I infrequently use ruby and this clutters the path
-load_chruby() {
-  echo_info "Loading chruby..."
-  # this is the same location on mac and linux
-  if [ -f "/usr/local/share/chruby/chruby.sh" ]; then
-    source /usr/local/share/chruby/chruby.sh
-    chruby ruby-2
-    ruby -v
-  fi
-}
+# chruby - done automatically because I frequently use Ruby
+# (this is the same location on mac and linux)
+if [ -f "/usr/local/share/chruby/chruby.sh" ]; then
+  source /usr/local/share/chruby/chruby.sh
+  chruby ruby-2.6
+  ruby -v
+fi
 
 # latex
 # not done automatically because I infrequently use TeX/LaTeX, and it clutters the path

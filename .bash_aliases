@@ -63,3 +63,5 @@ alias cwt='do_cmd cargo watch -x test'
 # volta
 alias ⚡️='volta'
 
+# for reading/writing notes to myself
+alias notes="mvim ~/Sync/notes/"

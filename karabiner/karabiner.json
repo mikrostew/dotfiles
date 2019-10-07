@@ -92,6 +92,32 @@
                             ]
                           }
                         ]
+                    },
+                    {
+                        "description": "Ctrl-⌥ -⌘ -M  - Open Cafe Menus (in browser)",
+                        "manipulators": [
+                          {
+                            "type": "basic",
+                            "from": {
+                              "key_code": "m",
+                              "modifiers": {
+                                "mandatory": [
+                                  "control",
+                                  "option",
+                                  "command"
+                                ],
+                                "optional": [
+                                  "caps_lock"
+                                ]
+                              }
+                            },
+                            "to": [
+                              {
+                                "shell_command": "$HOME/dotfiles/scripts/cafe-menus"
+                              }
+                            ]
+                          }
+                        ]
                     }
                 ]
             },

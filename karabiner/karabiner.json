@@ -16,7 +16,7 @@
                 },
                 "rules": [
                     {
-                        "description": "New iTerm2 Window",
+                        "description": "Ctrl-⌥ -⌘ -T  - New iTerm2 Window",
                         "manipulators": [
                           {
                             "type": "basic",
@@ -36,6 +36,32 @@
                             "to": [
                               {
                                 "shell_command": "$HOME/dotfiles/scripts/new-terminal"
+                              }
+                            ]
+                          }
+                        ]
+                    },
+                    {
+                        "description": "Ctrl-⌥ -⌘ -C  - New Chrome Window",
+                        "manipulators": [
+                          {
+                            "type": "basic",
+                            "from": {
+                              "key_code": "c",
+                              "modifiers": {
+                                "mandatory": [
+                                  "control",
+                                  "option",
+                                  "command"
+                                ],
+                                "optional": [
+                                  "caps_lock"
+                                ]
+                              }
+                            },
+                            "to": [
+                              {
+                                "shell_command": "$HOME/dotfiles/scripts/new-chrome"
                               }
                             ]
                           }

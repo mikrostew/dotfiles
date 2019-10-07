@@ -115,6 +115,12 @@ export PATH="$VOLTA_HOME/bin:$PATH"
 # need this for v-web, until we migrate to Node 12?
 export NODE_OPTIONS="--max-old-space-size=8192"
 
+# Visual Studio Code, for OSX
+if [ -d "/Applications/Visual Studio Code.app" ]
+then
+  export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
+fi
+
 # nvm
 # not done automatically, because this slows down new session startup, and I use Volta now
 load_nvm() {

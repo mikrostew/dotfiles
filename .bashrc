@@ -8,6 +8,17 @@ case $- in
       *) return;;
 esac
 
+# TODO: should I switch to zsh? now that it's the default on OSX? maybe
+# see:
+# - https://dev.to/saltyshiomix/a-guide-for-upgrading-macos-to-catalina-and-migrating-the-default-shell-from-bash-to-zsh-4ep3
+# - https://scriptingosx.com/2019/06/moving-to-zsh/
+# - https://apple.stackexchange.com/questions/361870/what-are-the-practical-differences-between-bash-and-zsh
+# - https://www.reddit.com/r/linux/comments/1csl7c/bash_vs_zsh/
+
+# in the meantime, so I don't keep seeing that deprecation warning
+# (from https://support.apple.com/en-us/HT208050, the link in the warning message)
+export BASH_SILENCE_DEPRECATION_WARNING=1
+
 # for platform-specific things
 platform_is_mac() {
     [ "$(uname)" == "Darwin" ] # OSX

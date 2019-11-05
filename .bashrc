@@ -53,6 +53,9 @@ shopt -s histappend
 # set extended globbing, see https://www.linuxjournal.com/content/bash-extended-globbing
 shopt -s extglob
 
+# spelling correction for directory names
+shopt -s cdspell
+
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
 HISTSIZE=1000
 HISTFILESIZE=2000

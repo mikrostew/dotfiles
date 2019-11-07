@@ -19,6 +19,10 @@ esac
 # (from https://support.apple.com/en-us/HT208050, the link in the warning message)
 export BASH_SILENCE_DEPRECATION_WARNING=1
 
+# also silence deprecation warnings about Tcl/Tk
+# (if I need it in the future I can install with homebrew)
+export TK_SILENCE_DEPRECATION=1
+
 # for platform-specific things
 platform_is_mac() {
     [ "$(uname)" == "Darwin" ] # OSX

@@ -6,6 +6,10 @@ Host github.com
     IdentityFile    ~/.ssh/github_rsa
     IdentitiesOnly yes
 
+# tester account
+Host *.corp.linkedin.com
+    IdentityFile    %d/.ssh/tester_at_linkedin.com_rsa_key
+
 # LinkedIn
 Host *.linkedin.com
 	IdentityFile 	%d/.ssh/%u_at_linkedin.com_ssh_key

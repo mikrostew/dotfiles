@@ -8,7 +8,7 @@ case $- in
       *) return;;
 esac
 
-# TODO: should I switch to zsh? now that it's the default on OSX? maybe
+# should I switch to zsh? now that it's the default on OSX? maybe
 # see:
 # - https://dev.to/saltyshiomix/a-guide-for-upgrading-macos-to-catalina-and-migrating-the-default-shell-from-bash-to-zsh-4ep3
 # - https://scriptingosx.com/2019/06/moving-to-zsh/
@@ -238,10 +238,11 @@ fgn() {
 
 
 # run version checks async to speed up load time
-# should only run into version issues when first setting up a system
-# TODO: combine all this into a single line somehow (maybe dotfile links separately?), and display in red on the top line of the console
-# TODO: somehow showing this in the tmux status line as an error
-# TODO: I can move all this into a config file, and have a single command to read that, do the version checks, and combine the status
+# (should only run into version issues when first setting up a system)
+# things I could do with this:
+# * combine all this into a single line somehow (maybe dotfile links separately?), and display in red on the top line of the console
+# * somehow showing this in the tmux status line as an error
+# * move all this into a config file, and have a single command to read that, do the version checks, and combine the status
 (
   min-version-check "bash" ">=4" "bash --version | sed -n -E 's/[^0-9]*([0-9]+\.[0-9]+\.[0-9]+[^ ]*).*/\1/ p'" 'brew install bash';
   min-version-check "git" "^2.14" "git --version | awk '{print \$3}'" 'brew install git';

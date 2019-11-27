@@ -21,6 +21,7 @@ Host eng-portal*
 # tester account
 Host *.corp.linkedin.com
     IdentityFile    %d/.ssh/tester_at_linkedin.com_rsa_key
+    PasswordAuthentication no
 
 # LinkedIn
 Host *.linkedin.com

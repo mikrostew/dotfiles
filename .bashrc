@@ -183,6 +183,19 @@ then
 fi
 
 
+# Qt (for Python)
+# (these recommendations are from homebrew after `brew install pyqt`)
+# If you need to have qt first in your PATH run:
+#   echo 'export PATH="/usr/local/opt/qt/bin:$PATH"' >> ~/.bash_profile
+#
+# For compilers to find qt you may need to set:
+export LDFLAGS="-L/usr/local/opt/qt/lib"
+export CPPFLAGS="-I/usr/local/opt/qt/include"
+#
+# For pkg-config to find qt you may need to set:
+export PKG_CONFIG_PATH="/usr/local/opt/qt/lib/pkgconfig"
+
+
 # functions to notify me about things
 
 # show a desktop notification with sound after a long-running command

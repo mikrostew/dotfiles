@@ -110,8 +110,9 @@ path_homebrew="/usr/local/sbin"
 path_yarn="$HOME/.yarn/bin"
 path_scripts="$DOTFILES_DIR/scripts"
 path_rust="$HOME/.cargo/bin"
+path_python="$HOME/Library/Python/3.7/bin" # for pipx, userpath, etc. - they set this as ~/.local/bin, but there's nothing there?
 # all together now
-export PATH="$path_homebrew:$path_yarn:$path_scripts:$path_rust:$PATH"
+export PATH="$path_homebrew:$path_yarn:$path_scripts:$path_rust:$path_python:$PATH"
 
 # for bash-completion after upgrading to bash 4.x with homebrew
 [ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion

@@ -170,6 +170,32 @@
                             ]
                           }
                         ]
+                    },
+                    {
+                        "description": "Ctrl-⌥ -⌘ -S  - Type the shrug emoji",
+                        "manipulators": [
+                          {
+                            "type": "basic",
+                            "from": {
+                              "key_code": "s",
+                              "modifiers": {
+                                "mandatory": [
+                                  "control",
+                                  "option",
+                                  "command"
+                                ],
+                                "optional": [
+                                  "caps_lock"
+                                ]
+                              }
+                            },
+                            "to": [
+                              {
+                                "shell_command": "$HOME/dotfiles/scripts/shrug"
+                              }
+                            ]
+                          }
+                        ]
                     }
                 ]
             },

@@ -61,6 +61,9 @@ alias cwt='do_cmd cargo watch -x test'
 # volta
 alias ⚡️='volta'
 
+# git
+alias grap='gpr && gp' # git rebase and push
+
 # for reading/writing notes to myself
 # (change the CWD so vim's file navigation will start in that dir, but return to whatever dir this was run from)
 alias notes="pushd ~/Sync/notes/ >/dev/null; mvim .; popd >/dev/null"

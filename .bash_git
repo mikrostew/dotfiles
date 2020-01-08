@@ -347,7 +347,11 @@ gremu() {
 
 # git - delete *.orig files, usually leftover after merge or rebase with conflicts
 grmorig() {
+  # running ls-files only looks at the working directory
+  # so change to the top level dir, in case I happen to be in a subdirectory
+  pushd "$(git rev-parse --show-toplevel)" >/dev/null
   do_git ls-files --others --exclude-standard | do_cmd grep \.orig$ | do_cmd xargs rm -v
+  popd >/dev/null
 }
 
 # git - show status of RB - which ACLs are needed (git review status)

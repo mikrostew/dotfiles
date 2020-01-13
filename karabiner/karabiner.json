@@ -196,6 +196,32 @@
                             ]
                           }
                         ]
+                    },
+                    {
+                        "description": "Ctrl-⌥ -⌘ -O  - Open oncall links in browser",
+                        "manipulators": [
+                          {
+                            "type": "basic",
+                            "from": {
+                              "key_code": "o",
+                              "modifiers": {
+                                "mandatory": [
+                                  "control",
+                                  "option",
+                                  "command"
+                                ],
+                                "optional": [
+                                  "caps_lock"
+                                ]
+                              }
+                            },
+                            "to": [
+                              {
+                                "shell_command": "$HOME/dotfiles/scripts/open-oncall-pages"
+                              }
+                            ]
+                          }
+                        ]
                     }
                 ]
             },

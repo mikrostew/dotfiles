@@ -128,7 +128,7 @@ export TERM=xterm-256color
 # loading things into the shell
 
 # volta - stable and fast enough to always load this
-export VOLTA_HOME="/Users/mistewar/.volta"
+export VOLTA_HOME="$HOME/.volta"
 grep --silent "$VOLTA_HOME/bin" <<< $PATH || export PATH="$VOLTA_HOME/bin:$PATH"
 
 # need this for v-web, until we migrate to Node 12?

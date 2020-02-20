@@ -155,6 +155,18 @@ function! StripTrailingWhitespace()
   call cursor(l,c)
 endfunction
 
+" set custom highlighting based on the shebang
+function! SetCustomSyntaxHighlighting()
+  " (see https://stackoverflow.com/a/2577449)
+  if did_filetype()   " don't check if filetype is already set
+      finish
+  endif
+  " badash
+  if getline(1) =~ '^#!/usr/bin/env badash'
+      setfiletype bash
+  endif
+endfunction
+
 """ plugins
 
 " NERDTree (no longer using this)
@@ -222,3 +234,6 @@ endif
 " (adapted from https://stackoverflow.com/a/14718908 and https://stackoverflow.com/a/21187692)
 " and using Markdown Preview Plus (https://chrome.google.com/webstore/detail/markdown-preview-plus/febilkbfcbhebfnokafefeacimjdckgl)
 autocmd BufEnter *.md exe 'noremap <leader>m :!open -a "Google Chrome" %:p<CR>'
+
+" custom syntax highlighting
+autocmd BufEnter * :call SetCustomSyntaxHighlighting()

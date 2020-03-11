@@ -227,7 +227,7 @@ let g:rustfmt_autosave = 1
 " font
 " (install IBM plex font from https://github.com/IBM/plex)
 if has("mac") || has("macunix")
-  set gfn=IBM\ Plex\ Mono:h14,Source\ Code\ Pro:h15,Menlo:h15
+  set guifont=IBM\ Plex\ Mono:h14,Source\ Code\ Pro:h15,Menlo:h15
 endif
 
 " Open markdown files with Chrome (on OSX)

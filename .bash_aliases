@@ -50,6 +50,8 @@ alias bi='bundle install'
 
 # mvim
 alias mm="mvim ."
+# mvim for streaming and recording my screen - increase the font size
+alias mvim-demo='mvim -c "set guifont=IBM\ Plex\ Mono:h18"'
 
 # cargo
 alias cb='do_cmd cargo build'

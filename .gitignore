@@ -30,3 +30,6 @@ cache/*.cache
 
 # saved vim views (from rust.vim plugin)
 .vim/view
+
+# installed node packages
+node_modules

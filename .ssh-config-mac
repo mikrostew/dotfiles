@@ -50,8 +50,9 @@ Host air
     User mikrostew
 
 Host pi
-    Hostname raspberrypi
+    Hostname 10.0.0.124
     User pi
+    IdentityFile    %d/.ssh/id_rsa
 
 Host android
     Hostname 10.0.0.171

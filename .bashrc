@@ -300,7 +300,7 @@ then
   if [ -z "$tab_number" ] || [ "$tab_number" == "0" ]
   then
     # see http://invisible-island.net/xterm/ctlseqs/ctlseqs.html, search "window manipulation"
-    printf '\e[3;10;10t'    # move window to upper left but not all the way in the corner
+    #printf '\e[3;10;10t'    # move window to upper left but not all the way in the corner
     printf '\033[8;32;96t' # 96W x 32H chars
   fi
 fi

@@ -1,5 +1,11 @@
 " use pathogen.vim for managing plugins (https://github.com/tpope/vim-pathogen)
+" plugins are currently installed as submodules
+" add a plugin:
+"  `git submodule add https://github.com/<user>/<project-name>.git $HOME/.vim/bundle/<project-name>`
+"  (then commit)
+" TODO: apparently Vim 8 has built-in support for plugins, so I don't need pathogen?
 execute pathogen#infect()
+
 syntax on
 filetype plugin indent on
 
@@ -190,20 +196,29 @@ hi illuminatedWord cterm=underline gui=underline
 let g:airline_section_b = ''  " normally this is git branch info
 let g:airline_section_y = ''  " normally this file encoding
 
-" syntastic settings
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 0
-let g:syntastic_check_on_wq = 0
-let g:syntastic_javascript_checkers = ['eslint']
-" thanks to https://github.com/vim-syntastic/syntastic/issues/2102
-" (script in $DOTFILES/scripts/)
-let g:syntastic_javascript_eslint_exec = 'eslint-for-vim'
-let g:syntastic_javascript_eslint_exe = 'npm run lint --'
-" disable syntastic by default, but allow toggling this when I want it
-" (adapted from https://stackoverflow.com/a/21434697)
-let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [],'passive_filetypes': [] }
-nnoremap <leader>S :SyntasticCheck<CR> :SyntasticToggleMode<CR>
+" " syntastic settings (no longer using this)
+" let g:syntastic_always_populate_loc_list = 1
+" let g:syntastic_auto_loc_list = 1
+" let g:syntastic_check_on_open = 0
+" let g:syntastic_check_on_wq = 0
+" let g:syntastic_javascript_checkers = ['eslint']
+" " thanks to https://github.com/vim-syntastic/syntastic/issues/2102
+" " (script in $DOTFILES/scripts/)
+" let g:syntastic_javascript_eslint_exec = 'eslint-for-vim'
+" let g:syntastic_javascript_eslint_exe = 'npm run lint --'
+" " disable syntastic by default, but allow toggling this when I want it
+" " (adapted from https://stackoverflow.com/a/21434697)
+" let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [],'passive_filetypes': [] }
+" nnoremap <leader>S :SyntasticCheck<CR> :SyntasticToggleMode<CR>
+
+" ALE (async lint engine) settings
+" (https://github.com/dense-analysis/ale)
+" custom styling from https://davidtranscend.com/blog/configure-eslint-prettier-vim/
+let g:ale_sign_error = '✘'
+let g:ale_sign_warning = '⚠'
+highlight ALEErrorSign ctermbg=NONE ctermfg=red
+highlight ALEWarningSign ctermbg=NONE ctermfg=yellow
+
 
 " CtrlP
 " command mapping

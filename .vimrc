@@ -213,11 +213,14 @@ let g:airline_section_y = ''  " normally this file encoding
 
 " ALE (async lint engine) settings
 " (https://github.com/dense-analysis/ale)
-" custom styling from https://davidtranscend.com/blog/configure-eslint-prettier-vim/
+" custom stuff from https://davidtranscend.com/blog/configure-eslint-prettier-vim/
 let g:ale_sign_error = '✘'
 let g:ale_sign_warning = '⚠'
-highlight ALEErrorSign ctermbg=NONE ctermfg=red
-highlight ALEWarningSign ctermbg=NONE ctermfg=yellow
+highlight ALEErrorSign ctermbg=NONE ctermfg=red guibg=NONE guifg=red
+highlight ALEWarningSign ctermbg=NONE ctermfg=yellow guibg=NONE guifg=yellow
+" auto-fix errors on save
+let g:ale_fixers = { 'javascript': ['eslint'] }
+let g:ale_fix_on_save = 1
 
 
 " CtrlP

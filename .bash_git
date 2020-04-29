@@ -445,36 +445,3 @@ gbm() {
     do_git branch --move "$1"
   fi
 }
-
-# release npm project
-#  - update version in package.json
-#  - commit with version in commit message
-#  - publish to npm
-release() {
-  # (adapted from https://github.com/stefanpenner/dotfiles/blob/master/.config/fish/config.fish)
-  if in_git_repo
-  then
-    tag="${1:?Must include a tag argument}"
-    current_branch="$(current_git_branch)"
-
-    # need to use npm
-    if [ -z "$NVM_BIN" ]; then load_nvm; fi
-
-    if [ -f package.json ]; then
-      do_cmd jq ".version=\"$tag\"" < package.json | do_cmd sponge package.json
-      do_git add ./package.json
-    fi
-
-    do_git commit -m "release v$tag 🎉"
-    do_git tag "v$tag"
-    do_git push origin "$current_branch" "v$tag"
-
-    if [ -f package.json ]; then
-      do_cmd npm publish
-    fi
-
-    echo_info "released as v$tag 🎉"
-    echo -n "released as v$tag 🎉" | pbcopy
-  fi
-}
-

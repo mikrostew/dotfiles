@@ -124,6 +124,12 @@ export RI="-T --format=ansi"
 # 256 color support
 export TERM=xterm-256color
 
+# fix the colors for ls on dark background
+# (from https://askubuntu.com/a/466203 - doesn't work for OSX)
+#LS_COLORS="$LS_COLORS:di=0;35:"; export LS_COLORS
+# (from https://softwaregravy.wordpress.com/2010/10/16/ls-colors-for-mac/)
+# this is the default, except for bold blue directories
+export LSCOLORS=Exfxcxdxbxegedabagacad
 
 # loading things into the shell
 

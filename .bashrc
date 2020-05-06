@@ -129,7 +129,7 @@ export TERM=xterm-256color
 
 # volta - stable and fast enough to always load this
 export VOLTA_HOME="$HOME/.volta"
-grep --silent "$VOLTA_HOME/bin" <<< $PATH || export PATH="$VOLTA_HOME/bin:$PATH"
+export PATH="$VOLTA_HOME/bin:$PATH"
 
 # need this for v-web, until we migrate to Node 12?
 export NODE_OPTIONS="--max-old-space-size=8192"

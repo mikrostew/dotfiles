@@ -1,7 +1,7 @@
 " use pathogen.vim for managing plugins (https://github.com/tpope/vim-pathogen)
 " plugins are currently installed as submodules
 " add a plugin:
-"  `git submodule add https://github.com/<user>/<project-name>.git $HOME/.vim/bundle/<project-name>`
+"  `git submodule add https://github.com/<user>/<project-name>.git .vim/bundle/<project-name>`
 "  (then commit)
 " TODO: apparently Vim 8 has built-in support for plugins, so I don't need pathogen?
 execute pathogen#infect()

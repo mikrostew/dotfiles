@@ -23,6 +23,10 @@ export BASH_SILENCE_DEPRECATION_WARNING=1
 # (if I need it in the future I can install with homebrew)
 export TK_SILENCE_DEPRECATION=1
 
+# because using `ls` for any file containing spaces in the name on the Raspberry Pi surrounds the name with single quotes
+# (see https://unix.stackexchange.com/q/258679 - I don't care about the controversy there, I just don't wnat the quotes)
+export QUOTING_STYLE=literal
+
 # for platform-specific things
 platform_is_mac() {
     [ "$(uname)" == "Darwin" ] # OSX

@@ -323,7 +323,7 @@ fi
 bashrc_run_time=$((bashrc_finish - bashrc_start))
 
 # log the startup time
-echo "$bashrc_start $bashrc_run_time" >> "$HOME/Sync/machines/bashrc-startup-time-$HOST_NAME"
+#echo "$bashrc_start $bashrc_run_time" >> "$HOME/Sync/machines/bashrc-startup-time-$HOST_NAME"
 echo -e ".bashrc loaded in $COLOR_FG_BOLD_BLUE${bashrc_run_time}ms$COLOR_RESET ($SESSION_TYPE session, tab #$tab_number)"
 
 # some installers like to add things to this file, so prevent that stuff from running

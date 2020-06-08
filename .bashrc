@@ -278,7 +278,7 @@ fgn() {
   min-version-check "sponge" "1.0.0" "which sponge >/dev/null && echo 1.0.0" 'brew install moreutils';
   platform_is_mac && min-version-check "terminal-notifier" "^2.0" "terminal-notifier -version | sed -e 's/terminal-notifier //' -e 's/\.$//'" 'brew install terminal-notifier';
   # also verify that the links to these dotfiles haven't changed
-  verify_dotfile_links
+  verify-dotfile-links
 ) & disown
 
 # show a clock in the top right corner of the terminal, formatted like "Mon May 20, 14:36 PDT"

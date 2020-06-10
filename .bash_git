@@ -359,6 +359,11 @@ grs() {
   do_git review status
 }
 
+# git - show status of RB - which ACLs are needed, and verify re-ships (git review status --verify-diff)
+grsv() {
+  do_git review status --verify-diff
+}
+
 # git - stash uncommitted changes (git stash)
 gs() {
   do_git stash

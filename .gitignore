@@ -8,7 +8,7 @@ Session.vim
 *~
 
 # compiled binaries
-bin/
+#bin/
 
 # nfs lock files
 .nfs0000*

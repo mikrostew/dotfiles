@@ -328,5 +328,3 @@ echo -e ".bashrc loaded in $COLOR_FG_BOLD_BLUE${bashrc_run_time}ms$COLOR_RESET (
 
 # some installers like to add things to this file, so prevent that stuff from running
 return 0
-export VOLTA_HOME="/Users/mistewar/.volta"
-export PATH="$VOLTA_HOME/bin:$PATH"

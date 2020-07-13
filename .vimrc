@@ -268,6 +268,12 @@ autocmd BufEnter *.md exe 'noremap <leader>m :!open -a "Google Chrome" %:p<CR>'
 " custom syntax highlighting
 autocmd BufEnter * :call SetCustomSyntaxHighlighting()
 
+
+" yank the full path to the currently open file
+" (https://stackoverflow.com/a/17096082)
+nnoremap <leader>yf :let @+ = expand("%:p")<CR>
+
+
 """""""""""""""
 " coc.nvim
 """""""""""""""

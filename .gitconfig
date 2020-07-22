@@ -1,0 +1,9 @@
+[core]
+  excludesfile = /Users/mistewar/.gitignore
+
+# from https://www.motowilliams.com/conditional-includes-for-git-config
+# (requires git >= 2.13)
+[includeIf "gitdir:~/src/"]
+  path = .gitconfig-oss
+[includeIf "gitdir:~/src/li/"]
+  path = .gitconfig-work

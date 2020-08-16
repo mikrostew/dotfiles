@@ -11,6 +11,9 @@
 "  * Remove the submodule's .git directory: `rm -rf .git/modules/path_to_submodule` (trailing slash ok)
 "  * Commit the changes: `git commit -m 'removed submodule <name>'`
 "  * Delete the now untracked submodule files: `rm -rf path_to_submodule`
+" update plugins on another computer after adding
+"  * `git submodule init`
+"  * `git submodule update`
 " TODO: apparently Vim 8 has built-in support for plugins, so I don't need pathogen?
 execute pathogen#infect()
 

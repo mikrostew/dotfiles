@@ -150,6 +150,10 @@ then
   export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
 fi
 
+# Wakatime
+# (see install instructions at https://wakatime.com/terminal)
+[ -f "$HOME/bash-wakatime/bash-wakatime.sh" ] && source "$HOME/bash-wakatime/bash-wakatime.sh"
+
 # nvm
 # not done automatically, because this slows down new session startup, and I use Volta now
 load_nvm() {

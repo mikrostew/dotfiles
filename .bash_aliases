@@ -48,8 +48,8 @@ alias bejb='bundle exec jekyll build'
 alias bejs='bundle exec jekyll serve'
 alias bi='bundle install'
 
-# mvim
-alias mm="mvim ."
+# mvim, and don't log the dumb errors to the terminal
+alias mm="mvim . 2>/dev/null"
 # mvim for streaming and recording my screen - increase the font size
 alias mvim-demo='mvim -c "set guifont=IBM\ Plex\ Mono:h18"'
 

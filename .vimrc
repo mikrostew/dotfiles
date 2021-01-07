@@ -133,7 +133,8 @@ nnoremap <leader>- <C-w>s<C-w>j:e.<CR>
 " use ack in vim
 "nnoremap <leader>a :Ack
 " set the currently file to executable
-nnoremap <leader>x :!chmod +x "%"<CR>
+" (using silent, so I don't have to press Enter after the command)
+nnoremap <leader>x :silent !chmod +x "%"<CR>
 
 """ edit my vimrc
 

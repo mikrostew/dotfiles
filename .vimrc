@@ -431,3 +431,21 @@ set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 "nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list.
 "nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
+
+
+" project-specific configuration
+" using `set exrc` seems like a bad idea: https://vi.stackexchange.com/questions/5055/why-is-set-exrc-dangerous
+" so I'm going to try a suggestion from a comment here: https://vim.fandom.com/wiki/Project_specific_settings
+function! SetupEnvironment()
+  let l:path = expand('%:p')
+  if l:path =~ '/Users/mikrostew/src/automaticowl.net'
+    silent! so .vimlocal
+  " for any other projects
+  " elseif l:path =~ '/something/else/blah'
+  "   silent! so .vimlocal
+  endif
+endfunction
+autocmd! BufReadPost,BufNewFile * call SetupEnvironment()
+
+" TODO - use yaml-fromat to change things, in .vimlocal
+" https://superuser.com/questions/1018808/how-do-you-run-a-vim-command-that-is-the-text-inside-a-buffer

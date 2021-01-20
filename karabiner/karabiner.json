@@ -248,6 +248,32 @@
                             ]
                           }
                         ]
+                    },
+                    {
+                        "description": "Ctrl-⌥ -⌘ -G  - Good morning script",
+                        "manipulators": [
+                          {
+                            "type": "basic",
+                            "from": {
+                              "key_code": "g",
+                              "modifiers": {
+                                "mandatory": [
+                                  "control",
+                                  "option",
+                                  "command"
+                                ],
+                                "optional": [
+                                  "caps_lock"
+                                ]
+                              }
+                            },
+                            "to": [
+                              {
+                                "shell_command": "$HOME/dotfiles/scripts/good-morning-wrapper"
+                              }
+                            ]
+                          }
+                        ]
                     }
                 ]
             },

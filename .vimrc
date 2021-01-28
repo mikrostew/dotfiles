@@ -49,6 +49,9 @@ set laststatus=2                " always show the status line, and one line belo
 set number                      " show line numbers
 set title                       " show title in console title bar
 let mapleader = " "             " set the leader key to space (easier to type than backslash)
+" automatically load file changes when running an external command in vim
+" https://unix.stackexchange.com/a/383044
+set autoread
 
 " so that the vim keys are logged correctly
 " from https://vi.stackexchange.com/a/14443

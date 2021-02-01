@@ -142,7 +142,7 @@ export VOLTA_HOME="$HOME/.volta"
 export PATH="$VOLTA_HOME/bin:$PATH"
 
 # need this for v-web, until we migrate to Node 12?
-export NODE_OPTIONS="--max-old-space-size=8192"
+export NODE_OPTIONS="--max-old-space-size=18432"
 
 # Visual Studio Code, for OSX
 if [ -d "/Applications/Visual Studio Code.app" ]

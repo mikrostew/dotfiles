@@ -22,22 +22,9 @@
                             "type": "basic",
                             "from": {
                               "key_code": "c",
-                              "modifiers": {
-                                "mandatory": [
-                                  "control",
-                                  "option",
-                                  "command"
-                                ],
-                                "optional": [
-                                  "caps_lock"
-                                ]
-                              }
+                              "modifiers": { "mandatory": [ "control", "option", "command" ], "optional": [ "caps_lock" ] }
                             },
-                            "to": [
-                              {
-                                "shell_command": "$HOME/dotfiles/scripts/new-chrome"
-                              }
-                            ]
+                            "to": [ { "shell_command": "$HOME/dotfiles/scripts/new-chrome" } ]
                           }
                         ]
                     },
@@ -48,22 +35,9 @@
                             "type": "basic",
                             "from": {
                               "key_code": "d",
-                              "modifiers": {
-                                "mandatory": [
-                                  "control",
-                                  "option",
-                                  "command"
-                                ],
-                                "optional": [
-                                  "caps_lock"
-                                ]
-                              }
+                              "modifiers": { "mandatory": [ "control", "option", "command" ], "optional": [ "caps_lock" ] }
                             },
-                            "to": [
-                              {
-                                "shell_command": "$HOME/dotfiles/scripts/new-desktop"
-                              }
-                            ]
+                            "to": [ { "shell_command": "$HOME/dotfiles/scripts/new-desktop" } ]
                           }
                         ]
                     },
@@ -74,22 +48,9 @@
                             "type": "basic",
                             "from": {
                               "key_code": "f",
-                              "modifiers": {
-                                "mandatory": [
-                                  "control",
-                                  "option",
-                                  "command"
-                                ],
-                                "optional": [
-                                  "caps_lock"
-                                ]
-                              }
+                              "modifiers": { "mandatory": [ "control", "option", "command" ], "optional": [ "caps_lock" ] }
                             },
-                            "to": [
-                              {
-                                "shell_command": "$HOME/dotfiles/scripts/new-firefox"
-                              }
-                            ]
+                            "to": [ { "shell_command": "$HOME/dotfiles/scripts/new-firefox" } ]
                           }
                         ]
                     },
@@ -100,22 +61,9 @@
                             "type": "basic",
                             "from": {
                               "key_code": "g",
-                              "modifiers": {
-                                "mandatory": [
-                                  "control",
-                                  "option",
-                                  "command"
-                                ],
-                                "optional": [
-                                  "caps_lock"
-                                ]
-                              }
+                              "modifiers": { "mandatory": [ "control", "option", "command" ], "optional": [ "caps_lock" ] }
                             },
-                            "to": [
-                              {
-                                "shell_command": "$HOME/dotfiles/scripts/good-morning-wrapper"
-                              }
-                            ]
+                            "to": [ { "shell_command": "$HOME/dotfiles/scripts/good-morning-wrapper" } ]
                           }
                         ]
                     },
@@ -126,22 +74,9 @@
                             "type": "basic",
                             "from": {
                               "key_code": "m",
-                              "modifiers": {
-                                "mandatory": [
-                                  "control",
-                                  "option",
-                                  "command"
-                                ],
-                                "optional": [
-                                  "caps_lock"
-                                ]
-                              }
+                              "modifiers": { "mandatory": [ "control", "option", "command" ], "optional": [ "caps_lock" ] }
                             },
-                            "to": [
-                              {
-                                "shell_command": "$HOME/dotfiles/scripts/cafe-menus"
-                              }
-                            ]
+                            "to": [ { "shell_command": "$HOME/dotfiles/scripts/cafe-menus" } ]
                           }
                         ]
                     },
@@ -152,22 +87,9 @@
                             "type": "basic",
                             "from": {
                               "key_code": "o",
-                              "modifiers": {
-                                "mandatory": [
-                                  "control",
-                                  "option",
-                                  "command"
-                                ],
-                                "optional": [
-                                  "caps_lock"
-                                ]
-                              }
+                              "modifiers": { "mandatory": [ "control", "option", "command" ], "optional": [ "caps_lock" ] }
                             },
-                            "to": [
-                              {
-                                "shell_command": "$HOME/dotfiles/scripts/open-oncall-pages"
-                              }
-                            ]
+                            "to": [ { "shell_command": "$HOME/dotfiles/scripts/open-oncall-pages" } ]
                           }
                         ]
                     },
@@ -178,22 +100,9 @@
                             "type": "basic",
                             "from": {
                               "key_code": "s",
-                              "modifiers": {
-                                "mandatory": [
-                                  "control",
-                                  "option",
-                                  "command"
-                                ],
-                                "optional": [
-                                  "caps_lock"
-                                ]
-                              }
+                              "modifiers": { "mandatory": [ "control", "option", "command" ], "optional": [ "caps_lock" ] }
                             },
-                            "to": [
-                              {
-                                "shell_command": "$HOME/dotfiles/scripts/shrug"
-                              }
-                            ]
+                            "to": [ { "shell_command": "$HOME/dotfiles/scripts/shrug" } ]
                           }
                         ]
                     },
@@ -204,22 +113,9 @@
                             "type": "basic",
                             "from": {
                               "key_code": "t",
-                              "modifiers": {
-                                "mandatory": [
-                                  "control",
-                                  "option",
-                                  "command"
-                                ],
-                                "optional": [
-                                  "caps_lock"
-                                ]
-                              }
+                              "modifiers": { "mandatory": [ "control", "option", "command" ], "optional": [ "caps_lock" ] }
                             },
-                            "to": [
-                              {
-                                "shell_command": "$HOME/dotfiles/scripts/new-terminal"
-                              }
-                            ]
+                            "to": [ { "shell_command": "$HOME/dotfiles/scripts/new-terminal" } ]
                           }
                         ]
                     },
@@ -230,21 +126,9 @@
                             "type": "basic",
                             "from": {
                               "key_code": "v",
-                              "modifiers": {
-                                "mandatory": [
-                                  "control",
-                                  "option",
-                                  "command"
-                                ],
-                                "optional": [
-                                  "caps_lock"
-                                ]
-                              }
+                              "modifiers": { "mandatory": [ "control", "option", "command" ], "optional": [ "caps_lock" ] }
                             },
-                            "to": [
-                              {
-                                "shell_command": "$HOME/dotfiles/scripts/mac-paste"
-                              }
+                            "to": [ { "shell_command": "$HOME/dotfiles/scripts/mac-paste" }
                             ]
                           }
                         ]
@@ -256,22 +140,9 @@
                             "type": "basic",
                             "from": {
                               "key_code": "x",
-                              "modifiers": {
-                                "mandatory": [
-                                  "control",
-                                  "option",
-                                  "command"
-                                ],
-                                "optional": [
-                                  "caps_lock"
-                                ]
-                              }
+                              "modifiers": { "mandatory": [ "control", "option", "command" ], "optional": [ "caps_lock" ] }
                             },
-                            "to": [
-                              {
-                                "shell_command": "$HOME/dotfiles/scripts/close-desktop"
-                              }
-                            ]
+                            "to": [ { "shell_command": "$HOME/dotfiles/scripts/close-desktop" } ]
                           }
                         ]
                     }

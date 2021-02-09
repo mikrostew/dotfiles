@@ -16,32 +16,6 @@
                 },
                 "rules": [
                     {
-                        "description": "Ctrl-⌥ -⌘ -T  - New iTerm2 Window",
-                        "manipulators": [
-                          {
-                            "type": "basic",
-                            "from": {
-                              "key_code": "t",
-                              "modifiers": {
-                                "mandatory": [
-                                  "control",
-                                  "option",
-                                  "command"
-                                ],
-                                "optional": [
-                                  "caps_lock"
-                                ]
-                              }
-                            },
-                            "to": [
-                              {
-                                "shell_command": "$HOME/dotfiles/scripts/new-terminal"
-                              }
-                            ]
-                          }
-                        ]
-                    },
-                    {
                         "description": "Ctrl-⌥ -⌘ -C  - New Chrome Window",
                         "manipulators": [
                           {
@@ -62,58 +36,6 @@
                             "to": [
                               {
                                 "shell_command": "$HOME/dotfiles/scripts/new-chrome"
-                              }
-                            ]
-                          }
-                        ]
-                    },
-                    {
-                        "description": "Ctrl-⌥ -⌘ -F  - New Firefox Window",
-                        "manipulators": [
-                          {
-                            "type": "basic",
-                            "from": {
-                              "key_code": "f",
-                              "modifiers": {
-                                "mandatory": [
-                                  "control",
-                                  "option",
-                                  "command"
-                                ],
-                                "optional": [
-                                  "caps_lock"
-                                ]
-                              }
-                            },
-                            "to": [
-                              {
-                                "shell_command": "$HOME/dotfiles/scripts/new-firefox"
-                              }
-                            ]
-                          }
-                        ]
-                    },
-                    {
-                        "description": "Ctrl-⌥ -⌘ -M  - Open Cafe Menus (in browser)",
-                        "manipulators": [
-                          {
-                            "type": "basic",
-                            "from": {
-                              "key_code": "m",
-                              "modifiers": {
-                                "mandatory": [
-                                  "control",
-                                  "option",
-                                  "command"
-                                ],
-                                "optional": [
-                                  "caps_lock"
-                                ]
-                              }
-                            },
-                            "to": [
-                              {
-                                "shell_command": "$HOME/dotfiles/scripts/cafe-menus"
                               }
                             ]
                           }
@@ -146,12 +68,12 @@
                         ]
                     },
                     {
-                        "description": "Ctrl-⌥ -⌘ -X  - Close current desktop in Mission Control",
+                        "description": "Ctrl-⌥ -⌘ -F  - New Firefox Window",
                         "manipulators": [
                           {
                             "type": "basic",
                             "from": {
-                              "key_code": "x",
+                              "key_code": "f",
                               "modifiers": {
                                 "mandatory": [
                                   "control",
@@ -165,19 +87,19 @@
                             },
                             "to": [
                               {
-                                "shell_command": "$HOME/dotfiles/scripts/close-desktop"
+                                "shell_command": "$HOME/dotfiles/scripts/new-firefox"
                               }
                             ]
                           }
                         ]
                     },
                     {
-                        "description": "Ctrl-⌥ -⌘ -S  - Type the shrug emoji",
+                        "description": "Ctrl-⌥ -⌘ -G  - Good morning script",
                         "manipulators": [
                           {
                             "type": "basic",
                             "from": {
-                              "key_code": "s",
+                              "key_code": "g",
                               "modifiers": {
                                 "mandatory": [
                                   "control",
@@ -191,7 +113,33 @@
                             },
                             "to": [
                               {
-                                "shell_command": "$HOME/dotfiles/scripts/shrug"
+                                "shell_command": "$HOME/dotfiles/scripts/good-morning-wrapper"
+                              }
+                            ]
+                          }
+                        ]
+                    },
+                    {
+                        "description": "Ctrl-⌥ -⌘ -M  - Open Cafe Menus (in browser)",
+                        "manipulators": [
+                          {
+                            "type": "basic",
+                            "from": {
+                              "key_code": "m",
+                              "modifiers": {
+                                "mandatory": [
+                                  "control",
+                                  "option",
+                                  "command"
+                                ],
+                                "optional": [
+                                  "caps_lock"
+                                ]
+                              }
+                            },
+                            "to": [
+                              {
+                                "shell_command": "$HOME/dotfiles/scripts/cafe-menus"
                               }
                             ]
                           }
@@ -224,6 +172,58 @@
                         ]
                     },
                     {
+                        "description": "Ctrl-⌥ -⌘ -S  - Type the shrug emoji",
+                        "manipulators": [
+                          {
+                            "type": "basic",
+                            "from": {
+                              "key_code": "s",
+                              "modifiers": {
+                                "mandatory": [
+                                  "control",
+                                  "option",
+                                  "command"
+                                ],
+                                "optional": [
+                                  "caps_lock"
+                                ]
+                              }
+                            },
+                            "to": [
+                              {
+                                "shell_command": "$HOME/dotfiles/scripts/shrug"
+                              }
+                            ]
+                          }
+                        ]
+                    },
+                    {
+                        "description": "Ctrl-⌥ -⌘ -T  - New iTerm2 Window",
+                        "manipulators": [
+                          {
+                            "type": "basic",
+                            "from": {
+                              "key_code": "t",
+                              "modifiers": {
+                                "mandatory": [
+                                  "control",
+                                  "option",
+                                  "command"
+                                ],
+                                "optional": [
+                                  "caps_lock"
+                                ]
+                              }
+                            },
+                            "to": [
+                              {
+                                "shell_command": "$HOME/dotfiles/scripts/new-terminal"
+                              }
+                            ]
+                          }
+                        ]
+                    },
+                    {
                         "description": "Ctrl-⌥ -⌘ -V  - Paste using System Events",
                         "manipulators": [
                           {
@@ -250,12 +250,12 @@
                         ]
                     },
                     {
-                        "description": "Ctrl-⌥ -⌘ -G  - Good morning script",
+                        "description": "Ctrl-⌥ -⌘ -X  - Close current desktop in Mission Control",
                         "manipulators": [
                           {
                             "type": "basic",
                             "from": {
-                              "key_code": "g",
+                              "key_code": "x",
                               "modifiers": {
                                 "mandatory": [
                                   "control",
@@ -269,7 +269,7 @@
                             },
                             "to": [
                               {
-                                "shell_command": "$HOME/dotfiles/scripts/good-morning-wrapper"
+                                "shell_command": "$HOME/dotfiles/scripts/close-desktop"
                               }
                             ]
                           }

@@ -145,6 +145,19 @@
                             "to": [ { "shell_command": "$HOME/dotfiles/scripts/close-desktop" } ]
                           }
                         ]
+                    },
+                    {
+                        "description": "Ctrl-⌥ -⌘ -Z  - Paste my Zoom meeting link",
+                        "manipulators": [
+                          {
+                            "type": "basic",
+                            "from": {
+                              "key_code": "z",
+                              "modifiers": { "mandatory": [ "control", "option", "command" ], "optional": [ "caps_lock" ] }
+                            },
+                            "to": [ { "shell_command": "$HOME/dotfiles/scripts/zoom-link" } ]
+                          }
+                        ]
                     }
                 ]
             },

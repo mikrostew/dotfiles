@@ -94,7 +94,7 @@
                         ]
                     },
                     {
-                        "description": "Ctrl-⌥ -⌘ -S  - Type the shrug emoji",
+                        "description": "Ctrl-⌥ -⌘ -S  - Type the shrug emoji ¯\\_(ツ)_/¯",
                         "manipulators": [
                           {
                             "type": "basic",

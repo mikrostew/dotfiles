@@ -39,3 +39,4 @@ cd ruby-install/
 sudo ./setup.sh
 ```
 
+TODO: look at https://dotfiles.github.io/, check out things there

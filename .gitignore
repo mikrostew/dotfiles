@@ -1,10 +1,11 @@
-# vim's temporary files
+# vim's temporary files and things
 # (from https://github.com/github/gitignore/blob/master/Global/vim.gitignore)
 [._]*.s[a-w][a-z]
 [._]s[a-w][a-z]
 *.un~
 Session.vim
 .netrwhist
+.netrwbook
 *~
 
 # compiled binaries

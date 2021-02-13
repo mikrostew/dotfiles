@@ -239,15 +239,6 @@ gbpatch() {
   fi
 }
 
-# git - checkout branch/tag/hash (git checkout)
-gc() {
-  arguments=('<branch-tag-or-hash>')
-  if in_git_repo && num_arguments_ok arguments[@] "$#"
-  then
-    do_git checkout "$1"
-  fi
-}
-
 # git - create new branch
 gcb() {
   arguments=( '<new-branch-name>' )

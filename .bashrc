@@ -137,6 +137,10 @@ export LSCOLORS=Exfxcxdxbxegedabagacad
 
 # loading things into the shell
 
+# volta - stable and fast enough to always load this
+export VOLTA_HOME="$HOME/.volta"
+export PATH="$VOLTA_HOME/bin:$PATH"
+
 # need this for v-web, until we migrate to Node 12?
 export NODE_OPTIONS="--max-old-space-size=18432"
 
@@ -326,6 +330,5 @@ bashrc_run_time=$((bashrc_finish - bashrc_start))
 #echo "$bashrc_start $bashrc_run_time" >> "$HOME/Sync/machines/bashrc-startup-time-$HOST_NAME"
 echo -e ".bashrc loaded in $COLOR_FG_BOLD_BLUE${bashrc_run_time}ms$COLOR_RESET ($SESSION_TYPE session, tab #$tab_number)"
 
-# if I don't have this here, Volta will overwrite it
-export VOLTA_HOME="$HOME/.volta"
-export PATH="$VOLTA_HOME/bin:$PATH"
+# some installers like to add things to this file, so prevent that stuff from running
+return 0

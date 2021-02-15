@@ -268,14 +268,10 @@ fgn() {
 # * move all this into a config file, and have a single command to read that, do the version checks, and combine the status
 (
   min-version-check "bash" ">=4" "bash --version | sed -n -E 's/[^0-9]*([0-9]+\.[0-9]+\.[0-9]+[^ ]*).*/\1/ p'" 'brew install bash';
-  min-version-check "git" "^2.14" "git --version | awk '{print \$3}'" 'brew install git';
-  min-version-check "jq" "^1.5" "jq --version | sed 's/jq-//'" 'brew install jq';
   min-version-check "expect" "^5.0" "expect -version | awk '{print \$3}'" 'brew install expect';
-  platform_is_mac && min-version-check "bats-core" "^1.0" "bats --version | awk '{print \$2}'" 'brew install bats-core' 'which bats';
   min-version-check "curl" "^7.0" "curl --version | head -n1 | awk '{print \$2}'" 'brew install curl';
   # sponge doesn't give a version, so as long as it exists that's fine
   min-version-check "sponge" "1.0.0" "which sponge >/dev/null && echo 1.0.0" 'brew install moreutils';
-  platform_is_mac && min-version-check "terminal-notifier" "^2.0" "terminal-notifier -version | sed -e 's/terminal-notifier //' -e 's/\.$//'" 'brew install terminal-notifier';
   # also verify that the links to these dotfiles haven't changed
   verify-dotfile-links
 ) & disown

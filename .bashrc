@@ -154,15 +154,6 @@ fi
 # (see install instructions at https://wakatime.com/terminal)
 [ -f "$HOME/bash-wakatime/bash-wakatime.sh" ] && source "$HOME/bash-wakatime/bash-wakatime.sh"
 
-# nvm
-# not done automatically, because this slows down new session startup, and I use Volta now
-load_nvm() {
-  echo_info "Loading nvm..."
-  export NVM_DIR="$HOME/.nvm"
-  [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"  # This loads nvm
-  [ -s "$NVM_DIR/bash_completion" ] && source "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-}
-
 # chruby - done automatically because I frequently use Ruby
 # (this is the same location on mac and linux)
 if [ -f "/usr/local/share/chruby/chruby.sh" ]; then

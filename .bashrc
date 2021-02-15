@@ -116,6 +116,7 @@ path_scripts="$DOTFILES_DIR/scripts"
 path_rust="$HOME/.cargo/bin"
 path_python="$HOME/Library/Python/3.7/bin" # for pipx, userpath, etc.
 path_python_globals="$HOME/.local/bin" # for packages installed with pipx
+# TODO: add Volta here
 # all together now
 export PATH="$path_homebrew:$path_yarn:$path_scripts:$path_rust:$path_python:$path_python_globals:$PATH"
 
@@ -164,6 +165,7 @@ fi
 
 # latex
 # not done automatically because I infrequently use TeX/LaTeX, and it clutters the path
+# TODO: can I install this with homebrew?
 load_latex() {
   echo_info "Adding TeX/LaTeX binaries to the path..."
   export PATH="/Library/TeX/texbin:$PATH"
@@ -256,6 +258,8 @@ fgn() {
 }
 
 
+# TODO: move these checks to the good-morning script
+#  * a lot of these are not necessary, since I'm using `brew upgrade XXXX` there
 # run version checks async to speed up load time
 # (should only run into version issues when first setting up a system)
 # things I could do with this:

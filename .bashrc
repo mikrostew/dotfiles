@@ -258,21 +258,9 @@ fgn() {
 }
 
 
-# TODO: move these checks to the good-morning script
-#  * a lot of these are not necessary, since I'm using `brew upgrade XXXX` there
-# run version checks async to speed up load time
-# (should only run into version issues when first setting up a system)
-# things I could do with this:
-# * combine all this into a single line somehow (maybe dotfile links separately?), and display in red on the top line of the console
-# * somehow showing this in the tmux status line as an error
-# * move all this into a config file, and have a single command to read that, do the version checks, and combine the status
+# TODO: move the rest of these checks to the good-morning script
 (
-  min-version-check "bash" ">=4" "bash --version | sed -n -E 's/[^0-9]*([0-9]+\.[0-9]+\.[0-9]+[^ ]*).*/\1/ p'" 'brew install bash';
-  min-version-check "expect" "^5.0" "expect -version | awk '{print \$3}'" 'brew install expect';
-  min-version-check "curl" "^7.0" "curl --version | head -n1 | awk '{print \$2}'" 'brew install curl';
-  # sponge doesn't give a version, so as long as it exists that's fine
-  min-version-check "sponge" "1.0.0" "which sponge >/dev/null && echo 1.0.0" 'brew install moreutils';
-  # also verify that the links to these dotfiles haven't changed
+  # verify that the links to these dotfiles haven't changed
   verify-dotfile-links
 ) & disown
 

@@ -1,9 +1,10 @@
 [core]
   excludesfile = /Users/mistewar/.gitignore
+  editor = vim
 
 # from https://www.motowilliams.com/conditional-includes-for-git-config
 # (requires git >= 2.13)
 [includeIf "gitdir:~/src/"]
-  path = .gitconfig-oss
+  path = oss.gitconfig
 [includeIf "gitdir:~/src/li/"]
-  path = .gitconfig-work
+  path = work.gitconfig

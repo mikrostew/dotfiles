@@ -15,6 +15,11 @@ Host *.corp.linkedin.com
 Host *.linkedin.com
 	IdentityFile 	%d/.ssh/%u_at_linkedin.com_ssh_key
 
+Host vm
+    Hostname mistewar-ld1.linkedin.biz
+    User mistewar
+    IdentityFile    %d/.ssh/%u_at_linkedin.com_ssh_key
+
 Host desktop
     Hostname mistewar-ld2.linkedin.biz
     User mistewar

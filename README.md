@@ -19,8 +19,8 @@ $ ssh-agent bash -c 'ssh-add /home/<user>/.ssh/github_rsa; git clone git@github.
 Then run the script to make the links to all these files
 
 ```
-$ cd dotfiles/
-$ ./scripts/make_dotfile_links
+$ cd src/gh/dotfiles/
+$ ./scripts/make-dotfile-links "$HOME/src/gh/dotfiles"
 ```
 
 Setup other stuff

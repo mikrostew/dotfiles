@@ -257,13 +257,6 @@ gcbm() {
   fi
 }
 
-# git - gui (git gui)
-gg() {
-  # use this in citool mode, to make a commit and exit
-  # then show what was committed
-  do_git gui citool && git log -n1 || echo "(no commit)"
-}
-
 # git - show commit log (input number of logs to show, default is 4)
 gl() {
   num_logs="${1:-4}" # default to showing the last 4 logs

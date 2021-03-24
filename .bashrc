@@ -257,13 +257,6 @@ fgn() {
   fi
 }
 
-
-# TODO: move the rest of these checks to the good-morning script
-(
-  # verify that the links to these dotfiles haven't changed
-  verify-dotfile-links
-) & disown
-
 # show a clock in the top right corner of the terminal, formatted like "Mon May 20, 14:36 PDT"
 #"$HOME/src/term-clock/term-clock.sh" "$$" --format "%a %b %d, %H:%M %Z" &
 

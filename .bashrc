@@ -41,12 +41,12 @@ else
   bashrc_start=$(date +%s%3N)
 fi
 
-# determine if this is a local or remote session
+# determine if this is a local or remote/ssh session
 # (adapted from https://unix.stackexchange.com/a/9607)
 SESSION_TYPE=local
 if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ] || [[ "$(ps -o comm= -p $PPID)" =~ sshd ]]
 then
-  SESSION_TYPE=remote/ssh
+  SESSION_TYPE=ssh
 fi
 
 # directory where the dotfiles repo is checked out
@@ -87,6 +87,7 @@ ps_pwd='\w'
 PS1="${COLOR_RESET}\n"\
 "${COLOR_FG_BOLD_BLACK}$ps_user${COLOR_RESET}"\
 "@${COLOR_FG_BOLD_BLACK}$ps_host${COLOR_RESET}"\
+" ($SESSION_TYPE)"\
 ":${COLOR_FG_BOLD_BLACK}$ps_pwd/${COLOR_RESET}"\
 "\n\$ "
 

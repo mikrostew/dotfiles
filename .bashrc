@@ -259,6 +259,7 @@ fgn() {
 }
 
 # show a clock in the top right corner of the terminal, formatted like "Mon May 20, 14:36 PDT"
+# NOTE: not doing this anymore, using the clock in tmux is so much better
 #"$HOME/src/term-clock/term-clock.sh" "$$" --format "%a %b %d, %H:%M %Z" &
 
 # to log the startup time later
@@ -269,28 +270,29 @@ echo -e "uptime: $COLOR_FG_BOLD_BLUE$(uptime)$COLOR_RESET"
 
 # resize the terminal window if this is a local session
 # (see https://apple.stackexchange.com/a/47841)
-if [ "$SESSION_TYPE" == "local" ]
-then
-  # get the tab number of this session
-  # NOTE: this is not bulletproof - if I close tab 0, then open a new tab, it will be tab 0
-  if [ -n "$ITERM_SESSION_ID" ] && [[ "$ITERM_SESSION_ID" =~ ^w[0-9]*t([0-9]*)p[0-9]*: ]]
-  then
-    tab_number="${BASH_REMATCH[1]}"
-  elif [ -n "$TERM_SESSION_ID" ] && [[ "$TERM_SESSION_ID" =~ ^w[0-9]*t([0-9]*)p[0-9]*: ]]
-  then
-    tab_number="${BASH_REMATCH[1]}"
-  else
-    tab_number="?"
-  fi
-
-  # if this is the first tab in this session, resize it
-  if [ -z "$tab_number" ] || [ "$tab_number" == "0" ]
-  then
-    # see http://invisible-island.net/xterm/ctlseqs/ctlseqs.html, search "window manipulation"
-    #printf '\e[3;10;10t'    # move window to upper left but not all the way in the corner
-    printf '\033[8;32;96t' # 96W x 32H chars
-  fi
-fi
+# NOTE: not doing this anymore, because I'm starting to find it annoying
+# if [ "$SESSION_TYPE" == "local" ]
+# then
+#   # get the tab number of this session
+#   # NOTE: this is not bulletproof - if I close tab 0, then open a new tab, it will be tab 0
+#   if [ -n "$ITERM_SESSION_ID" ] && [[ "$ITERM_SESSION_ID" =~ ^w[0-9]*t([0-9]*)p[0-9]*: ]]
+#   then
+#     tab_number="${BASH_REMATCH[1]}"
+#   elif [ -n "$TERM_SESSION_ID" ] && [[ "$TERM_SESSION_ID" =~ ^w[0-9]*t([0-9]*)p[0-9]*: ]]
+#   then
+#     tab_number="${BASH_REMATCH[1]}"
+#   else
+#     tab_number="?"
+#   fi
+#
+#   # if this is the first tab in this session, resize it
+#   if [ -z "$tab_number" ] || [ "$tab_number" == "0" ]
+#   then
+#     # see http://invisible-island.net/xterm/ctlseqs/ctlseqs.html, search "window manipulation"
+#     #printf '\e[3;10;10t'    # move window to upper left but not all the way in the corner
+#     printf '\033[8;32;96t' # 96W x 32H chars
+#   fi
+# fi
 
 if platform_is_mac; then
   bashrc_finish=$(gdate +%s%3N)

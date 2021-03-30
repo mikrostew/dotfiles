@@ -102,6 +102,14 @@
                       "from": { "key_code": "z", "modifiers": { "mandatory": [ "control", "option", "command" ], "optional": [ "caps_lock" ] } },
                       "to": [ { "shell_command": "$HOME/src/gh/dotfiles/scripts/zoom-link" } ]
                     } ]
+                  },
+                  {
+                    "description": "Ctrl-⌥ -⌘ -i  - Paste a checkmark ✅",
+                    "manipulators": [ {
+                      "type": "basic",
+                      "from": { "key_code": "i", "modifiers": { "mandatory": [ "control", "option", "command" ], "optional": [ "caps_lock" ] } },
+                      "to": [ { "shell_command": "$HOME/src/gh/dotfiles/scripts/check-mark" } ]
+                    } ]
                   }
                 ]
             },

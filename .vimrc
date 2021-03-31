@@ -139,7 +139,7 @@ nnoremap <leader>- <C-w>s<C-w>j:e.<CR>
 " (using silent, so I don't have to press Enter after the command)
 nnoremap <leader>x :silent !chmod +x "%"<CR>
 
-""" edit my vimrc
+""" edit and re-source my vimrc
 
 nmap <leader>ev :e $MYVIMRC<CR>
 nmap <leader>sv :so $MYVIMRC<CR>
@@ -234,7 +234,10 @@ let g:ale_sign_warning = '⚠'
 highlight ALEErrorSign ctermbg=NONE ctermfg=red guibg=NONE guifg=red
 highlight ALEWarningSign ctermbg=NONE ctermfg=yellow guibg=NONE guifg=yellow
 " auto-fix errors on save
-let g:ale_fixers = { 'javascript': ['eslint'] }
+let g:ale_fixers = {
+  \ 'javascript': ['eslint', 'prettier'],
+  \ 'typescript': ['eslint', 'prettier'],
+\ }
 let g:ale_fix_on_save = 1
 " jump to next error
 nnoremap <leader>e :ALENext -wrap -error<CR>

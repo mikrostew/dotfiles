@@ -446,9 +446,8 @@ function! SetupEnvironment()
   let l:path = expand('%:p')
   if l:path =~ '/Users/mikrostew/src/automaticowl.net'
     silent! so .vimlocal
-  " for any other projects
-  " elseif l:path =~ '/something/else/blah'
-  "   silent! so .vimlocal
+  elseif l:path =~ '/Users/mistewar/src/li/blog'
+    silent! so .vimlocal
   endif
 endfunction
 autocmd! BufReadPost,BufNewFile * call SetupEnvironment()

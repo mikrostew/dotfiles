@@ -158,11 +158,8 @@ fi
 
 # chruby - done automatically because I frequently use Ruby
 # (this is the same location on mac and linux)
-if [ -f "/usr/local/share/chruby/chruby.sh" ]; then
-  source /usr/local/share/chruby/chruby.sh
-  chruby ruby-2.6
-  ruby -v
-fi
+[ -f "/usr/local/share/chruby/chruby.sh" ] && source /usr/local/share/chruby/chruby.sh && chruby ruby-3.0
+ruby -v
 
 # latex
 # not done automatically because I infrequently use TeX/LaTeX, and it clutters the path

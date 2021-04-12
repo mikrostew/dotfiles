@@ -45,7 +45,7 @@ alias rebash='unalias -a; source $HOME/.bashrc'
 # bundler
 alias be='bundle exec'
 alias bejb='bundle exec jekyll build'
-alias bejs='bundle exec jekyll serve'
+alias bejs='bundle exec jekyll serve --incremental --livereload'
 alias bi='bundle install'
 
 # mvim, and don't log the dumb errors to the terminal

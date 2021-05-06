@@ -14,6 +14,7 @@
 " update plugins on another computer after adding
 "  * `git submodule init`
 "  * `git submodule update`
+"  (after deleting a plugin, will have to manually remove the plugin dir)
 " TODO: apparently Vim 8 has built-in support for plugins, so I don't need pathogen?
 execute pathogen#infect()
 

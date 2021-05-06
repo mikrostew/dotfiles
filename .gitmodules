@@ -46,6 +46,3 @@
 [submodule ".vim/bundle/coc.nvim"]
 	path = .vim/bundle/coc.nvim
 	url = https://github.com/neoclide/coc.nvim.git
-[submodule ".vim/bundle/vim-wakatime"]
-	path = .vim/bundle/vim-wakatime
-	url = git://github.com/wakatime/vim-wakatime.git

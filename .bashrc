@@ -154,7 +154,7 @@ fi
 
 # Wakatime
 # (see install instructions at https://wakatime.com/terminal)
-[ -f "$HOME/bash-wakatime/bash-wakatime.sh" ] && source "$HOME/bash-wakatime/bash-wakatime.sh"
+#[ -f "$HOME/bash-wakatime/bash-wakatime.sh" ] && source "$HOME/bash-wakatime/bash-wakatime.sh"
 
 # chruby - done automatically because I frequently use Ruby
 # (this is the same location on mac and linux)

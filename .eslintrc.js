@@ -13,7 +13,7 @@ module.exports = {
       experimentalObjectRestSpread: true,
     },
   },
-  extends: [],
+  extends: 'eslint:recommended',
   rules: {
     // from eslint/recommended/esnext
     'array-callback-return': 2,
@@ -32,9 +32,7 @@ module.exports = {
     'no-alert': 2,
     'no-constant-condition': [
       2,
-      {
-        checkLoops: false,
-      },
+      { checkLoops: false },
     ],
     'no-duplicate-imports': 2,
     'no-empty-function': 2,
@@ -58,9 +56,7 @@ module.exports = {
     'no-unmodified-loop-condition': 2,
     'no-unneeded-ternary': [
       2,
-      {
-        defaultAssignment: false,
-      },
+      { defaultAssignment: false },
     ],
     'no-unsafe-negation': 2,
     'no-unused-expressions': [
@@ -101,12 +97,10 @@ module.exports = {
     'arrow-spacing': 2,
     'generator-star-spacing': 2,
     'block-spacing': 2,
-    'brace-style': 2,
+    'brace-style': 'error',
     camelcase: [
       2,
-      {
-        properties: 'never',
-      },
+      { properties: 'never' },
     ],
     'comma-dangle': [
       2,
@@ -128,13 +122,6 @@ module.exports = {
     // "import/extensions": 2,
     // "import/imports-first": 2,
     // "import/newline-after-import": 2,
-    indent: [
-      2,
-      'tab',
-      {
-        SwitchCase: 1,
-      },
-    ],
     'key-spacing': 2,
     'keyword-spacing': 'error',
     'linebreak-style': 2,
@@ -143,12 +130,12 @@ module.exports = {
     'no-multi-spaces': 2,
     'no-trailing-spaces': 2,
     'no-whitespace-before-property': 2,
-    'object-curly-newline': 2,
+    'object-curly-newline': ['error', { multiline: true }],
     'object-curly-spacing': [
       2,
       'always',
     ],
-    'object-property-newline': 0,
+    'object-property-newline': 'error',
     'one-var-declaration-per-line': 2,
     'operator-linebreak': [
       2,

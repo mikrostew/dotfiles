@@ -248,15 +248,6 @@ gcb() {
   fi
 }
 
-# git - create new branch (that tracks origin/master)
-gcbm() {
-  arguments=( '<new-branch-name>' )
-  if in_git_repo && num_arguments_ok arguments[@] "$#"
-  then
-    do_git checkout -b "$1" origin/master
-  fi
-}
-
 # git - show commit log (input number of logs to show, default is 4)
 gl() {
   num_logs="${1:-4}" # default to showing the last 4 logs

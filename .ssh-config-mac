@@ -55,7 +55,7 @@ Host air
     User mikrostew
 
 Host pi
-    Hostname 10.0.0.124
+    Hostname 192.168.1.243
     User pi
     IdentityFile    %d/.ssh/id_rsa
 

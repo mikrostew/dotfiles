@@ -71,6 +71,11 @@ nnoremap <leader><space> :nohls<cr>
 " use Tab to jump between bracket pairs ([{}])
 nnoremap <tab> %
 vnoremap <tab> %
+" Grep command: grep CWD, and open results in a quickfix buffer w/ links and highlight the matches
+" (from https://chase-seibert.github.io/blog/2013/09/21/vim-grep-under-cursor.html)
+command! -nargs=+ Grep execute 'silent grep! -n -I -r --exclude-dir node_modules --exclude-dir .git --exclude-dir .bundle . -e <args>' | copen | execute 'silent /<args>'
+" Grep for the word under the cursor
+":nmap <leader>g :Grep <c-r>=expand("<cword>")<cr><cr>
 
 """ long line handling
 

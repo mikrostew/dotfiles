@@ -406,17 +406,6 @@ gfiles() {
   fi
 }
 
-# git - squash commits in current branch into a single commit (git squash branch)
-gsqb() {
-  arguments=( '<commit-message>' '[extra-line]' )
-  if in_git_repo && not_on_git_branch 'master' && no_uncommitted_changes && num_arguments_min arguments[@] "$#"
-  then
-    squash-branch "$1" "$2"
-  else
-    return -1;
-  fi
-}
-
 # git - branch move (rename current branch)
 gbm() {
   arguments=( '<new-branch-name>' )

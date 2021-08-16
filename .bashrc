@@ -143,8 +143,9 @@ export LSCOLORS=Exfxcxdxbxegedabagacad
 export VOLTA_HOME="$HOME/.volta"
 export PATH="$VOLTA_HOME/bin:$PATH"
 
-# need this for v-web, until we migrate to Node 12?
-export NODE_OPTIONS="--max-old-space-size=18432"
+# heap setting to build v-web
+# experimental flag to use await in Node REPL (https://github.com/nodejs/node/pull/19604)
+export NODE_OPTIONS="--max-old-space-size=8192 --experimental-repl-await"
 
 # Visual Studio Code, for OSX
 if [ -d "/Applications/Visual Studio Code.app" ]

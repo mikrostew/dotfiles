@@ -38,10 +38,10 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@mikrostew/good-morning@^0.1.1":
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/@mikrostew/good-morning/-/good-morning-0.1.2.tgz#310bb23901ad6a27d59439f1733725a106d43530"
-  integrity sha512-rHJI9Wp2T1abSyRveRZYmO80AuQQm3YrusmI/+QIMG63DsqX5wC/Svm4xpJaF7rLVbLaa/QRMynXr4BkamFtHA==
+"@mikrostew/good-morning@^0.1.4":
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/@mikrostew/good-morning/-/good-morning-0.1.4.tgz#f18d10c8221dca7c2fb503ca477e7a2af03f7090"
+  integrity sha512-f4jk1KR2Dh58lmKZ8g9q04C7NDUCDnOzZZqJsZNcKuPPBkURakRTbKUnbg0VawJt0AYiyu5GD2jdvaMnu4rMwg==
   dependencies:
     chalk "^4.1.2"
     execa "^5.1.1"
@@ -1363,10 +1363,15 @@ shebang-regex@^3.0.0:
   resolved "https://registry.yarnpkg.com/shebang-regex/-/shebang-regex-3.0.0.tgz#ae16f1644d873ecad843b0307b143362d4c42172"
   integrity sha512-7++dFhtcx3353uBaq8DDR4NuxBetBzC7ZQOhmTQInHEd6bSrXdiEyzCvG07Z44UYdLShWUyXt5M/yhz8ekcb1A==
 
-signal-exit@^3.0.2, signal-exit@^3.0.3:
+signal-exit@^3.0.2:
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/signal-exit/-/signal-exit-3.0.3.tgz#a1410c2edd8f077b08b4e253c8eacfcaf057461c"
   integrity sha512-VUJ49FC8U1OxwZLxIbTTrDvLnf/6TDgxZcK8wxR8zs13xpx7xbG60ndBlhNrFi2EMuFRoeDoJO7wthSLq42EjA==
+
+signal-exit@^3.0.3:
+  version "3.0.5"
+  resolved "https://registry.yarnpkg.com/signal-exit/-/signal-exit-3.0.5.tgz#9e3e8cc0c75a99472b44321033a7702e7738252f"
+  integrity sha512-KWcOiKeQj6ZyXx7zq4YxSMgHRlod4czeBQZrPb8OKcohcqAXShm7E20kEMle9WBt26hFcAf0qLOcp5zmY7kOqQ==
 
 slash@^3.0.0:
   version "3.0.0"

@@ -24,14 +24,6 @@
                     } ]
                   },
                   {
-                    "description": "Ctrl-⌥ -⌘ -D  - New Desktop in Mission Control",
-                    "manipulators": [ {
-                      "type": "basic",
-                      "from": { "key_code": "d", "modifiers": { "mandatory": [ "control", "option", "command" ], "optional": [ "caps_lock" ] } },
-                      "to": [ { "shell_command": "$HOME/src/gh/dotfiles/scripts/new-desktop" } ]
-                    } ]
-                  },
-                  {
                     "description": "Ctrl-⌥ -⌘ -F  - New Firefox Window",
                     "manipulators": [ {
                       "type": "basic",
@@ -88,14 +80,6 @@
                     } ]
                   },
                   {
-                    "description": "Ctrl-⌥ -⌘ -X  - Close current desktop in Mission Control",
-                    "manipulators": [ {
-                      "type": "basic",
-                      "from": { "key_code": "x", "modifiers": { "mandatory": [ "control", "option", "command" ], "optional": [ "caps_lock" ] } },
-                      "to": [ { "shell_command": "$HOME/src/gh/dotfiles/scripts/close-desktop" } ]
-                    } ]
-                  },
-                  {
                     "description": "Ctrl-⌥ -⌘ -Z  - Paste my Zoom meeting link",
                     "manipulators": [ {
                       "type": "basic",
@@ -104,7 +88,7 @@
                     } ]
                   },
                   {
-                    "description": "Ctrl-⌥ -⌘ -i  - Paste a checkmark ✅",
+                    "description": "Ctrl-⌥ -⌘ -I  - Paste a checkmark ✅",
                     "manipulators": [ {
                       "type": "basic",
                       "from": { "key_code": "i", "modifiers": { "mandatory": [ "control", "option", "command" ], "optional": [ "caps_lock" ] } },

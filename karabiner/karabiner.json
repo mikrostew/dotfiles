@@ -94,6 +94,14 @@
                       "from": { "key_code": "i", "modifiers": { "mandatory": [ "control", "option", "command" ], "optional": [ "caps_lock" ] } },
                       "to": [ { "shell_command": "$HOME/src/gh/dotfiles/scripts/check-mark" } ]
                     } ]
+                  },
+                  {
+                    "description": "Ctrl-⌥ -⌘ -X  - Paste a red X ❌",
+                    "manipulators": [ {
+                      "type": "basic",
+                      "from": { "key_code": "x", "modifiers": { "mandatory": [ "control", "option", "command" ], "optional": [ "caps_lock" ] } },
+                      "to": [ { "shell_command": "$HOME/src/gh/dotfiles/scripts/red-x" } ]
+                    } ]
                   }
                 ]
             },

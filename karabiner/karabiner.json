@@ -40,11 +40,11 @@
                     } ]
                   },
                   {
-                    "description": "Ctrl-⌥ -⌘ -M  - Open Cafe Menus (in browser)",
+                    "description": "Ctrl-⌥ -⌘ -M  - Open Apps for Meetings",
                     "manipulators": [ {
                       "type": "basic",
                       "from": { "key_code": "m", "modifiers": { "mandatory": [ "control", "option", "command" ], "optional": [ "caps_lock" ] } },
-                      "to": [ { "shell_command": "$HOME/src/gh/dotfiles/scripts/cafe-menus" } ]
+                      "to": [ { "shell_command": "$HOME/src/gh/dotfiles/scripts/meeting-setup-wrapper" } ]
                     } ]
                   },
                   {

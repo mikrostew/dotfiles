@@ -4,6 +4,7 @@ module.exports = {
     commonjs: true,
     node: true,
   },
+  parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 2020,
     sourceType: 'module',
@@ -30,10 +31,7 @@ module.exports = {
     // "import/no-nodejs-modules": 2,
     // "import/prefer-default-export": 2,
     'no-alert': 2,
-    'no-constant-condition': [
-      2,
-      { checkLoops: false },
-    ],
+    'no-constant-condition': [2, { checkLoops: false }],
     'no-duplicate-imports': 2,
     'no-empty-function': 2,
     'no-else-return': 0,
@@ -54,10 +52,7 @@ module.exports = {
     'no-self-compare': 2,
     'no-throw-literal': 2,
     'no-unmodified-loop-condition': 2,
-    'no-unneeded-ternary': [
-      2,
-      { defaultAssignment: false },
-    ],
+    'no-unneeded-ternary': [2, { defaultAssignment: false }],
     'no-unsafe-negation': 2,
     'no-unused-expressions': [
       2,
@@ -66,10 +61,7 @@ module.exports = {
         allowShortCircuit: true,
       },
     ],
-    'no-use-before-define': [
-      2,
-      'nofunc',
-    ],
+    'no-use-before-define': [2, 'nofunc'],
     'no-useless-call': 2,
     'no-useless-computed-key': 2,
     'no-useless-concat': 2,
@@ -86,26 +78,14 @@ module.exports = {
     'prefer-spread': 2,
 
     // from eslint/recommended/esnext/style-guide
-    'array-bracket-spacing': [
-      'error',
-      'never',
-    ],
-    'arrow-parens': [
-      'error',
-      'always',
-    ],
+    'array-bracket-spacing': ['error', 'never'],
+    'arrow-parens': ['error', 'always'],
     'arrow-spacing': 2,
     'generator-star-spacing': 2,
     'block-spacing': 2,
     'brace-style': 'error',
-    camelcase: [
-      2,
-      { properties: 'never' },
-    ],
-    'comma-dangle': [
-      2,
-      'always-multiline',
-    ],
+    camelcase: [2, { properties: 'never' }],
+    'comma-dangle': [2, 'always-multiline'],
     'comma-spacing': 2,
     'comma-style': 2,
     'computed-property-spacing': 2,
@@ -114,10 +94,7 @@ module.exports = {
     //   2,
     //   "multi"
     // ],
-    'dot-location': [
-      2,
-      'property',
-    ],
+    'dot-location': [2, 'property'],
     'func-call-spacing': 2,
     // "import/extensions": 2,
     // "import/imports-first": 2,
@@ -131,33 +108,14 @@ module.exports = {
     'no-trailing-spaces': 2,
     'no-whitespace-before-property': 2,
     'object-curly-newline': ['error', { multiline: true }],
-    'object-curly-spacing': [
-      2,
-      'always',
-    ],
+    'object-curly-spacing': [2, 'always'],
     'object-property-newline': 'error',
     'one-var-declaration-per-line': 2,
-    'operator-linebreak': [
-      2,
-      'before',
-    ],
-    'quote-props': [
-      2,
-      'as-needed',
-    ],
-    quotes: [
-      2,
-      'single',
-      {
-        avoidEscape: true,
-        allowTemplateLiterals: true,
-      },
-    ],
+    'operator-linebreak': [2, 'before'],
+    'quote-props': [2, 'as-needed'],
+    quotes: [2, 'single', { avoidEscape: true }],
     'rest-spread-spacing': 2,
-    semi: [
-      2,
-      'always',
-    ],
+    semi: [2, 'always'],
     'semi-spacing': 2,
     'sort-imports': 2,
     'space-before-blocks': 2,
@@ -173,10 +131,7 @@ module.exports = {
     'space-infix-ops': 2,
     'space-unary-ops': 2,
     'spaced-comment': 2,
-    'template-curly-spacing': [
-      'error',
-      'never',
-    ],
+    'template-curly-spacing': ['error', 'never'],
     'valid-jsdoc': 1,
 
     // from eslint/recommended/node

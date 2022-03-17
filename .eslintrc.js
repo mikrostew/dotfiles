@@ -15,6 +15,9 @@ module.exports = {
     },
   },
   extends: 'eslint:recommended',
+  overrides: {
+    files: 'scripts/**/*',
+  },
   rules: {
     // from eslint/recommended/esnext
     'array-callback-return': 2,

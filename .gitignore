@@ -34,3 +34,6 @@ cache/*.cache
 
 # installed node packages
 node_modules
+
+# karabiner
+karabiner/automatic_backups/

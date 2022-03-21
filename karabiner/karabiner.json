@@ -102,6 +102,14 @@
                       "from": { "key_code": "x", "modifiers": { "mandatory": [ "control", "option", "command" ], "optional": [ "caps_lock" ] } },
                       "to": [ { "shell_command": "$HOME/src/gh/dotfiles/scripts/red-x" } ]
                     } ]
+                  },
+                  {
+                    "description": "Ctrl-⌥ -⌘ -/  - Show keyboard shortcut help",
+                    "manipulators": [ {
+                      "type": "basic",
+                      "from": { "key_code": "slash", "modifiers": { "mandatory": [ "control", "option", "command" ], "optional": [ "caps_lock" ] } },
+                      "to": [ { "shell_command": "$HOME/src/gh/dotfiles/scripts/keyboard-shortcut-help-wrapper" } ]
+                    } ]
                   }
                 ]
             },
@@ -169,6 +177,7 @@
             ],
             "virtual_hid_keyboard": {
                 "country_code": 0,
+                "indicate_sticky_modifier_keys_state": true,
                 "mouse_key_xy_scale": 100
             }
         }

@@ -38,10 +38,10 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@mikrostew/good-morning@^0.1.5":
-  version "0.1.5"
-  resolved "https://registry.yarnpkg.com/@mikrostew/good-morning/-/good-morning-0.1.5.tgz#1b19ade763d03c9080489e37932b6b6d5150f28a"
-  integrity sha512-LkXOi3Ew+LCAv++CoJ4uXnJiAAhjskB46hSmSN1tQ2DJb7TJ5umLGmM0uPJZhfjExDVJu5MEfJhFJFibeySqmQ==
+"@mikrostew/good-morning@^0.1.6":
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/@mikrostew/good-morning/-/good-morning-0.1.6.tgz#64e12618b10e1d1b80380f3c0b2d99e6f98e0d05"
+  integrity sha512-euZ/OEKpVcjiqXAEi0imRm7xGdQaSeAYD9zNjtl4EWeKyLfauHvRkwKtIpViIbSNzvTwdydFic60GMtAO1ymGw==
   dependencies:
     chalk "^4.1.2"
     execa "^5.1.1"

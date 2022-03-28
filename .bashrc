@@ -84,13 +84,14 @@ source "$DOTFILES_DIR/.bash_colors"
 ps_user='\u'
 ps_host='\h'
 ps_pwd='\w'
-PS1="${COLOR_RESET}\n"\
-"${COLOR_FG_BOLD_BLACK}$ps_user${COLOR_RESET}"\
-"@${COLOR_FG_BOLD_BLACK}$ps_host${COLOR_RESET}"\
-" ($SESSION_TYPE)"\
-":${COLOR_FG_BOLD_BLACK}$ps_pwd/${COLOR_RESET}"\
-"\n\$ "
-
+# Warp automatically makes things look nice, no need for newlines
+if [[ "$TERM_PROGRAM" =~ Warp ]]
+then
+  PS1="${COLOR_FG_BOLD_BLACK}$ps_user${COLOR_RESET}@${COLOR_FG_BOLD_BLACK}$ps_host${COLOR_RESET} ($SESSION_TYPE):${COLOR_FG_BOLD_BLACK}$ps_pwd/${COLOR_RESET}"
+else
+  # make things look nicer for normal bash sessions
+  PS1="\n${COLOR_FG_BOLD_BLACK}$ps_user${COLOR_RESET}@${COLOR_FG_BOLD_BLACK}$ps_host${COLOR_RESET} ($SESSION_TYPE):${COLOR_FG_BOLD_BLACK}$ps_pwd/${COLOR_RESET}\n\$ "
+fi
 
 # aliases
 source "$DOTFILES_DIR/.bash_aliases"

@@ -110,6 +110,14 @@
                       "from": { "key_code": "slash", "modifiers": { "mandatory": [ "control", "option", "command" ], "optional": [ "caps_lock" ] } },
                       "to": [ { "shell_command": "$HOME/src/gh/dotfiles/scripts/keyboard-shortcut-help-wrapper" } ]
                     } ]
+                  },
+                  {
+                    "description": "Ctrl-⌥ -⌘ -W  - New Warp window",
+                    "manipulators": [ {
+                      "type": "basic",
+                      "from": { "key_code": "w", "modifiers": { "mandatory": [ "control", "option", "command" ], "optional": [ "caps_lock" ] } },
+                      "to": [ { "shell_command": "$HOME/src/gh/dotfiles/scripts/new-warp" } ]
+                    } ]
                   }
                 ]
             },

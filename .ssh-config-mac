@@ -22,6 +22,10 @@ Host eng-portal*
 Host *.corp.linkedin.com
     IdentityFile    %d/.ssh/tester_at_linkedin.com_rsa_key
     PasswordAuthentication no
+    # fix midgard ssh issues, maybe (see go/midgard/sudo)
+    RemoteForward /var/tmp/${USER}-sudo.sock /Users/${USER}/.midgard/sudo.agent
+    SetEnv MIDGARD_SUDO_SOCK=/var/tmp/${USER}-sudo.sock
+    SendEnv MIDGARD_SUDO_SOCK
 
 # LinkedIn
 Host *.linkedin.com

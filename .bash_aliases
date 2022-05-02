@@ -66,6 +66,9 @@ alias ⚡️='volta'
 # git
 alias grap='gpr && gp' # git rebase and push
 
+# VSCode
+alias vs="code ."
+
 # for reading/writing notes to myself
 # (change the CWD so vim's file navigation will start in that dir, but return to whatever dir this was run from)
 alias notes="pushd ~/Sync/notes/ >/dev/null; mvim .; popd >/dev/null"

@@ -560,10 +560,10 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
-"@mikrostew/good-morning@^0.1.9":
-  version "0.1.9"
-  resolved "https://registry.yarnpkg.com/@mikrostew/good-morning/-/good-morning-0.1.9.tgz#b19cd556fe795db334d2255553c14e957ba4abed"
-  integrity sha512-rknzmsC4GHRr/DzYYhs72nDWQI2G1smBxHQWY7+cV/J3Po22qpIxLLMNx9fRJ2g5qtR2BrILp258Ss5GMoRq4A==
+"@mikrostew/good-morning@^0.1.11":
+  version "0.1.11"
+  resolved "https://registry.yarnpkg.com/@mikrostew/good-morning/-/good-morning-0.1.11.tgz#50741b8e9d8be83173a253eaadacd8154c27d831"
+  integrity sha512-8Z0GG230B6wgiOMygl0fYRR68/Dn4l3nMrZm54ZNX/xQqPkgdjeRJXnzASntsT3Y04Z3rO8V/z3nRK941SLCOg==
   dependencies:
     chalk "^4.1.2"
     execa "^5.1.1"

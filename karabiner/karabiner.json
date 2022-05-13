@@ -36,7 +36,7 @@
                     "manipulators": [ {
                       "type": "basic",
                       "from": { "key_code": "g", "modifiers": { "mandatory": [ "control", "option", "command" ], "optional": [ "caps_lock" ] } },
-                      "to": [ { "shell_command": "$HOME/src/gh/dotfiles/scripts/good-morning-wrapper" } ]
+                      "to": [ { "shell_command": "$HOME/src/gh/dotfiles/scripts/script-wrapper --resize 'cd src/gh/dotfiles/ && (gpr; yi; good-morning-tasks.ts)'" } ]
                     } ]
                   },
                   {
@@ -44,7 +44,15 @@
                     "manipulators": [ {
                       "type": "basic",
                       "from": { "key_code": "m", "modifiers": { "mandatory": [ "control", "option", "command" ], "optional": [ "caps_lock" ] } },
-                      "to": [ { "shell_command": "$HOME/src/gh/dotfiles/scripts/meeting-setup-wrapper" } ]
+                      "to": [ { "shell_command": "$HOME/src/gh/dotfiles/scripts/script-wrapper --exit-conf meeting-setup" } ]
+                    } ]
+                  },
+                  {
+                    "description": "Ctrl-⌥ -⌘ -B  - Close Apps for Meetings",
+                    "manipulators": [ {
+                      "type": "basic",
+                      "from": { "key_code": "b", "modifiers": { "mandatory": [ "control", "option", "command" ], "optional": [ "caps_lock" ] } },
+                      "to": [ { "shell_command": "$HOME/src/gh/dotfiles/scripts/script-wrapper --exit-conf meeting-teardown" } ]
                     } ]
                   },
                   {
@@ -108,7 +116,7 @@
                     "manipulators": [ {
                       "type": "basic",
                       "from": { "key_code": "slash", "modifiers": { "mandatory": [ "control", "option", "command" ], "optional": [ "caps_lock" ] } },
-                      "to": [ { "shell_command": "$HOME/src/gh/dotfiles/scripts/keyboard-shortcut-help-wrapper" } ]
+                      "to": [ { "shell_command": "$HOME/src/gh/dotfiles/scripts/script-wrapper --exit-conf keyboard-shortcut-help" } ]
                     } ]
                   },
                   {

@@ -116,7 +116,7 @@ path_homebrew="/usr/local/sbin"
 path_yarn="$HOME/.yarn/bin"
 path_scripts="$DOTFILES_DIR/scripts"
 path_rust="$HOME/.cargo/bin"
-path_python="$HOME/Library/Python/3.7/bin" # for pipx, userpath, etc.
+path_python="$HOME/Library/Python/3.8/bin" # for pipx, userpath, etc.
 path_python_globals="$HOME/.local/bin" # for packages installed with pipx
 # TODO: add Volta here
 # all together now

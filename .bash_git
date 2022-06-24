@@ -248,9 +248,9 @@ gcb() {
   fi
 }
 
-# git - show commit log (input number of logs to show, default is 4)
+# git - show commit log (input number of logs to show, default is 3)
 gl() {
-  num_logs="${1:-4}" # default to showing the last 4 logs
+  num_logs="${1:-3}"
   do_git log -n$num_logs
 }
 

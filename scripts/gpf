@@ -1,7 +1,0 @@
-#!/usr/bin/env badash
-# shellcheck shell=bash
-
-# [git] Force-push changes (Git Push Force)
-
-# using --force-with-lease in case someone else has pushed to my branch unbeknownst to me
-@wait-for-command git push --force-with-lease

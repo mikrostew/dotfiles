@@ -20,7 +20,7 @@
                     "manipulators": [ {
                       "type": "basic",
                       "from": { "key_code": "c", "modifiers": { "mandatory": [ "control", "option", "command" ], "optional": [ "caps_lock" ] } },
-                      "to": [ { "shell_command": "$HOME/src/gh/dotfiles/scripts/new-chrome" } ]
+                      "to": [ { "shell_command": "/usr/local/bin/new-chrome" } ]
                     } ]
                   },
                   {
@@ -28,7 +28,7 @@
                     "manipulators": [ {
                       "type": "basic",
                       "from": { "key_code": "f", "modifiers": { "mandatory": [ "control", "option", "command" ], "optional": [ "caps_lock" ] } },
-                      "to": [ { "shell_command": "$HOME/src/gh/dotfiles/scripts/new-firefox" } ]
+                      "to": [ { "shell_command": "/usr/local/bin/new-firefox" } ]
                     } ]
                   },
                   {
@@ -36,7 +36,7 @@
                     "manipulators": [ {
                       "type": "basic",
                       "from": { "key_code": "g", "modifiers": { "mandatory": [ "control", "option", "command" ], "optional": [ "caps_lock" ] } },
-                      "to": [ { "shell_command": "$HOME/src/gh/dotfiles/scripts/script-wrapper --resize 'cd src/gh/dotfiles/ && (gpr; yi; good-morning-tasks.ts)'" } ]
+                      "to": [ { "shell_command": "/usr/local/bin/script-wrapper --resize 'cd src/gh/dotfiles/ && (gpr; yi; good-morning-tasks.ts)'" } ]
                     } ]
                   },
                   {
@@ -44,7 +44,7 @@
                     "manipulators": [ {
                       "type": "basic",
                       "from": { "key_code": "m", "modifiers": { "mandatory": [ "control", "option", "command" ], "optional": [ "caps_lock" ] } },
-                      "to": [ { "shell_command": "$HOME/src/gh/dotfiles/scripts/script-wrapper --exit-conf meeting-setup" } ]
+                      "to": [ { "shell_command": "/usr/local/bin/script-wrapper --exit-conf meeting-setup" } ]
                     } ]
                   },
                   {
@@ -52,7 +52,7 @@
                     "manipulators": [ {
                       "type": "basic",
                       "from": { "key_code": "b", "modifiers": { "mandatory": [ "control", "option", "command" ], "optional": [ "caps_lock" ] } },
-                      "to": [ { "shell_command": "$HOME/src/gh/dotfiles/scripts/script-wrapper --exit-conf meeting-teardown" } ]
+                      "to": [ { "shell_command": "/usr/local/bin/script-wrapper --exit-conf meeting-teardown" } ]
                     } ]
                   },
                   {
@@ -60,7 +60,7 @@
                     "manipulators": [ {
                       "type": "basic",
                       "from": { "key_code": "o", "modifiers": { "mandatory": [ "control", "option", "command" ], "optional": [ "caps_lock" ] } },
-                      "to": [ { "shell_command": "$HOME/src/gh/dotfiles/scripts/open-oncall-pages" } ]
+                      "to": [ { "shell_command": "/usr/local/bin/open-oncall-pages" } ]
                     } ]
                   },
                   {
@@ -68,7 +68,7 @@
                     "manipulators": [ {
                       "type": "basic",
                       "from": { "key_code": "s", "modifiers": { "mandatory": [ "control", "option", "command" ], "optional": [ "caps_lock" ] } },
-                      "to": [ { "shell_command": "$HOME/src/gh/dotfiles/scripts/shrug" } ]
+                      "to": [ { "shell_command": "/usr/local/bin/shrug" } ]
                     } ]
                   },
                   {
@@ -76,7 +76,7 @@
                     "manipulators": [ {
                       "type": "basic",
                       "from": { "key_code": "t", "modifiers": { "mandatory": [ "control", "option", "command" ], "optional": [ "caps_lock" ] } },
-                      "to": [ { "shell_command": "$HOME/src/gh/dotfiles/scripts/new-terminal" } ]
+                      "to": [ { "shell_command": "/usr/local/bin/new-terminal" } ]
                     } ]
                   },
                   {
@@ -84,7 +84,7 @@
                     "manipulators": [ {
                       "type": "basic",
                       "from": { "key_code": "v", "modifiers": { "mandatory": [ "control", "option", "command" ], "optional": [ "caps_lock" ] } },
-                      "to": [ { "shell_command": "$HOME/src/gh/dotfiles/scripts/mac-paste" } ]
+                      "to": [ { "shell_command": "/usr/local/bin/mac-paste" } ]
                     } ]
                   },
                   {
@@ -92,7 +92,7 @@
                     "manipulators": [ {
                       "type": "basic",
                       "from": { "key_code": "z", "modifiers": { "mandatory": [ "control", "option", "command" ], "optional": [ "caps_lock" ] } },
-                      "to": [ { "shell_command": "$HOME/src/gh/dotfiles/scripts/zoom-link" } ]
+                      "to": [ { "shell_command": "/usr/local/bin/zoom-link" } ]
                     } ]
                   },
                   {
@@ -100,7 +100,7 @@
                     "manipulators": [ {
                       "type": "basic",
                       "from": { "key_code": "i", "modifiers": { "mandatory": [ "control", "option", "command" ], "optional": [ "caps_lock" ] } },
-                      "to": [ { "shell_command": "$HOME/src/gh/dotfiles/scripts/check-mark" } ]
+                      "to": [ { "shell_command": "/usr/local/bin/check-mark" } ]
                     } ]
                   },
                   {
@@ -108,7 +108,7 @@
                     "manipulators": [ {
                       "type": "basic",
                       "from": { "key_code": "x", "modifiers": { "mandatory": [ "control", "option", "command" ], "optional": [ "caps_lock" ] } },
-                      "to": [ { "shell_command": "$HOME/src/gh/dotfiles/scripts/red-x" } ]
+                      "to": [ { "shell_command": "/usr/local/bin/red-x" } ]
                     } ]
                   },
                   {
@@ -116,7 +116,7 @@
                     "manipulators": [ {
                       "type": "basic",
                       "from": { "key_code": "slash", "modifiers": { "mandatory": [ "control", "option", "command" ], "optional": [ "caps_lock" ] } },
-                      "to": [ { "shell_command": "$HOME/src/gh/dotfiles/scripts/script-wrapper --exit-conf keyboard-shortcut-help" } ]
+                      "to": [ { "shell_command": "/usr/local/bin/script-wrapper --exit-conf keyboard-shortcut-help" } ]
                     } ]
                   },
                   {
@@ -124,7 +124,7 @@
                     "manipulators": [ {
                       "type": "basic",
                       "from": { "key_code": "w", "modifiers": { "mandatory": [ "control", "option", "command" ], "optional": [ "caps_lock" ] } },
-                      "to": [ { "shell_command": "$HOME/src/gh/dotfiles/scripts/new-warp" } ]
+                      "to": [ { "shell_command": "/usr/local/bin/new-warp" } ]
                     } ]
                   }
                 ]

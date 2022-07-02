@@ -111,16 +111,15 @@ if ! shopt -oq posix; then
 fi
 
 # PATH
-# homebrew, yarn, scripts in this repo
+# homebrew, yarn, rust, python, etc.
 path_homebrew="/usr/local/sbin"
 path_yarn="$HOME/.yarn/bin"
-path_scripts="$DOTFILES_DIR/scripts"
 path_rust="$HOME/.cargo/bin"
 path_python="$HOME/Library/Python/3.8/bin" # for pipx, userpath, etc.
 path_python_globals="$HOME/.local/bin" # for packages installed with pipx
 # TODO: add Volta here
 # all together now
-export PATH="$path_homebrew:$path_yarn:$path_scripts:$path_rust:$path_python:$path_python_globals:$PATH"
+export PATH="$path_homebrew:$path_yarn:$path_rust:$path_python:$path_python_globals:$PATH"
 
 # for bash-completion after upgrading to bash 4.x with homebrew
 [ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion

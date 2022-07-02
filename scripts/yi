@@ -1,6 +1,0 @@
-#!/usr/bin/env badash
-# shellcheck shell=bash
-
-# Install dependencies with yarn
-
-@wait-for-command yarn install

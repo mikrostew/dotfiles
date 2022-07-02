@@ -224,7 +224,6 @@ let g:airline_section_y = ''  " normally this file encoding
 " let g:syntastic_check_on_wq = 0
 " let g:syntastic_javascript_checkers = ['eslint']
 " " thanks to https://github.com/vim-syntastic/syntastic/issues/2102
-" " (script in $DOTFILES/scripts/)
 " let g:syntastic_javascript_eslint_exec = 'eslint-for-vim'
 " let g:syntastic_javascript_eslint_exe = 'npm run lint --'
 " " disable syntastic by default, but allow toggling this when I want it

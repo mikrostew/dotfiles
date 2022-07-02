@@ -1,6 +1,0 @@
-#!/usr/bin/env badash
-# shellcheck shell=bash
-
-# [git] Push changes (Git Push)
-
-@wait-for-command git push

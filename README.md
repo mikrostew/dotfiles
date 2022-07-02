@@ -20,7 +20,7 @@ Then run the script to make the links to all these files
 
 ```
 $ cd src/gh/dotfiles/
-$ ./scripts/make-dotfile-links "$HOME/src/gh/dotfiles"
+$ ./make-dotfile-links "$HOME/src/gh/dotfiles"
 ```
 
 Setup other stuff

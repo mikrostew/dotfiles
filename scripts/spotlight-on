@@ -1,6 +1,0 @@
-#!/usr/bin/env badash
-# shellcheck shell=bash
-
-# Turn off spotlight (usually for local builds)
-
-@wait-for-command sudo mdutil -a -i on

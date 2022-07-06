@@ -99,6 +99,10 @@ source "$DOTFILES_DIR/.bash_aliases"
 # git aliases and functions
 source "$DOTFILES_DIR/.bash_git"
 
+# script aliases (because they conflict with installed things)
+alias gpr=/usr/local/lib/scripts/bin/gpr
+alias weather=/usr/local/lib/scripts/bin/weather
+
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).

@@ -15,170 +15,470 @@
                     "mouse_motion_to_scroll.speed": 100
                 },
                 "rules": [
-                  {
-                    "description": "Ctrl-⌥ -⌘ -C  - New Chrome Window",
-                    "manipulators": [ {
-                      "type": "basic",
-                      "from": { "key_code": "c", "modifiers": { "mandatory": [ "control", "option", "command" ], "optional": [ "caps_lock" ] } },
-                      "to": [ { "shell_command": "/usr/local/bin/new-chrome" } ]
-                    } ]
-                  },
-                  {
-                    "description": "Ctrl-⌥ -⌘ -F  - New Firefox Window",
-                    "manipulators": [ {
-                      "type": "basic",
-                      "from": { "key_code": "f", "modifiers": { "mandatory": [ "control", "option", "command" ], "optional": [ "caps_lock" ] } },
-                      "to": [ { "shell_command": "/usr/local/bin/new-firefox" } ]
-                    } ]
-                  },
-                  {
-                    "description": "Ctrl-⌥ -⌘ -G  - Good morning script",
-                    "manipulators": [ {
-                      "type": "basic",
-                      "from": { "key_code": "g", "modifiers": { "mandatory": [ "control", "option", "command" ], "optional": [ "caps_lock" ] } },
-                      "to": [ { "shell_command": "/usr/local/bin/script-wrapper --resize 'cd src/gh/dotfiles/ && (gpr; yi; good-morning-tasks.ts)'" } ]
-                    } ]
-                  },
-                  {
-                    "description": "Ctrl-⌥ -⌘ -M  - Open Apps for Meetings",
-                    "manipulators": [ {
-                      "type": "basic",
-                      "from": { "key_code": "m", "modifiers": { "mandatory": [ "control", "option", "command" ], "optional": [ "caps_lock" ] } },
-                      "to": [ { "shell_command": "/usr/local/bin/script-wrapper --exit-conf meeting-setup" } ]
-                    } ]
-                  },
-                  {
-                    "description": "Ctrl-⌥ -⌘ -B  - Close Apps for Meetings",
-                    "manipulators": [ {
-                      "type": "basic",
-                      "from": { "key_code": "b", "modifiers": { "mandatory": [ "control", "option", "command" ], "optional": [ "caps_lock" ] } },
-                      "to": [ { "shell_command": "/usr/local/bin/script-wrapper --exit-conf meeting-teardown" } ]
-                    } ]
-                  },
-                  {
-                    "description": "Ctrl-⌥ -⌘ -O  - Open oncall links in browser",
-                    "manipulators": [ {
-                      "type": "basic",
-                      "from": { "key_code": "o", "modifiers": { "mandatory": [ "control", "option", "command" ], "optional": [ "caps_lock" ] } },
-                      "to": [ { "shell_command": "/usr/local/bin/open-oncall-pages" } ]
-                    } ]
-                  },
-                  {
-                    "description": "Ctrl-⌥ -⌘ -S  - Type the shrug emoji ¯\\_(ツ)_/¯",
-                    "manipulators": [ {
-                      "type": "basic",
-                      "from": { "key_code": "s", "modifiers": { "mandatory": [ "control", "option", "command" ], "optional": [ "caps_lock" ] } },
-                      "to": [ { "shell_command": "/usr/local/bin/shrug" } ]
-                    } ]
-                  },
-                  {
-                    "description": "Ctrl-⌥ -⌘ -T  - New iTerm2 Window",
-                    "manipulators": [ {
-                      "type": "basic",
-                      "from": { "key_code": "t", "modifiers": { "mandatory": [ "control", "option", "command" ], "optional": [ "caps_lock" ] } },
-                      "to": [ { "shell_command": "/usr/local/bin/new-terminal" } ]
-                    } ]
-                  },
-                  {
-                    "description": "Ctrl-⌥ -⌘ -V  - Paste using System Events",
-                    "manipulators": [ {
-                      "type": "basic",
-                      "from": { "key_code": "v", "modifiers": { "mandatory": [ "control", "option", "command" ], "optional": [ "caps_lock" ] } },
-                      "to": [ { "shell_command": "/usr/local/bin/mac-paste" } ]
-                    } ]
-                  },
-                  {
-                    "description": "Ctrl-⌥ -⌘ -Z  - Paste my Zoom meeting link",
-                    "manipulators": [ {
-                      "type": "basic",
-                      "from": { "key_code": "z", "modifiers": { "mandatory": [ "control", "option", "command" ], "optional": [ "caps_lock" ] } },
-                      "to": [ { "shell_command": "/usr/local/bin/zoom-link" } ]
-                    } ]
-                  },
-                  {
-                    "description": "Ctrl-⌥ -⌘ -I  - Paste a checkmark ✅",
-                    "manipulators": [ {
-                      "type": "basic",
-                      "from": { "key_code": "i", "modifiers": { "mandatory": [ "control", "option", "command" ], "optional": [ "caps_lock" ] } },
-                      "to": [ { "shell_command": "/usr/local/bin/check-mark" } ]
-                    } ]
-                  },
-                  {
-                    "description": "Ctrl-⌥ -⌘ -X  - Paste a red X ❌",
-                    "manipulators": [ {
-                      "type": "basic",
-                      "from": { "key_code": "x", "modifiers": { "mandatory": [ "control", "option", "command" ], "optional": [ "caps_lock" ] } },
-                      "to": [ { "shell_command": "/usr/local/bin/red-x" } ]
-                    } ]
-                  },
-                  {
-                    "description": "Ctrl-⌥ -⌘ -/  - Show keyboard shortcut help",
-                    "manipulators": [ {
-                      "type": "basic",
-                      "from": { "key_code": "slash", "modifiers": { "mandatory": [ "control", "option", "command" ], "optional": [ "caps_lock" ] } },
-                      "to": [ { "shell_command": "/usr/local/bin/script-wrapper --exit-conf keyboard-shortcut-help" } ]
-                    } ]
-                  },
-                  {
-                    "description": "Ctrl-⌥ -⌘ -W  - New Warp window",
-                    "manipulators": [ {
-                      "type": "basic",
-                      "from": { "key_code": "w", "modifiers": { "mandatory": [ "control", "option", "command" ], "optional": [ "caps_lock" ] } },
-                      "to": [ { "shell_command": "/usr/local/bin/new-warp" } ]
-                    } ]
-                  }
+                    {
+                        "description": "Ctrl-Opt-Cmd-C - New Chrome Window",
+                        "manipulators": [
+                            {
+                                "type": "basic",
+                                "from": {
+                                    "key_code": "c",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "control",
+                                            "option",
+                                            "command"
+                                        ],
+                                        "optional": [
+                                            "caps_lock"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "shell_command": "/usr/local/bin/new-chrome"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "description": "Ctrl-Opt-Cmd-F - New Firefox Window",
+                        "manipulators": [
+                            {
+                                "type": "basic",
+                                "from": {
+                                    "key_code": "f",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "control",
+                                            "option",
+                                            "command"
+                                        ],
+                                        "optional": [
+                                            "caps_lock"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "shell_command": "/usr/local/bin/new-firefox"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "description": "Ctrl-Opt-Cmd-B - Close Apps for Meetings",
+                        "manipulators": [
+                            {
+                                "type": "basic",
+                                "from": {
+                                    "key_code": "b",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "control",
+                                            "option",
+                                            "command"
+                                        ],
+                                        "optional": [
+                                            "caps_lock"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "shell_command": "/usr/local/bin/script-wrapper --exit-conf meeting-teardown"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "description": "Ctrl-Opt-Cmd-W - New Warp window",
+                        "manipulators": [
+                            {
+                                "type": "basic",
+                                "from": {
+                                    "key_code": "w",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "control",
+                                            "option",
+                                            "command"
+                                        ],
+                                        "optional": [
+                                            "caps_lock"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "shell_command": "/usr/local/bin/new-warp"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "description": "Ctrl-Opt-Cmd-V - Paste using System Events",
+                        "manipulators": [
+                            {
+                                "type": "basic",
+                                "from": {
+                                    "key_code": "v",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "control",
+                                            "option",
+                                            "command"
+                                        ],
+                                        "optional": [
+                                            "caps_lock"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "shell_command": "/usr/local/bin/mac-paste"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "description": "Ctrl-Opt-Cmd-G - Good morning script",
+                        "manipulators": [
+                            {
+                                "type": "basic",
+                                "from": {
+                                    "key_code": "g",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "control",
+                                            "option",
+                                            "command"
+                                        ],
+                                        "optional": [
+                                            "caps_lock"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "shell_command": "/usr/local/bin/script-wrapper --resize good-morning-tasks.ts"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "description": "Ctrl-Opt-Cmd-X - Paste a red X ❌",
+                        "manipulators": [
+                            {
+                                "type": "basic",
+                                "from": {
+                                    "key_code": "x",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "control",
+                                            "option",
+                                            "command"
+                                        ],
+                                        "optional": [
+                                            "caps_lock"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "shell_command": "/usr/local/bin/red-x"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "description": "Ctrl-Opt-Cmd-M - Open Apps for Meetings",
+                        "manipulators": [
+                            {
+                                "type": "basic",
+                                "from": {
+                                    "key_code": "m",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "control",
+                                            "option",
+                                            "command"
+                                        ],
+                                        "optional": [
+                                            "caps_lock"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "shell_command": "/usr/local/bin/script-wrapper --exit-conf meeting-setup"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "description": "Ctrl-Opt-Cmd-S - Type the shrug emoji ¯\\_(ツ)_/¯",
+                        "manipulators": [
+                            {
+                                "type": "basic",
+                                "from": {
+                                    "key_code": "s",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "control",
+                                            "option",
+                                            "command"
+                                        ],
+                                        "optional": [
+                                            "caps_lock"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "shell_command": "/usr/local/bin/shrug"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "description": "Ctrl-Opt-Cmd-Z - Paste my Zoom meeting link",
+                        "manipulators": [
+                            {
+                                "type": "basic",
+                                "from": {
+                                    "key_code": "z",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "control",
+                                            "option",
+                                            "command"
+                                        ],
+                                        "optional": [
+                                            "caps_lock"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "shell_command": "/usr/local/bin/zoom-link"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "description": "Ctrl-Opt-Cmd-O - Open oncall links in browser",
+                        "manipulators": [
+                            {
+                                "type": "basic",
+                                "from": {
+                                    "key_code": "o",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "control",
+                                            "option",
+                                            "command"
+                                        ],
+                                        "optional": [
+                                            "caps_lock"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "shell_command": "/usr/local/bin/open-oncall-pages"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "description": "Ctrl-Opt-Cmd-/ - Show keyboard shortcut help",
+                        "manipulators": [
+                            {
+                                "type": "basic",
+                                "from": {
+                                    "key_code": "slash",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "control",
+                                            "option",
+                                            "command"
+                                        ],
+                                        "optional": [
+                                            "caps_lock"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "shell_command": "/usr/local/bin/script-wrapper --exit-conf keyboard-shortcut-help"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "description": "Ctrl-Opt-Cmd-I - Paste a checkmark ✅",
+                        "manipulators": [
+                            {
+                                "type": "basic",
+                                "from": {
+                                    "key_code": "i",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "control",
+                                            "option",
+                                            "command"
+                                        ],
+                                        "optional": [
+                                            "caps_lock"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "shell_command": "/usr/local/bin/check-mark"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "description": "Ctrl-Opt-Cmd-T - New iTerm2 Window",
+                        "manipulators": [
+                            {
+                                "type": "basic",
+                                "from": {
+                                    "key_code": "t",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "control",
+                                            "option",
+                                            "command"
+                                        ],
+                                        "optional": [
+                                            "caps_lock"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "shell_command": "/usr/local/bin/new-terminal"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
                 ]
             },
             "devices": [],
             "fn_function_keys": [
-              {
-                "from": { "key_code": "f1" },
-                "to": { "consumer_key_code": "display_brightness_decrement" }
-              },
-              {
-                "from": { "key_code": "f2" },
-                "to": { "consumer_key_code": "display_brightness_increment" }
-              },
-              {
-                "from": { "key_code": "f3" },
-                "to": { "key_code": "mission_control" }
-              },
-              {
-                "from": { "key_code": "f4" },
-                "to": { "key_code": "launchpad" }
-              },
-              {
-                "from": { "key_code": "f5" },
-                "to": { "key_code": "illumination_decrement" }
-              },
-              {
-                "from": { "key_code": "f6" },
-                "to": { "key_code": "illumination_increment" }
-              },
-              {
-                "from": { "key_code": "f7" },
-                "to": { "consumer_key_code": "rewind" }
-              },
-              {
-                "from": { "key_code": "f8" },
-                "to": { "consumer_key_code": "play_or_pause" }
-              },
-              {
-                "from": { "key_code": "f9" },
-                "to": { "consumer_key_code": "fastforward" }
-              },
-              {
-                "from": { "key_code": "f10" },
-                "to": { "consumer_key_code": "mute" }
-              },
-              {
-                "from": { "key_code": "f11" },
-                "to": { "consumer_key_code": "volume_decrement" }
-              },
-              {
-                "from": { "key_code": "f12" },
-                "to": { "consumer_key_code": "volume_increment" }
-              }
+                {
+                    "from": {
+                        "key_code": "f1"
+                    },
+                    "to": {
+                        "consumer_key_code": "display_brightness_decrement"
+                    }
+                },
+                {
+                    "from": {
+                        "key_code": "f2"
+                    },
+                    "to": {
+                        "consumer_key_code": "display_brightness_increment"
+                    }
+                },
+                {
+                    "from": {
+                        "key_code": "f3"
+                    },
+                    "to": {
+                        "key_code": "mission_control"
+                    }
+                },
+                {
+                    "from": {
+                        "key_code": "f4"
+                    },
+                    "to": {
+                        "key_code": "launchpad"
+                    }
+                },
+                {
+                    "from": {
+                        "key_code": "f5"
+                    },
+                    "to": {
+                        "key_code": "illumination_decrement"
+                    }
+                },
+                {
+                    "from": {
+                        "key_code": "f6"
+                    },
+                    "to": {
+                        "key_code": "illumination_increment"
+                    }
+                },
+                {
+                    "from": {
+                        "key_code": "f7"
+                    },
+                    "to": {
+                        "consumer_key_code": "rewind"
+                    }
+                },
+                {
+                    "from": {
+                        "key_code": "f8"
+                    },
+                    "to": {
+                        "consumer_key_code": "play_or_pause"
+                    }
+                },
+                {
+                    "from": {
+                        "key_code": "f9"
+                    },
+                    "to": {
+                        "consumer_key_code": "fastforward"
+                    }
+                },
+                {
+                    "from": {
+                        "key_code": "f10"
+                    },
+                    "to": {
+                        "consumer_key_code": "mute"
+                    }
+                },
+                {
+                    "from": {
+                        "key_code": "f11"
+                    },
+                    "to": {
+                        "consumer_key_code": "volume_decrement"
+                    }
+                },
+                {
+                    "from": {
+                        "key_code": "f12"
+                    },
+                    "to": {
+                        "consumer_key_code": "volume_increment"
+                    }
+                }
             ],
             "name": "Default profile",
             "parameters": {
@@ -186,10 +486,14 @@
             },
             "selected": true,
             "simple_modifications": [
-              {
-                "from": { "key_code": "caps_lock" },
-                "to": { "key_code": "escape" }
-              }
+                {
+                    "from": {
+                        "key_code": "caps_lock"
+                    },
+                    "to": {
+                        "key_code": "escape"
+                    }
+                }
             ],
             "virtual_hid_keyboard": {
                 "country_code": 0,

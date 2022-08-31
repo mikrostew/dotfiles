@@ -146,32 +146,6 @@
                         ]
                     },
                     {
-                        "description": "Ctrl-Opt-Cmd-G - Good morning script",
-                        "manipulators": [
-                            {
-                                "type": "basic",
-                                "from": {
-                                    "key_code": "g",
-                                    "modifiers": {
-                                        "mandatory": [
-                                            "control",
-                                            "option",
-                                            "command"
-                                        ],
-                                        "optional": [
-                                            "caps_lock"
-                                        ]
-                                    }
-                                },
-                                "to": [
-                                    {
-                                        "shell_command": "/usr/local/bin/script-wrapper --resize good-morning-tasks.ts"
-                                    }
-                                ]
-                            }
-                        ]
-                    },
-                    {
                         "description": "Ctrl-Opt-Cmd-X - Paste a red X ❌",
                         "manipulators": [
                             {
@@ -374,6 +348,32 @@
                                 "to": [
                                     {
                                         "shell_command": "/usr/local/bin/new-terminal"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "description": "Ctrl-Opt-Cmd-G - Good morning script",
+                        "manipulators": [
+                            {
+                                "type": "basic",
+                                "from": {
+                                    "key_code": "g",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "control",
+                                            "option",
+                                            "command"
+                                        ],
+                                        "optional": [
+                                            "caps_lock"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "shell_command": "/usr/local/bin/script-wrapper --resize good-morning-tasks"
                                     }
                                 ]
                             }

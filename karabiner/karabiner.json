@@ -16,240 +16,6 @@
                 },
                 "rules": [
                     {
-                        "description": "Ctrl-Opt-Cmd-C - New Chrome Window",
-                        "manipulators": [
-                            {
-                                "type": "basic",
-                                "from": {
-                                    "key_code": "c",
-                                    "modifiers": {
-                                        "mandatory": [
-                                            "control",
-                                            "option",
-                                            "command"
-                                        ],
-                                        "optional": [
-                                            "caps_lock"
-                                        ]
-                                    }
-                                },
-                                "to": [
-                                    {
-                                        "shell_command": "/usr/local/bin/new-chrome"
-                                    }
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        "description": "Ctrl-Opt-Cmd-F - New Firefox Window",
-                        "manipulators": [
-                            {
-                                "type": "basic",
-                                "from": {
-                                    "key_code": "f",
-                                    "modifiers": {
-                                        "mandatory": [
-                                            "control",
-                                            "option",
-                                            "command"
-                                        ],
-                                        "optional": [
-                                            "caps_lock"
-                                        ]
-                                    }
-                                },
-                                "to": [
-                                    {
-                                        "shell_command": "/usr/local/bin/new-firefox"
-                                    }
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        "description": "Ctrl-Opt-Cmd-B - Close Apps for Meetings",
-                        "manipulators": [
-                            {
-                                "type": "basic",
-                                "from": {
-                                    "key_code": "b",
-                                    "modifiers": {
-                                        "mandatory": [
-                                            "control",
-                                            "option",
-                                            "command"
-                                        ],
-                                        "optional": [
-                                            "caps_lock"
-                                        ]
-                                    }
-                                },
-                                "to": [
-                                    {
-                                        "shell_command": "/usr/local/bin/script-wrapper --exit-conf meeting-teardown"
-                                    }
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        "description": "Ctrl-Opt-Cmd-W - New Warp window",
-                        "manipulators": [
-                            {
-                                "type": "basic",
-                                "from": {
-                                    "key_code": "w",
-                                    "modifiers": {
-                                        "mandatory": [
-                                            "control",
-                                            "option",
-                                            "command"
-                                        ],
-                                        "optional": [
-                                            "caps_lock"
-                                        ]
-                                    }
-                                },
-                                "to": [
-                                    {
-                                        "shell_command": "/usr/local/bin/new-warp"
-                                    }
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        "description": "Ctrl-Opt-Cmd-V - Paste using System Events",
-                        "manipulators": [
-                            {
-                                "type": "basic",
-                                "from": {
-                                    "key_code": "v",
-                                    "modifiers": {
-                                        "mandatory": [
-                                            "control",
-                                            "option",
-                                            "command"
-                                        ],
-                                        "optional": [
-                                            "caps_lock"
-                                        ]
-                                    }
-                                },
-                                "to": [
-                                    {
-                                        "shell_command": "/usr/local/bin/mac-paste"
-                                    }
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        "description": "Ctrl-Opt-Cmd-X - Paste a red X ❌",
-                        "manipulators": [
-                            {
-                                "type": "basic",
-                                "from": {
-                                    "key_code": "x",
-                                    "modifiers": {
-                                        "mandatory": [
-                                            "control",
-                                            "option",
-                                            "command"
-                                        ],
-                                        "optional": [
-                                            "caps_lock"
-                                        ]
-                                    }
-                                },
-                                "to": [
-                                    {
-                                        "shell_command": "/usr/local/bin/red-x"
-                                    }
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        "description": "Ctrl-Opt-Cmd-M - Open Apps for Meetings",
-                        "manipulators": [
-                            {
-                                "type": "basic",
-                                "from": {
-                                    "key_code": "m",
-                                    "modifiers": {
-                                        "mandatory": [
-                                            "control",
-                                            "option",
-                                            "command"
-                                        ],
-                                        "optional": [
-                                            "caps_lock"
-                                        ]
-                                    }
-                                },
-                                "to": [
-                                    {
-                                        "shell_command": "/usr/local/bin/script-wrapper --exit-conf meeting-setup"
-                                    }
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        "description": "Ctrl-Opt-Cmd-S - Type the shrug emoji ¯\\_(ツ)_/¯",
-                        "manipulators": [
-                            {
-                                "type": "basic",
-                                "from": {
-                                    "key_code": "s",
-                                    "modifiers": {
-                                        "mandatory": [
-                                            "control",
-                                            "option",
-                                            "command"
-                                        ],
-                                        "optional": [
-                                            "caps_lock"
-                                        ]
-                                    }
-                                },
-                                "to": [
-                                    {
-                                        "shell_command": "/usr/local/bin/shrug"
-                                    }
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        "description": "Ctrl-Opt-Cmd-Z - Paste my Zoom meeting link",
-                        "manipulators": [
-                            {
-                                "type": "basic",
-                                "from": {
-                                    "key_code": "z",
-                                    "modifiers": {
-                                        "mandatory": [
-                                            "control",
-                                            "option",
-                                            "command"
-                                        ],
-                                        "optional": [
-                                            "caps_lock"
-                                        ]
-                                    }
-                                },
-                                "to": [
-                                    {
-                                        "shell_command": "/usr/local/bin/zoom-link"
-                                    }
-                                ]
-                            }
-                        ]
-                    },
-                    {
                         "description": "Ctrl-Opt-Cmd-O - Open oncall links in browser",
                         "manipulators": [
                             {
@@ -269,7 +35,33 @@
                                 },
                                 "to": [
                                     {
-                                        "shell_command": "/usr/local/bin/open-oncall-pages"
+                                        "shell_command": "/usr/local/bin/terminal-notifier -message 'Open oncall links in browser' -title 'Keyboard Shortcut Activated' -sender 'org.pqrs.Karabiner-Elements.Preferences'; /usr/local/bin/open-oncall-pages"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "description": "Ctrl-Opt-Cmd-C - New Chrome Window",
+                        "manipulators": [
+                            {
+                                "type": "basic",
+                                "from": {
+                                    "key_code": "c",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "control",
+                                            "option",
+                                            "command"
+                                        ],
+                                        "optional": [
+                                            "caps_lock"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "shell_command": "/usr/local/bin/terminal-notifier -message 'New Chrome Window' -title 'Keyboard Shortcut Activated' -sender 'org.pqrs.Karabiner-Elements.Preferences'; /usr/local/bin/new-chrome"
                                     }
                                 ]
                             }
@@ -295,19 +87,19 @@
                                 },
                                 "to": [
                                     {
-                                        "shell_command": "/usr/local/bin/script-wrapper --exit-conf keyboard-shortcut-help"
+                                        "shell_command": "/usr/local/bin/terminal-notifier -message 'Show keyboard shortcut help' -title 'Keyboard Shortcut Activated' -sender 'org.pqrs.Karabiner-Elements.Preferences'; /usr/local/bin/script-wrapper --exit-conf keyboard-shortcut-help"
                                     }
                                 ]
                             }
                         ]
                     },
                     {
-                        "description": "Ctrl-Opt-Cmd-I - Paste a checkmark ✅",
+                        "description": "Ctrl-Opt-Cmd-M - Open Apps for Meetings",
                         "manipulators": [
                             {
                                 "type": "basic",
                                 "from": {
-                                    "key_code": "i",
+                                    "key_code": "m",
                                     "modifiers": {
                                         "mandatory": [
                                             "control",
@@ -321,7 +113,33 @@
                                 },
                                 "to": [
                                     {
-                                        "shell_command": "/usr/local/bin/check-mark"
+                                        "shell_command": "/usr/local/bin/terminal-notifier -message 'Open Apps for Meetings' -title 'Keyboard Shortcut Activated' -sender 'org.pqrs.Karabiner-Elements.Preferences'; /usr/local/bin/script-wrapper --exit-conf meeting-setup"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "description": "Ctrl-Opt-Cmd-X - Paste a red X ❌",
+                        "manipulators": [
+                            {
+                                "type": "basic",
+                                "from": {
+                                    "key_code": "x",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "control",
+                                            "option",
+                                            "command"
+                                        ],
+                                        "optional": [
+                                            "caps_lock"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "shell_command": "/usr/local/bin/terminal-notifier -message 'Paste a red X ❌' -title 'Keyboard Shortcut Activated' -sender 'org.pqrs.Karabiner-Elements.Preferences'; /usr/local/bin/red-x"
                                     }
                                 ]
                             }
@@ -347,7 +165,33 @@
                                 },
                                 "to": [
                                     {
-                                        "shell_command": "/usr/local/bin/new-terminal"
+                                        "shell_command": "/usr/local/bin/terminal-notifier -message 'New iTerm2 Window' -title 'Keyboard Shortcut Activated' -sender 'org.pqrs.Karabiner-Elements.Preferences'; /usr/local/bin/new-terminal"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "description": "Ctrl-Opt-Cmd-I - Paste a checkmark ✅",
+                        "manipulators": [
+                            {
+                                "type": "basic",
+                                "from": {
+                                    "key_code": "i",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "control",
+                                            "option",
+                                            "command"
+                                        ],
+                                        "optional": [
+                                            "caps_lock"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "shell_command": "/usr/local/bin/terminal-notifier -message 'Paste a checkmark ✅' -title 'Keyboard Shortcut Activated' -sender 'org.pqrs.Karabiner-Elements.Preferences'; /usr/local/bin/check-mark"
                                     }
                                 ]
                             }
@@ -373,7 +217,163 @@
                                 },
                                 "to": [
                                     {
-                                        "shell_command": "/usr/local/bin/script-wrapper --resize good-morning-tasks"
+                                        "shell_command": "/usr/local/bin/terminal-notifier -message 'Good morning script' -title 'Keyboard Shortcut Activated' -sender 'org.pqrs.Karabiner-Elements.Preferences'; /usr/local/bin/script-wrapper --resize good-morning-tasks"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "description": "Ctrl-Opt-Cmd-F - New Firefox Window",
+                        "manipulators": [
+                            {
+                                "type": "basic",
+                                "from": {
+                                    "key_code": "f",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "control",
+                                            "option",
+                                            "command"
+                                        ],
+                                        "optional": [
+                                            "caps_lock"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "shell_command": "/usr/local/bin/terminal-notifier -message 'New Firefox Window' -title 'Keyboard Shortcut Activated' -sender 'org.pqrs.Karabiner-Elements.Preferences'; /usr/local/bin/new-firefox"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "description": "Ctrl-Opt-Cmd-W - New Warp window",
+                        "manipulators": [
+                            {
+                                "type": "basic",
+                                "from": {
+                                    "key_code": "w",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "control",
+                                            "option",
+                                            "command"
+                                        ],
+                                        "optional": [
+                                            "caps_lock"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "shell_command": "/usr/local/bin/terminal-notifier -message 'New Warp window' -title 'Keyboard Shortcut Activated' -sender 'org.pqrs.Karabiner-Elements.Preferences'; /usr/local/bin/new-warp"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "description": "Ctrl-Opt-Cmd-S - Type the shrug emoji ¯\\_(ツ)_/¯",
+                        "manipulators": [
+                            {
+                                "type": "basic",
+                                "from": {
+                                    "key_code": "s",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "control",
+                                            "option",
+                                            "command"
+                                        ],
+                                        "optional": [
+                                            "caps_lock"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "shell_command": "/usr/local/bin/terminal-notifier -message 'Type the shrug emoji ¯\\_(ツ)_/¯' -title 'Keyboard Shortcut Activated' -sender 'org.pqrs.Karabiner-Elements.Preferences'; /usr/local/bin/shrug"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "description": "Ctrl-Opt-Cmd-B - Close Apps for Meetings",
+                        "manipulators": [
+                            {
+                                "type": "basic",
+                                "from": {
+                                    "key_code": "b",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "control",
+                                            "option",
+                                            "command"
+                                        ],
+                                        "optional": [
+                                            "caps_lock"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "shell_command": "/usr/local/bin/terminal-notifier -message 'Close Apps for Meetings' -title 'Keyboard Shortcut Activated' -sender 'org.pqrs.Karabiner-Elements.Preferences'; /usr/local/bin/script-wrapper --exit-conf meeting-teardown"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "description": "Ctrl-Opt-Cmd-Z - Paste my Zoom meeting link",
+                        "manipulators": [
+                            {
+                                "type": "basic",
+                                "from": {
+                                    "key_code": "z",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "control",
+                                            "option",
+                                            "command"
+                                        ],
+                                        "optional": [
+                                            "caps_lock"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "shell_command": "/usr/local/bin/terminal-notifier -message 'Paste my Zoom meeting link' -title 'Keyboard Shortcut Activated' -sender 'org.pqrs.Karabiner-Elements.Preferences'; /usr/local/bin/zoom-link"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "description": "Ctrl-Opt-Cmd-V - Paste using System Events",
+                        "manipulators": [
+                            {
+                                "type": "basic",
+                                "from": {
+                                    "key_code": "v",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "control",
+                                            "option",
+                                            "command"
+                                        ],
+                                        "optional": [
+                                            "caps_lock"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "shell_command": "/usr/local/bin/terminal-notifier -message 'Paste using System Events' -title 'Keyboard Shortcut Activated' -sender 'org.pqrs.Karabiner-Elements.Preferences'; /usr/local/bin/mac-paste"
                                     }
                                 ]
                             }

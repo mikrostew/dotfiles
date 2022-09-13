@@ -163,8 +163,8 @@ fi
 
 # chruby - done automatically because I frequently use Ruby
 # (this is the same location on mac and linux)
-[ -f "/usr/local/share/chruby/chruby.sh" ] && source /usr/local/share/chruby/chruby.sh && chruby ruby-3
-ruby -v
+#[ -f "/usr/local/share/chruby/chruby.sh" ] && source /usr/local/share/chruby/chruby.sh && chruby ruby-3
+#ruby -v
 
 # latex
 # not done automatically because I infrequently use TeX/LaTeX, and it clutters the path
@@ -200,7 +200,7 @@ fi
 #   echo 'export PATH="/usr/local/opt/qt/bin:$PATH"' >> ~/.bash_profile
 #
 # For compilers to find qt you may need to set:
-# (but, this interferes with building ruby)
+# (this interferes with building ruby, whatever)
 #export LDFLAGS="-L/usr/local/opt/qt/lib"
 export CPPFLAGS="-I/usr/local/opt/qt/include"
 #

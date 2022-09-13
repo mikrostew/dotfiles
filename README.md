@@ -23,20 +23,5 @@ $ cd src/gh/dotfiles/
 $ ./make-dotfile-links "$HOME/src/gh/dotfiles"
 ```
 
-Setup other stuff
-
-chruby
-```
-git clone git@github.com:postmodern/chruby.git
-cd chruby/
-sudo ./scripts/setup.sh
-```
-
-ruby-install
-```
-git clone git@github.com:postmodern/ruby-install.git
-cd ruby-install/
-sudo ./setup.sh
-```
 
 TODO: look at https://dotfiles.github.io/, check out things there

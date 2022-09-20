@@ -274,13 +274,6 @@ glc() {
   echo "$changed_files" | xargs eslint --config ~/dotfiles/.eslintrc.json --plugin extra-rules --rule 'extra-rules/no-commented-out-code: warn'
 }
 
-# git - run mergetool for conflicts (git mergetool)
-gmt() {
-  # @uses_funcs do_git
-  # TODO: different tool for Mac/Linux
-  do_git mergetool --tool=opendiff
-}
-
 # git - apply diff from review board to repo (git review apply)
 gra() {
   echo_err "TODO"

@@ -16,3 +16,5 @@
 	smudge = git-lfs smudge -- %f
 [init]
 	defaultBranch = main
+[mergetool "meld"]
+	cmd = meld --auto-merge "$LOCAL" "$BASE" "$REMOTE" --output "$MERGED"

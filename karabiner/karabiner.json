@@ -378,6 +378,32 @@
                                 ]
                             }
                         ]
+                    },
+                    {
+                        "description": "Ctrl-Opt-Cmd-J - Type the shrug emoji ¯\\_(ツ)_/¯ for Jira",
+                        "manipulators": [
+                            {
+                                "type": "basic",
+                                "from": {
+                                    "key_code": "j",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "control",
+                                            "option",
+                                            "command"
+                                        ],
+                                        "optional": [
+                                            "caps_lock"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "shell_command": "/usr/local/bin/terminal-notifier -message 'Type the shrug emoji ¯\\_(ツ)_/¯ for Jira' -title 'Keyboard Shortcut Activated' -sender 'org.pqrs.Karabiner-Elements.Preferences'; /usr/local/bin/shrug-jira"
+                                    }
+                                ]
+                            }
+                        ]
                     }
                 ]
             },

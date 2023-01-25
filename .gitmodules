@@ -19,9 +19,6 @@
 [submodule ".vim/bundle/ctrlp.vim"]
 	path = .vim/bundle/ctrlp.vim
 	url = https://github.com/kien/ctrlp.vim.git
-[submodule ".vim/bundle/vim-illuminate"]
-	path = .vim/bundle/vim-illuminate
-	url = https://github.com/RRethy/vim-illuminate.git
 [submodule ".vim/bundle/vim-ember-hbs"]
 	path = .vim/bundle/vim-ember-hbs
 	url = https://github.com/joukevandermaas/vim-ember-hbs.git

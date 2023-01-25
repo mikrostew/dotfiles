@@ -12,7 +12,7 @@
     url = git://github.com/tpope/vim-commentary.git
 [submodule ".vim/bundle/ctrlp.vim"]
 	path = .vim/bundle/ctrlp.vim
-	url = https://github.com/kien/ctrlp.vim.git
+	url = https://github.com/ctrlpvim/ctrlp.vim.git
 [submodule ".vim/bundle/vim-ember-hbs"]
 	path = .vim/bundle/vim-ember-hbs
 	url = https://github.com/joukevandermaas/vim-ember-hbs.git

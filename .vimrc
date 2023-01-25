@@ -1,8 +1,10 @@
 " use pathogen.vim for managing plugins (https://github.com/tpope/vim-pathogen)
 " plugins are currently installed as submodules
+"
 " add a plugin:
 "  * `git submodule add https://github.com/<user>/<project-name>.git .vim/bundle/<project-name>`
 "  * commit
+"
 " remove a plugin (from https://stackoverflow.com/a/1260982)
 "  * Delete the relevant section from the .gitmodules file
 "  * Stage the .gitmodules changes: `git add .gitmodules`
@@ -11,10 +13,16 @@
 "  * Remove the submodule's .git directory: `rm -rf .git/modules/path_to_submodule` (trailing slash ok)
 "  * Commit the changes: `git commit -m 'removed submodule <name>'`
 "  * Delete the now untracked submodule files: `rm -rf path_to_submodule`
+"
 " update plugins on another computer after adding
 "  * `git submodule init`
 "  * `git submodule update`
 "  (after deleting a plugin, will have to manually remove the plugin dir)
+"
+" change URL of a plugin (from https://stackoverflow.com/a/66072686)
+"  * `git submodule set-url path/to/submodule <new URL>`
+"  * (commit the changes)
+"
 " TODO: apparently Vim 8 has built-in support for plugins, so I don't need pathogen?
 execute pathogen#infect()
 

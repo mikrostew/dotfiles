@@ -147,8 +147,6 @@ nnoremap <leader>s :%s/\<<C-r><C-w>\>/
 " open split (with '|' or '-'), then open file browser
 nnoremap <leader>\| <C-w>v<C-w>l:e.<CR>
 nnoremap <leader>- <C-w>s<C-w>j:e.<CR>
-" use ack in vim
-"nnoremap <leader>a :Ack
 " set the currently file to executable
 " (using silent, so I don't have to press Enter after the command)
 nnoremap <leader>x :silent !chmod +x "%"<CR>

@@ -221,20 +221,6 @@ hi illuminatedWord cterm=underline gui=underline
 let g:airline_section_b = ''  " normally this is git branch info
 let g:airline_section_y = ''  " normally this file encoding
 
-" " syntastic settings (no longer using this)
-" let g:syntastic_always_populate_loc_list = 1
-" let g:syntastic_auto_loc_list = 1
-" let g:syntastic_check_on_open = 0
-" let g:syntastic_check_on_wq = 0
-" let g:syntastic_javascript_checkers = ['eslint']
-" " thanks to https://github.com/vim-syntastic/syntastic/issues/2102
-" let g:syntastic_javascript_eslint_exec = 'eslint-for-vim'
-" let g:syntastic_javascript_eslint_exe = 'npm run lint --'
-" " disable syntastic by default, but allow toggling this when I want it
-" " (adapted from https://stackoverflow.com/a/21434697)
-" let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [],'passive_filetypes': [] }
-" nnoremap <leader>S :SyntasticCheck<CR> :SyntasticToggleMode<CR>
-
 " ALE (async lint engine) settings
 " (https://github.com/dense-analysis/ale)
 " custom stuff (adapted from https://davidtranscend.com/blog/configure-eslint-prettier-vim/)

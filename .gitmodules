@@ -1,12 +1,12 @@
 [submodule ".vim/bundle/vim-surround"]
-    path = .vim/bundle/vim-surround
-    url = git://github.com/tpope/vim-surround.git
+	path = .vim/bundle/vim-surround
+	url = https://github.com/tpope/vim-surround.git
 [submodule ".vim/bundle/vim-repeat"]
-    path = .vim/bundle/vim-repeat
-    url = git://github.com/tpope/vim-repeat.git
+	path = .vim/bundle/vim-repeat
+	url = https://github.com/tpope/vim-repeat.git
 [submodule ".vim/bundle/vim-commentary"]
-    path = .vim/bundle/vim-commentary
-    url = git://github.com/tpope/vim-commentary.git
+	path = .vim/bundle/vim-commentary
+	url = https://github.com/tpope/vim-commentary.git
 [submodule ".vim/bundle/ctrlp.vim"]
 	path = .vim/bundle/ctrlp.vim
 	url = https://github.com/ctrlpvim/ctrlp.vim.git
@@ -15,7 +15,7 @@
 	url = https://github.com/joukevandermaas/vim-ember-hbs.git
 [submodule ".vim/bundle/vim-vinegar"]
 	path = .vim/bundle/vim-vinegar
-	url = git@github.com:tpope/vim-vinegar.git
+	url = https://github.com/tpope/vim-vinegar.git
 [submodule ".vim/bundle/vim-airline"]
 	path = .vim/bundle/vim-airline
 	url = https://github.com/vim-airline/vim-airline

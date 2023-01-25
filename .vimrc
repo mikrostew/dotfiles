@@ -3,7 +3,10 @@
 "
 " add a plugin:
 "  * `git submodule add https://github.com/<user>/<project-name>.git .vim/bundle/<project-name>`
-"  * commit
+"  * (commit changes)
+"
+" update plugins:
+"  * `git submodule update --remote`
 "
 " remove a plugin (from https://stackoverflow.com/a/1260982)
 "  * Delete the relevant section from the .gitmodules file
@@ -13,11 +16,11 @@
 "  * Remove the submodule's .git directory: `rm -rf .git/modules/path_to_submodule` (trailing slash ok)
 "  * Commit the changes: `git commit -m 'removed submodule <name>'`
 "  * Delete the now untracked submodule files: `rm -rf path_to_submodule`
+"  * (after deleting a plugin, will have to manually remove the plugin dir on other machines)
 "
 " update plugins on another computer after adding
 "  * `git submodule init`
 "  * `git submodule update`
-"  (after deleting a plugin, will have to manually remove the plugin dir)
 "
 " change URL of a plugin (from https://stackoverflow.com/a/66072686)
 "  * `git submodule set-url path/to/submodule <new URL>`

@@ -224,8 +224,8 @@ let g:netrw_list_hide= '.*\.swp$,\~$,\.orig$'
 hi illuminatedWord cterm=underline gui=underline
 
 " airline (https://github.com/vim-airline/vim-airline)
-let g:airline_section_b = ''  " normally this is git branch info
-let g:airline_section_y = ''  " normally this file encoding
+"let g:airline_section_b = ''  " git branch info
+let g:airline_section_y = ''  " this file encoding
 
 " ALE (async lint engine) settings
 " (https://github.com/dense-analysis/ale)

@@ -260,11 +260,6 @@ let g:ctrlp_working_path_mode = 'ra'
 set wildignore+=*/vendor/**
 set wildignore+=*/target/**
 
-" limelight.vim
-let g:limelight_default_coefficient = 0.7
-" can load this by default, but I'm not sure I want that
-"autocmd VimEnter * Limelight
-
 " rust.vim
 " automatically format when saving a buffer
 let g:rustfmt_autosave = 1

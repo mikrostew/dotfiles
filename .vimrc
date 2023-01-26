@@ -25,6 +25,7 @@
 " change URL of a plugin (from https://stackoverflow.com/a/66072686)
 "  * `git submodule set-url path/to/submodule <new URL>`
 "  * (commit the changes)
+"  * (Note: have to run this on other machines that check out this repo - is there a better way?)
 "
 " TODO: apparently Vim 8 has built-in support for plugins, so I don't need pathogen?
 execute pathogen#infect()

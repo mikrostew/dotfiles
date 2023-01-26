@@ -77,6 +77,9 @@ links["tsconfig.json"]="tsconfig.json"
 # oops, don't include this, to avoid interfering with other projects config
 #links[".eslintrc.js"]=".eslintrc.js"
 
+# TODO: also track coc extensions in ~/.config/coc/extensions.package.json
+# (can `yarn install` from that dir)
+# TODO: and track coc config file (wherever that is)
 
 # machine-specific
 host_name="$(hostname)"

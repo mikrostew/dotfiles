@@ -2,17 +2,21 @@
 "
 " Plugins are currently managed with git submodules (which kinda suck but ¯\_(ツ)_/¯).
 "
+" TODO: these are painful, I should make them into scripts
+"
 " ADD a plugin:
-"  * `git submodule add https://github.com/<user>/<project-name>.git .vim/bundle/<project-name>`
-"  * (commit changes)
+"  * `git submodule add [-b branch] https://github.com/<user>/<project-name>.git .vim/pack/mikrostew/start/<project-name>`
+"  * (commit the changes)
 "  * then update plugins on another computer
 "    - `git submodule init`
 "    - `git submodule update`
 "
 " UPDATE plugins:
 "  * `git submodule update --remote`
+"  * (commit the changes)
 "
 " REMOVE a plugin (from https://stackoverflow.com/a/1260982)
+"  (TODO: maybe a better way: https://shapeshed.com/vim-packages/)
 "  * Delete the relevant section from the .gitmodules file
 "  * Stage the .gitmodules changes: `git add .gitmodules`
 "  * Delete the relevant section from .git/config

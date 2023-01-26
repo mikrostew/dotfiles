@@ -8,3 +8,27 @@
 [submodule ".vim/pack/mikrostew/start/vim-airline"]
 	path = .vim/pack/mikrostew/start/vim-airline
 	url = https://github.com/vim-airline/vim-airline.git
+[submodule ".vim/pack/mikrostew/start/ale"]
+	path = .vim/pack/mikrostew/start/ale
+	url = https://github.com/dense-analysis/ale.git
+[submodule ".vim/pack/mikrostew/start/ctrlp"]
+	path = .vim/pack/mikrostew/start/ctrlp
+	url = https://github.com/ctrlpvim/ctrlp.vim.git
+[submodule ".vim/pack/mikrostew/start/rust.vim"]
+	path = .vim/pack/mikrostew/start/rust.vim
+	url = https://github.com/rust-lang/rust.vim.git
+[submodule ".vim/pack/mikrostew/start/vim-commentary"]
+	path = .vim/pack/mikrostew/start/vim-commentary
+	url = https://github.com/tpope/vim-commentary.git
+[submodule ".vim/pack/mikrostew/start/vim-ember-hbs"]
+	path = .vim/pack/mikrostew/start/vim-ember-hbs
+	url = https://github.com/joukevandermaas/vim-ember-hbs.git
+[submodule ".vim/pack/mikrostew/start/vim-javascript"]
+	path = .vim/pack/mikrostew/start/vim-javascript
+	url = https://github.com/pangloss/vim-javascript.git
+[submodule ".vim/pack/mikrostew/start/vim-repeat"]
+	path = .vim/pack/mikrostew/start/vim-repeat
+	url = https://github.com/tpope/vim-repeat.git
+[submodule ".vim/pack/mikrostew/start/vim-surround"]
+	path = .vim/pack/mikrostew/start/vim-surround
+	url = https://github.com/tpope/vim-surround.git

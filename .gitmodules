@@ -2,3 +2,9 @@
 	path = .vim/pack/mikrostew/start/coc.nvim
 	url = https://github.com/neoclide/coc.nvim.git
 	branch = release
+[submodule ".vim/pack/mikrostew/start/vim-vinegar"]
+	path = .vim/pack/mikrostew/start/vim-vinegar
+	url = https://github.com/tpope/vim-vinegar.git
+[submodule ".vim/pack/mikrostew/start/vim-airline"]
+	path = .vim/pack/mikrostew/start/vim-airline
+	url = https://github.com/vim-airline/vim-airline.git

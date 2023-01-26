@@ -447,6 +447,9 @@ command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organize
 " Resume latest coc list.
 "nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
 
+" install these CoC extensions if they are missing
+let g:coc_global_extensions = ['coc-rust-analyzer']
+
 
 " project-specific configuration
 " using `set exrc` seems like a bad idea: https://vi.stackexchange.com/questions/5055/why-is-set-exrc-dangerous

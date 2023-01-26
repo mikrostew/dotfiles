@@ -32,8 +32,5 @@ cache/*.cache
 # saved vim views (from rust.vim plugin)
 .vim/view
 
-# installed node packages
-node_modules
-
 # karabiner
 karabiner/automatic_backups/

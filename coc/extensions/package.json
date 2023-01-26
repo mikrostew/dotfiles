@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "coc-rust-analyzer": ">=0.71.1"
+  },
+  "disabled": [],
+  "locked": []
+}

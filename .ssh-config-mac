@@ -49,7 +49,7 @@ Host laptop
 # personal
 Host github.com
     Hostname github.com
-    User mikrostew
+    #User mikrostew
     # IdentityFile    ~/.ssh/github_mikrostew
     IdentityFile    %d/.ssh/github_rsa
     IdentitiesOnly yes

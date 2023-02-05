@@ -53,7 +53,7 @@ links[".bashrc"]=".bashrc"
 links[".inputrc"]=".inputrc"
 
 # git
-links[".gitignore"]=".gitignore"
+links[".gitignore"]=".gitignore-base"
 links[".gitconfig"]=".gitconfig"
 links[".gitconfig-oss"]=".gitconfig-oss"
 links[".gitconfig-work"]=".gitconfig-work"

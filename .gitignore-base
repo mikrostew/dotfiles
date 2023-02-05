@@ -1,0 +1,20 @@
+# gitignore file for all projects on this machine
+
+# vim's temporary files and things
+# (from https://github.com/github/gitignore/blob/master/Global/vim.gitignore)
+[._]*.s[a-w][a-z]
+[._]s[a-w][a-z]
+*.un~
+Session.vim
+.netrwhist
+.netrwbook
+*~
+
+# nfs lock files
+.nfs0000*
+
+# OSX things
+.DS_Store
+
+# saved vim views (from rust.vim plugin)
+.vim/view

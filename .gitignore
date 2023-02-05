@@ -1,36 +1,10 @@
-# vim's temporary files and things
-# (from https://github.com/github/gitignore/blob/master/Global/vim.gitignore)
-[._]*.s[a-w][a-z]
-[._]s[a-w][a-z]
-*.un~
-Session.vim
-.netrwhist
-.netrwbook
-*~
+# gitignore for this repo
 
-# compiled binaries
-#bin/
-
-# nfs lock files
-.nfs0000*
-
-# OSX things
-.DS_Store
-
-# bundler config and gems
-.bundle/
-
-# SVN directories (for tracking svn repos in a branch)
-.svn/
-
-# kitchen log files
-.kitchen/logs
-
-# for this repo
+# caches of API calls
 cache/*.cache
 
-# saved vim views (from rust.vim plugin)
-.vim/view
-
-# karabiner
+# karabiner stuff
 karabiner/automatic_backups/
+
+# ignore deps
+node_modules

@@ -448,7 +448,17 @@ command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organize
 "nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
 
 " install these CoC extensions if they are missing
-let g:coc_global_extensions = ['coc-rust-analyzer']
+let g:coc_global_extensions = [
+  \ 'coc-actions',
+  \ 'coc-css',
+  \ 'coc-ember',
+  \ 'coc-highlight',
+  \ 'coc-html',
+  \ 'coc-json',
+  \ 'coc-rust-analyzer',
+  \ 'coc-tsserver',
+  \ 'coc-vimlsp'
+\ ]
 
 
 " project-specific configuration

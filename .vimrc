@@ -211,22 +211,9 @@ endfunction
 
 """ plugins
 
-" NERDTree (no longer using this)
-" show hidden files
-" let NERDTreeShowHidden=1
-" use instead of  netrw (this is the default)
-" let g:NERDTreeHijackNetrw = 1
-" open blank initial window so that NERDTree doesn't disappear on the first file open
-" (from https://stackoverflow.com/a/36882670/)
-" autocmd VimEnter NERD_tree_1 enew | execute 'NERDTree '.argv()[0]
-
 " netrw (built-in)
 " hide these file extensions (from https://stackoverflow.com/a/21020164/)
 let g:netrw_list_hide= '.*\.swp$,\~$,\.orig$'
-
-" vim-illuminate (https://github.com/RRethy/vim-illuminate)
-" use an underline to highlight instead of the cursor color
-hi illuminatedWord cterm=underline gui=underline
 
 " airline (https://github.com/vim-airline/vim-airline)
 "let g:airline_section_b = ''  " git branch info

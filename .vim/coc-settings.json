@@ -1,3 +1,4 @@
 {
-  "rust-analyzer.completion.autoimport.enable": true
+  "rust-analyzer.completion.autoimport.enable": true,
+  "suggest.noselect": true
 }

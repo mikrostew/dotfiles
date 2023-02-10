@@ -8,3 +8,7 @@ karabiner/automatic_backups/
 
 # ignore deps
 node_modules
+
+# coc.nvim
+coc/extensions
+coc/memos.json

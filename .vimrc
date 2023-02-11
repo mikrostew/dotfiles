@@ -228,8 +228,8 @@ highlight ALEErrorSign ctermbg=NONE ctermfg=red guibg=NONE guifg=red
 highlight ALEWarningSign ctermbg=NONE ctermfg=yellow guibg=NONE guifg=yellow
 " auto-fix errors on save
 let g:ale_fixers = {
-\   'javascript': ['eslint'],
-\   'typescript': ['eslint'],
+\   'javascript': ['eslint', 'prettier'],
+\   'typescript': ['eslint', 'prettier'],
 \}
 let g:ale_fix_on_save = 1
 " show ALE errors and warnings in the status line

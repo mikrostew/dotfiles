@@ -149,7 +149,7 @@ export PATH="$VOLTA_HOME/bin:$PATH"
 
 # heap setting to build v-web
 # experimental flag to use await in Node REPL (https://github.com/nodejs/node/pull/19604)
-export NODE_OPTIONS="--max-old-space-size=8192"
+export NODE_OPTIONS="--max-old-space-size=12288"
 
 # Visual Studio Code, for OSX
 if [ -d "/Applications/Visual Studio Code.app" ]

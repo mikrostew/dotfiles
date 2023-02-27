@@ -15,16 +15,16 @@
 "  * `git submodule update --remote`
 "  * (commit the changes)
 "
-" REMOVE a plugin (from https://stackoverflow.com/a/1260982)
-"  (TODO: maybe a better way: https://shapeshed.com/vim-packages/)
-"  * Delete the relevant section from the .gitmodules file
-"  * Stage the .gitmodules changes: `git add .gitmodules`
-"  * Delete the relevant section from .git/config
-"  * Remove the submodule files from the working tree and index: `git rm --cached path_to_submodule` (no trailing slash)
-"  * Remove the submodule's .git directory: `rm -rf .git/modules/path_to_submodule` (trailing slash ok)
-"  * Commit the changes: `git commit -m 'removed submodule <name>'`
-"  * Delete the now untracked submodule files: `rm -rf path_to_submodule`
-"  * (after deleting a plugin, will have to manually remove the plugin dir on other machines)
+" REMOVE a plugin (adapted from https://shapeshed.com/vim-packages/)
+"  * git submodule deinit .vim/pack/mikrostew/start/<plugin>
+"  * git rm .vim/pack/mikrostew/start/<plugin>
+"  * rm -rf .git/modules/.vim/pack/mikrostew/start/<plugin>
+"  * (commit the changes)
+" on other machines
+"  * (pull and rebase)
+"  * rm -rf .git/modules/.vim/pack/mikrostew/start/<plugin>
+"  * rm -rf .vim/pack/mikrostew/start/<plugin>
+"  * (remove the config from .git/config)
 "
 " CHANGE URL of a plugin (from https://stackoverflow.com/a/66072686)
 "  * `git submodule set-url path/to/submodule <new URL>`

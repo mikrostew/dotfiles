@@ -161,9 +161,9 @@ fi
 # (see install instructions at https://wakatime.com/terminal)
 #[ -f "$HOME/bash-wakatime/bash-wakatime.sh" ] && source "$HOME/bash-wakatime/bash-wakatime.sh"
 
-# chruby - done automatically because I frequently use Ruby
+# chruby - loaded for when I want to use Ruby (usually just Jekyll)
 # (this is the same location on mac and linux)
-#[ -f "/usr/local/share/chruby/chruby.sh" ] && source /usr/local/share/chruby/chruby.sh && chruby ruby-3
+[ -f "/usr/local/share/chruby/chruby.sh" ] && source /usr/local/share/chruby/chruby.sh
 #ruby -v
 
 # latex

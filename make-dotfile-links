@@ -62,7 +62,8 @@ links[".gitconfig-work"]=".gitconfig-work"
 links[".tmux.conf"]=".tmux.conf"
 
 # bundler
-links[".bundle"]=".bundle"
+# don't remember why I was linking this
+#links[".bundle"]=".bundle"
 
 # rubocop
 links[".rubocop.yml"]=".rubocop.yml"

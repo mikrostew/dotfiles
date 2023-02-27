@@ -1,12 +1,11 @@
 # Re-enable the ssh-dss (DSA) public key algorithm
-Host *
-
-    HostkeyAlgorithms +ssh-dss
-    PubkeyAcceptedKeyTypes +ssh-dss
-    AddKeysToAgent yes
-    UseKeychain yes
-    # need this after upgrade to 10.13.3
-    Ciphers aes128-cbc,3des-cbc,aes256-ctr
+# Host *
+#     HostkeyAlgorithms +ssh-dss
+#     PubkeyAcceptedKeyTypes +ssh-dss
+#     AddKeysToAgent yes
+#     UseKeychain yes
+#     # need this after upgrade to 10.13.3
+#     Ciphers aes128-cbc,3des-cbc,aes256-ctr
 
 # proxy thru eng-portal
 Host *prod *prod.linkedin.com *stg *stg.linkedin.com *.grid.linkedin.com

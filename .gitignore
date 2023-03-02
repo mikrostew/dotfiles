@@ -10,5 +10,6 @@ karabiner/automatic_backups/
 node_modules
 
 # coc.nvim
+coc/commands
 coc/extensions
 coc/memos.json

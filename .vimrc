@@ -446,7 +446,6 @@ set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 " install these CoC extensions if they are missing
 let g:coc_global_extensions = [
   \ 'coc-css',
-  \ 'coc-ember',
   \ 'coc-highlight',
   \ 'coc-html',
   \ 'coc-json',

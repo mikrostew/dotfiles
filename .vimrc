@@ -230,6 +230,7 @@ highlight ALEWarningSign ctermbg=NONE ctermfg=yellow guibg=NONE guifg=yellow
 let g:ale_fixers = {
 \   'javascript': ['eslint', 'prettier'],
 \   'typescript': ['eslint', 'prettier'],
+\   'css': ['prettier'],
 \}
 let g:ale_fix_on_save = 1
 " show ALE errors and warnings in the status line

@@ -207,6 +207,36 @@ export CPPFLAGS="-I/usr/local/opt/qt/include"
 # For pkg-config to find qt you may need to set:
 export PKG_CONFIG_PATH="/usr/local/opt/qt/lib/pkgconfig"
 
+# this function needs to be part of the shell
+# (the cd won't work if run from a script file)
+up() {
+  local num_dirs="$1"
+  # default to going up a single dir
+  if [ -z "$num_dirs" ]
+  then
+    echo 'up 1 directory'
+    cd ..
+    pwd
+    return
+  fi
+  # make sure this is a number > 0
+  case "$num_dirs" in
+    ''|*[!0-9]*) echo "Error: expected a number, but got '$num_dirs'"; return 1 ;;
+    *) : ;;
+  esac
+  if [ "$num_dirs" -le 0 ]
+  then
+    echo "Error: number of directories must be > 0"
+    return 1
+  fi
+  # multiple dirs
+  echo "up $num_dirs directories"
+  for (( i=1; i<=num_dirs; i++ ))
+  do
+    cd ..
+    pwd
+  done
+}
 
 # functions to notify me about things
 

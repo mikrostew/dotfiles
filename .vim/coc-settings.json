@@ -2,6 +2,6 @@
   "eslint.packageManager": "yarn",
   "rust-analyzer.completion.autoimport.enable": true,
   "suggest.noselect": true,
-  "tsserver.maxTsServerMemory": 8192,
+  "tsserver.maxTsServerMemory": 10240,
   "workspace.workspaceFolderCheckCwd": false
 }

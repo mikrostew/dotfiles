@@ -176,11 +176,14 @@ colorscheme wombat
 " colorscheme delek
 
 " line numbers should be grey
-hi LineNr       ctermfg=darkGrey
+" hi LineNr       ctermfg=darkGrey
 " make the Ubuntu terminal look better
 if $COLORTERM == 'gnome-terminal'
   set t_Co=256
 endif
+
+" don't show a folding column
+set foldcolumn=0
 
 """ functions
 
@@ -424,6 +427,7 @@ command! -nargs=0 OR   :call     CocActionAsync('runCommand', 'editor.action.org
 " Add (Neo)Vim's native statusline support
 " NOTE: Please see `:h coc-status` for integrations with external plugins that
 " provide custom statusline: lightline.vim, vim-airline
+" TODO: using https://github.com/neoclide/coc-git, I think?
 set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 
 " Mappings for CoCList

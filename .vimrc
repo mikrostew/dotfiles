@@ -294,9 +294,9 @@ set updatetime=300
 " Don't pass messages to |ins-completion-menu|.
 set shortmess+=c
 
-" Always show the signcolumn, otherwise it would shift the text each time
-" diagnostics appear/become resolved.
-set signcolumn=yes
+" Show the signcolumn errors/warnings on top of the line numbers
+" (looks nicer than a separate column, and prevents shifting when diagnostics appear/become resolved)
+set signcolumn=number
 
 " Use tab for trigger completion with characters ahead and navigate
 " NOTE: There's always complete item selected by default, you may want to enable

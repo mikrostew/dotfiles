@@ -462,15 +462,16 @@ let g:coc_global_extensions = [
 " project-specific configuration
 " using `set exrc` seems like a bad idea: https://vi.stackexchange.com/questions/5055/why-is-set-exrc-dangerous
 " so I'm going to try a suggestion from a comment here: https://vim.fandom.com/wiki/Project_specific_settings
-function! SetupEnvironment()
-  let l:path = expand('%:p')
-  if l:path =~ '/Users/mikrostew/src/automaticowl.net'
-    silent! so .vimlocal
-  elseif l:path =~ '/Users/mistewar/src/li/blog'
-    silent! so .vimlocal
-  endif
-endfunction
-autocmd! BufReadPost,BufNewFile * call SetupEnvironment()
+"
+" function! SetupEnvironment()
+"   let l:path = expand('%:p')
+"   if l:path =~ '/Users/mikrostew/src/automaticowl.net'
+"     silent! so .vimlocal
+"   elseif l:path =~ '/Users/mistewar/src/li/blog'
+"     silent! so .vimlocal
+"   endif
+" endfunction
+" autocmd! BufReadPost,BufNewFile * call SetupEnvironment()
 
 " TODO - use yaml-fromat to change things, in .vimlocal
 " https://superuser.com/questions/1018808/how-do-you-run-a-vim-command-that-is-the-text-inside-a-buffer

@@ -32,3 +32,6 @@
 [submodule ".vim/pack/mikrostew/start/vim-surround"]
 	path = .vim/pack/mikrostew/start/vim-surround
 	url = https://github.com/tpope/vim-surround.git
+[submodule ".vim/pack/mikrostew/start/copilot.vim"]
+	path = .vim/pack/mikrostew/start/copilot.vim
+	url = https://github.com/github/copilot.vim.git

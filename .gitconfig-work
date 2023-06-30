@@ -2,3 +2,5 @@
 [user]
   name = Michael Stewart
   email = mistewart@linkedin.com
+[core]
+  sshCommand = "ssh -i ~/.ssh/mistewar_at_linkedin.com_ssh_key"

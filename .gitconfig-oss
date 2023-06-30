@@ -2,3 +2,5 @@
 [user]
   name = Michael Stewart
   email = mikrostew@gmail.com
+[core]
+  sshCommand = "ssh -i ~/.ssh/github_rsa"

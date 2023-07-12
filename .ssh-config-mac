@@ -46,10 +46,8 @@ Host laptop
     IdentityFile    %d/.ssh/%u_at_linkedin.com_ssh_key
 
 # personal
-Host github.com
-    Hostname github.com
-    #User mikrostew
-    # IdentityFile    ~/.ssh/github_mikrostew
+Match host github.com user mikrostew
+    #Hostname github.com
     IdentityFile    %d/.ssh/github_rsa
     IdentitiesOnly yes
 

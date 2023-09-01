@@ -69,6 +69,9 @@ alias grap='gpr && gp' # git rebase and push
 # VSCode
 alias vs="code ."
 
+# mint
+alias mu='mint update'
+
 # for reading/writing notes to myself
 # (change the CWD so vim's file navigation will start in that dir, but return to whatever dir this was run from)
 alias notes="pushd ~/Sync/notes/ >/dev/null; mvim .; popd >/dev/null"
